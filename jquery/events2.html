@@ -1,0 +1,514 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eventos jQuery con Animaciones (sin logger)</title>
+
+  <!-- Bootstrap 4 (opcional) -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+  <style>
+    body { background:#f7f7f7; }
+    header { position: sticky; top: 0; z-index: 1000; background:#f7f7f7; padding: 14px 0 10px; }
+    section[id] { scroll-margin-top: 140px; }
+
+    .menu-bar {
+      border: 1px solid #e6e6e6;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.04);
+      margin-bottom: 12px;
+    }
+    .menu-bar a {
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      text-decoration: none;
+      border: 1px solid #ddd;
+      color: #111;
+      background: #fafafa;
+      font-size: 14px;
+    }
+    .menu-bar a:hover { background:#f0f0f0; }
+
+    .demo-box {
+      background: #fff;
+      border: 1px solid #e6e6e6;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.04);
+      margin-bottom: 18px;
+    }
+
+    .small-note { font-size: 13px; color:#555; }
+
+    /* ---------- Animaciones / componentes ---------- */
+
+    /* 1) Tarjeta flip (mouseenter/mouseleave) */
+    .flip-wrap { perspective: 900px; max-width: 380px; }
+    .flip-card {
+      width: 100%;
+      height: 220px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform .55s ease;
+      border-radius: 16px;
+    }
+    .flip-card.is-flipped { transform: rotateY(180deg); }
+
+    .flip-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      backface-visibility: hidden;
+      border: 1px solid #e6e6e6;
+      box-shadow: 0 8px 20px rgba(0,0,0,.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 16px;
+      background: #fff;
+    }
+    .flip-back { transform: rotateY(180deg); background: #111; color: #fff; border-color: #222; }
+
+    /* 2) Botón click con “pulse” */
+    .pulse {
+      animation: pulse .35s ease;
+    }
+    @keyframes pulse {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.06); }
+      100% { transform: scale(1); }
+    }
+
+    /* 3) Doble click: “shake” */
+    .shake {
+      animation: shake .35s ease;
+    }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-6px); }
+    }
+
+    /* 4) Keydown/keyup: barra de energía */
+    .energy {
+      background:#fafafa;
+      border:1px solid #e6e6e6;
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .bar {
+      height: 10px;
+      background: #ececec;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar > div {
+      width: 0%;
+      height: 100%;
+      background: #6aa7ff;
+      transition: width .15s ease;
+    }
+    .energy .hint { font-size: 13px; color:#666; margin-top: 8px; }
+
+    /* 5) Change (select): cambia “tema” */
+    .theme-box{
+      border-radius: 14px;
+      border: 1px solid #e6e6e6;
+      padding: 14px;
+      transition: background .25s ease, color .25s ease, border-color .25s ease;
+      background:#fff;
+      color:#111;
+    }
+    .theme-dark{ background:#111; color:#fff; border-color:#222; }
+    .theme-blue{ background:#eef7ff; color:#0b2a55; border-color:#cfe3ff; }
+    .theme-green{ background:#eefcf0; color:#0f3a1f; border-color:#cfead6; }
+
+    /* 6) Submit: “enviado” + confeti simple */
+    .sent {
+      position: relative;
+      overflow: hidden;
+      border-color: #cfead6 !important;
+      background: #eefcf0 !important;
+    }
+    .sent-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid #cfead6;
+      background: #fff;
+      font-size: 12px;
+      margin-left: 8px;
+    }
+
+    .confetti {
+      position: absolute;
+      top: -20px;
+      width: 10px;
+      height: 16px;
+      opacity: 0;
+    }
+    .sent .confetti {
+      animation: confettiFall .9s ease forwards;
+      opacity: 1;
+    }
+    @keyframes confettiFall {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(260px) rotate(140deg); }
+    }
+
+    /* 7) Load imagen: blur -> nítido */
+    .img-wrap img {
+      max-width: 320px;
+      width: 100%;
+      border-radius: 14px;
+      border:1px solid #e6e6e6;
+      display:block;
+      filter: blur(10px);
+      transform: scale(0.98);
+      opacity: 0.7;
+      transition: filter .45s ease, transform .45s ease, opacity .45s ease;
+    }
+    .img-wrap img.is-loaded {
+      filter: blur(0);
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    /* 8) Scroll: barra de progreso */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      width: 0%;
+      background: #111;
+      z-index: 2000;
+    }
+
+    /* 9) Focus/blur: brillo del panel */
+    .focus-glow { transition: box-shadow .2s ease; border-radius: 14px; }
+    .focus-glow.is-focus { box-shadow: 0 0 0 4px rgba(106,167,255,.25); }
+
+    /* contenido largo para probar scroll */
+    .filler { color:#666; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<div class="container py-3">
+
+  <header>
+    <h1 class="h3 mb-2">Eventos jQuery con animaciones (sin almacenar logs)</h1>
+    <p class="text-muted mb-2">
+      Cada evento dispara una animación visible (ideal para clases). No se guarda historial, solo se “ve” el efecto.
+    </p>
+
+    <nav class="menu-bar">
+      <a href="#sec-mouse" class="js-scroll">Mouse</a>
+      <a href="#sec-click" class="js-scroll">Click / dblclick</a>
+      <a href="#sec-keyboard" class="js-scroll">Teclado</a>
+      <a href="#sec-form" class="js-scroll">Form (change/submit/focus)</a>
+      <a href="#sec-load" class="js-scroll">Load</a>
+      <a href="#sec-scroll" class="js-scroll">Scroll</a>
+    </nav>
+  </header>
+
+  <!-- Mouse: enter/leave flip -->
+  <section class="demo-box" id="sec-mouse">
+    <h2 class="h5 mb-2">1) mouseenter / mouseleave: tarjeta que se da vuelta</h2>
+    <p class="small-note mb-3">
+      Cuando el mouse entra, la tarjeta rota (flip). Cuando sale, vuelve al frente.
+    </p>
+
+    <div class="flip-wrap">
+      <div class="flip-card" id="flipCard">
+        <div class="flip-face">
+          <h3 class="h6 mb-1">Frente</h3>
+          <p class="mb-0">Pasa el mouse encima para ver el reverso.</p>
+        </div>
+        <div class="flip-face flip-back">
+          <h3 class="h6 mb-1">Reverso</h3>
+          <p class="mb-0">mouseenter / mouseleave activan esta animación.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Click / dblclick -->
+  <section class="demo-box" id="sec-click">
+    <h2 class="h5 mb-2">2) click y dblclick: efectos “pulse” y “shake”</h2>
+    <p class="small-note mb-3">
+      Un click hace “pulse”. Un doble click hace “shake”.
+    </p>
+
+    <button class="btn btn-primary mr-2" id="btnPulse">Click (pulse)</button>
+    <button class="btn btn-warning" id="btnShake">Doble click (shake)</button>
+
+    <div class="demo-area mt-3">
+      <div class="hover-box" id="clickTarget">
+        Este bloque recibe las animaciones de pulse y shake.
+      </div>
+    </div>
+  </section>
+
+  <!-- Keyboard -->
+  <section class="demo-box" id="sec-keyboard">
+    <h2 class="h5 mb-2">3) keydown / keyup: “barra de energía”</h2>
+    <p class="small-note mb-3">
+      Mantén presionada una tecla para subir la barra. Al soltar, la barra baja.
+    </p>
+
+    <div class="energy">
+      <label class="mb-1">Escribe aquí:</label>
+      <input type="text" class="form-control mb-3" id="keyInput" placeholder="Presiona y mantén una tecla..." />
+      <div class="bar"><div id="energyBar"></div></div>
+      <div class="hint">keydown aumenta; keyup reduce.</div>
+    </div>
+  </section>
+
+  <!-- Form -->
+  <section class="demo-box" id="sec-form">
+    <h2 class="h5 mb-2">4) change / submit / focus / blur</h2>
+    <p class="small-note mb-3">
+      Cambia el select para modificar el “tema”. En focus/blur se enciende/apaga un brillo. En submit aparece “enviado”.
+    </p>
+
+    <div class="theme-box focus-glow" id="themeBox">
+      <form id="demoForm">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>Nombre (focus/blur)</label>
+            <input type="text" class="form-control" id="nameInput" placeholder="Tu nombre" />
+          </div>
+          <div class="form-group col-md-6">
+            <label>Tema (change)</label>
+            <select class="form-control" id="themeSelect">
+              <option value="default">Default</option>
+              <option value="blue">Azul</option>
+              <option value="green">Verde</option>
+              <option value="dark">Oscuro</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-success" type="submit">Enviar (submit)</button>
+        <span class="sent-badge d-none" id="sentBadge">Enviado</span>
+      </form>
+
+      <!-- confetti simple (se activa en submit) -->
+      <div class="confetti" id="c1" style="left:10%; background:#ffd36e;"></div>
+      <div class="confetti" id="c2" style="left:35%; background:#9ec5fe;"></div>
+      <div class="confetti" id="c3" style="left:60%; background:#b8f2c5;"></div>
+      <div class="confetti" id="c4" style="left:85%; background:#ff9ec8;"></div>
+    </div>
+  </section>
+
+  <!-- Load -->
+  <section class="demo-box" id="sec-load">
+    <h2 class="h5 mb-2">5) load: imagen pasa de borrosa a nítida</h2>
+    <p class="small-note mb-3">
+      Cuando la imagen termina de cargar, se le quita el blur y se hace nítida.
+    </p>
+
+    <div class="img-wrap">
+      <button class="btn btn-outline-primary mb-3" id="btnReloadImg">Recargar imagen</button>
+      <img id="demoImg" alt="Imagen demo" />
+    </div>
+  </section>
+
+  <!-- Scroll -->
+  <section class="demo-box" id="sec-scroll">
+    <h2 class="h5 mb-2">6) scroll: barra de progreso superior</h2>
+    <p class="small-note mb-2">
+      Al hacer scroll, la barra superior muestra el avance en la página.
+    </p>
+    <p class="filler mb-0">
+      Texto de relleno para que la página sea larga. Baja para ver cómo se llena la barra de progreso.
+      <br><br>
+      Construcción y proyectos requieren planificación, control de calidad, seguridad, coordinación de equipos y
+      una gestión efectiva de tiempos y costos. Este párrafo se repite para crear una longitud suficiente.
+      <br><br>
+      Construcción y proyectos requieren planificación, control de calidad, seguridad, coordinación de equipos y
+      una gestión efectiva de tiempos y costos. Este párrafo se repite para crear una longitud suficiente.
+      <br><br>
+      Construcción y proyectos requieren planificación, control de calidad, seguridad, coordinación de equipos y
+      una gestión efectiva de tiempos y costos. Este párrafo se repite para crear una longitud suficiente.
+      <br><br>
+      Construcción y proyectos requieren planificación, control de calidad, seguridad, coordinación de equipos y
+      una gestión efectiva de tiempos y costos. Este párrafo se repite para crear una longitud suficiente.
+      <br><br>
+      Construcción y proyectos requieren planificación, control de calidad, seguridad, coordinación de equipos y
+      una gestión efectiva de tiempos y costos. Este párrafo se repite para crear una longitud suficiente.
+      <br><br>
+      Fin del relleno.
+    </p>
+  </section>
+
+</div>
+
+<!-- jQuery CDN -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<script>
+  // ---------------------------
+  // Scroll suave menú
+  // ---------------------------
+  $(".js-scroll").on("click", function (e) {
+    e.preventDefault();
+    const target = $(this).attr("href");
+    const $t = $(target);
+    if ($t.length) {
+      const offset = 120;
+      $("html, body").animate({ scrollTop: $t.offset().top - offset }, 450);
+    }
+  });
+
+  // ---------------------------
+  // 1) mouseenter / mouseleave (flip)
+  // ---------------------------
+  $("#flipCard").on("mouseenter", function () {
+    $(this).addClass("is-flipped");
+  });
+
+  $("#flipCard").on("mouseleave", function () {
+    $(this).removeClass("is-flipped");
+  });
+
+  // ---------------------------
+  // 2) click => pulse; dblclick => shake
+  // ---------------------------
+  $("#btnPulse").on("click", function () {
+    const $t = $("#clickTarget");
+    $t.removeClass("shake").addClass("pulse");
+    setTimeout(() => $t.removeClass("pulse"), 380);
+  });
+
+  $("#btnShake").on("dblclick", function () {
+    const $t = $("#clickTarget");
+    $t.removeClass("pulse").addClass("shake");
+    setTimeout(() => $t.removeClass("shake"), 420);
+  });
+
+  // También permitir dblclick directo sobre el bloque
+  $("#clickTarget").on("dblclick", function () {
+    $(this).addClass("shake");
+    setTimeout(() => $(this).removeClass("shake"), 420);
+  });
+
+  // ---------------------------
+  // 3) keydown / keyup => barra
+  // ---------------------------
+  let energy = 0;
+
+  $("#keyInput").on("keydown", function () {
+    energy = Math.min(100, energy + 12);
+    $("#energyBar").css("width", energy + "%");
+  });
+
+  $("#keyInput").on("keyup", function () {
+    energy = Math.max(0, energy - 18);
+    $("#energyBar").css("width", energy + "%");
+  });
+
+  // ---------------------------
+  // 4) change => tema; focus/blur => glow; submit => "sent" + confetti
+  // ---------------------------
+  $("#themeSelect").on("change", function () {
+    const val = $(this).val();
+    const $box = $("#themeBox");
+
+    $box.removeClass("theme-dark theme-blue theme-green");
+
+    if (val === "dark") $box.addClass("theme-dark");
+    if (val === "blue") $box.addClass("theme-blue");
+    if (val === "green") $box.addClass("theme-green");
+
+    // mini-animación de entrada
+    $box.addClass("pulse");
+    setTimeout(() => $box.removeClass("pulse"), 380);
+  });
+
+  $("#nameInput").on("focus", function () {
+    $("#themeBox").addClass("is-focus");
+  });
+
+  $("#nameInput").on("blur", function () {
+    $("#themeBox").removeClass("is-focus");
+  });
+
+  $("#demoForm").on("submit", function (e) {
+    e.preventDefault();
+
+    const $box = $("#themeBox");
+    const $badge = $("#sentBadge");
+
+    $box.addClass("sent pulse");
+    $badge.removeClass("d-none");
+
+    // activar confeti (re-dispara animación)
+    $("#c1,#c2,#c3,#c4").each(function () {
+      const el = this;
+      el.style.animation = "none";
+      el.offsetHeight; // reflow
+      el.style.animation = "";
+    });
+
+    setTimeout(() => $box.removeClass("pulse"), 380);
+    setTimeout(() => {
+      $box.removeClass("sent");
+      $badge.addClass("d-none");
+    }, 1200);
+  });
+
+  // ---------------------------
+  // 5) load => blur -> nítido (imagen)
+  // ---------------------------
+  function setRandomImg() {
+    const url = "https://picsum.photos/320/200?random=" + Date.now();
+    $("#demoImg").removeClass("is-loaded").attr("src", url);
+  }
+
+  $("#demoImg").on("load", function () {
+    $(this).addClass("is-loaded");
+  });
+
+  $("#btnReloadImg").on("click", function () {
+    setRandomImg();
+  });
+
+  setRandomImg();
+
+  // ---------------------------
+  // 6) scroll => progress bar
+  // ---------------------------
+  let lastScroll = 0;
+  $(window).on("scroll", function () {
+    // throttle liviano
+    const now = Date.now();
+    if (now - lastScroll < 30) return;
+    lastScroll = now;
+
+    const docH = $(document).height();
+    const winH = $(window).height();
+    const scrollTop = $(window).scrollTop();
+
+    const max = Math.max(1, docH - winH);
+    const pct = Math.min(100, Math.max(0, (scrollTop / max) * 100));
+
+    $("#scrollProgress").css("width", pct + "%");
+  });
+</script>
+
+</body>
+</html>
+```

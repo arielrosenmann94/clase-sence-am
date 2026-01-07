@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ejemplo jQuery show() / hide()</title>
+
+  <style>
+    /* Parte "oculta por CSS" para probar show() */
+    p.texto {
+      display: none;
+      margin-top: 12px;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 14px;
+      margin-right: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Ejemplo básico: show() y hide()</h2>
+
+  <button id="btnShow">Mostrar</button>
+  <button id="btnHide">Ocultar</button>
+
+  <p class="texto">
+    Hola, soy un párrafo con clase <strong>.texto</strong>.  
+    Con show() aparezco y con hide() desaparezco.
+  </p>
+
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+  <script>
+  
+    $("#btnShow").on("click", function () {
+      $("p.texto").show();
+    });
+
+  
+    $("#btnHide").on("click", function () {
+      $("p.texto").hide();
+    });
+  </script>
+<script>
+  // show() equivalente: quitar display:none
+  document.getElementById("btnShow").addEventListener("click", function () {
+    document.querySelector("p.texto").style.display = "block";
+  });
+
+  // hide() equivalente: aplicar display:none
+  document.getElementById("btnHide").addEventListener("click", function () {
+    document.querySelector("p.texto").style.display = "none";
+  });
+</script>
+
+</body>
+</html>

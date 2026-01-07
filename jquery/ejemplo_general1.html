@@ -1,0 +1,533 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Animaciones jQuery para clases: show/hide, fade, slide, animate + menú</title>
+
+  <!-- Bootstrap 4 (opcional, solo estilo) -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+  <style>
+    body { background:#f7f7f7; }
+    header { position: sticky; top: 0; z-index: 1000; background: #f7f7f7; padding-top: 14px; }
+    section[id] { scroll-margin-top: 140px; }
+
+    .menu-bar {
+      border: 1px solid #e6e6e6;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.04);
+      margin-bottom: 16px;
+    }
+    .menu-bar a {
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      text-decoration: none;
+      border: 1px solid #ddd;
+      color: #111;
+      background: #fafafa;
+    }
+    .menu-bar a:hover { background:#f0f0f0; }
+
+    .demo-box {
+      background: #fff;
+      border: 1px solid #e6e6e6;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.04);
+      margin-bottom: 18px;
+    }
+
+    .target {
+      display: none; /* por defecto oculto */
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px dashed #bbb;
+      background: #fcfcfc;
+      margin-top: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .small-note { font-size: 13px; color:#555; }
+
+    pre {
+      background: #0e0f12;
+      color: #e6e6e6;
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 12px;
+      white-space: pre-wrap;
+    }
+
+    /* Para demos con "animate" */
+    .target-animate {
+      width: 100%;
+      max-width: 520px;
+    }
+    .mini-line {
+      height: 6px;
+      background: #eee;
+      border-radius: 999px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .mini-line > div {
+      width: 20%;
+      height: 100%;
+      background: #c9d6ff;
+    }
+
+    /* Demos de "entrada/salida" por transform usando animate + step (simple) */
+    .target-pop {
+      display: none;
+      transform: scale(0.95);
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container py-3">
+
+    <header class="mb-3">
+      <h1 class="h3 mb-2">Sitio para clases: Animaciones de entrada/salida con jQuery</h1>
+      <p class="text-muted mb-3">
+        Incluye: <strong>show/hide/toggle</strong>, <strong>fadeIn/fadeOut/fadeToggle</strong>,
+        <strong>slideDown/slideUp/slideToggle</strong> y animaciones personalizadas con <strong>animate()</strong>.
+      </p>
+
+      <nav class="menu-bar">
+        <a href="#sec-show-hide" class="js-scroll">show/hide</a>
+        <a href="#sec-fade" class="js-scroll">fade</a>
+        <a href="#sec-slide" class="js-scroll">slide</a>
+        <a href="#sec-animate" class="js-scroll">animate()</a>
+        <a href="#sec-custom" class="js-scroll">entradas/salidas extra</a>
+        <a href="#sec-resumen" class="js-scroll">resumen</a>
+      </nav>
+    </header>
+
+    <!-- 1) show/hide -->
+    <section class="demo-box" id="sec-show-hide">
+      <h2 class="h5 mb-2">1) show() / hide() / toggle()</h2>
+      <p class="mb-2">
+        <strong>show()</strong> muestra (quita display:none), <strong>hide()</strong> oculta (pone display:none),
+        y <strong>toggle()</strong> alterna entre ambos estados.
+      </p>
+      <p class="small-note mb-3">Uso típico: mostrar/ocultar bloques rápido, sin transición.</p>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" id="btnShow">Mostrar</button>
+        <button class="btn btn-secondary" id="btnHide">Ocultar</button>
+        <button class="btn btn-outline-dark" id="btnToggle">Toggle</button>
+      </div>
+
+      <div class="target" id="boxShowHide">
+        <span class="badge badge-info">SHOW/HIDE</span>
+        <div class="mt-2">Bloque visible/oculto sin animación.</div>
+      </div>
+
+      <pre id="codeShowHide"></pre>
+    </section>
+
+    <!-- 2) fade -->
+    <section class="demo-box" id="sec-fade">
+      <h2 class="h5 mb-2">2) fadeIn() / fadeOut() / fadeToggle()</h2>
+      <p class="mb-2">
+        Cambian la opacidad gradualmente. Puedes indicar duración en ms (ej: 400).
+      </p>
+      <p class="small-note mb-3">Uso típico: mensajes, avisos, contenido que aparece “suave”.</p>
+
+      <div class="btn-group">
+        <button class="btn btn-success" id="btnFadeIn">fadeIn</button>
+        <button class="btn btn-danger" id="btnFadeOut">fadeOut</button>
+        <button class="btn btn-outline-dark" id="btnFadeToggle">fadeToggle</button>
+      </div>
+
+      <div class="target" id="boxFade">
+        <span class="badge badge-success">FADE</span>
+        <div class="mt-2">Bloque con transición de opacidad.</div>
+      </div>
+
+      <pre id="codeFade"></pre>
+    </section>
+
+    <!-- 3) slide -->
+    <section class="demo-box" id="sec-slide">
+      <h2 class="h5 mb-2">3) slideDown() / slideUp() / slideToggle()</h2>
+      <p class="mb-2">
+        Animación vertical tipo acordeón: despliega y pliega ajustando la altura.
+      </p>
+      <p class="small-note mb-3">Uso típico: FAQ, acordeones, paneles de configuración.</p>
+
+      <div class="btn-group">
+        <button class="btn btn-info" id="btnSlideDown">slideDown</button>
+        <button class="btn btn-warning" id="btnSlideUp">slideUp</button>
+        <button class="btn btn-outline-dark" id="btnSlideToggle">slideToggle</button>
+      </div>
+
+      <div class="target" id="boxSlide">
+        <span class="badge badge-warning">SLIDE</span>
+        <div class="mt-2">
+          Ejemplo: panel que se despliega/plega como acordeón.
+          <div class="mini-line"><div></div></div>
+        </div>
+      </div>
+
+      <pre id="codeSlide"></pre>
+    </section>
+
+    <!-- 4) animate -->
+    <section class="demo-box" id="sec-animate">
+      <h2 class="h5 mb-2">4) animate(): animaciones personalizadas</h2>
+      <p class="mb-2">
+        <strong>animate()</strong> permite animar propiedades numéricas CSS (por ejemplo: <code>opacity</code>,
+        <code>marginLeft</code>, <code>width</code>, <code>height</code>). No anima todo (por ejemplo, no anima
+        colores sin plugins).
+      </p>
+      <p class="small-note mb-3">
+        Uso típico: “entradas/salidas” con desplazamiento, resaltado temporal, expansión de panel, microinteracciones.
+      </p>
+
+      <div class="btn-group mb-2">
+        <button class="btn btn-primary" id="btnAnimateIn">Entrada: desplazarse + aparecer</button>
+        <button class="btn btn-secondary" id="btnAnimateOut">Salida: desvanecer + volver</button>
+        <button class="btn btn-outline-dark" id="btnAnimateReset">Reset</button>
+      </div>
+
+      <div class="target target-animate" id="boxAnimate">
+        <span class="badge badge-primary">ANIMATE</span>
+        <div class="mt-2">
+          Este bloque usa <code>animate()</code> para simular entrada/salida con desplazamiento y opacidad.
+        </div>
+      </div>
+
+      <pre id="codeAnimate"></pre>
+    </section>
+
+    <!-- 5) Extras -->
+    <section class="demo-box" id="sec-custom">
+      <h2 class="h5 mb-2">5) Otras entradas/salidas “para mostrar en clase”</h2>
+      <p class="mb-2">
+        Aquí tienes combinaciones típicas: “pop” (escala+opacidad), “shake” (error), y “highlight” (resaltar).
+        Todas hechas con jQuery (sin librerías extra).
+      </p>
+
+      <!-- Pop in/out -->
+      <div class="mb-3">
+        <h3 class="h6 mb-2">A) Pop In / Pop Out (escala + opacidad)</h3>
+        <div class="btn-group">
+          <button class="btn btn-success" id="btnPopIn">Pop In</button>
+          <button class="btn btn-danger" id="btnPopOut">Pop Out</button>
+        </div>
+
+        <div class="target target-pop mt-3" id="boxPop">
+          <span class="badge badge-success">POP</span>
+          <div class="mt-2">Entrada/salida tipo “pop” (simula zoom suave).</div>
+        </div>
+
+        <pre id="codePop"></pre>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Shake -->
+      <div class="mb-3">
+        <h3 class="h6 mb-2">B) Shake (para errores o validaciones)</h3>
+        <div class="btn-group">
+          <button class="btn btn-warning" id="btnShake">Shake</button>
+        </div>
+
+        <div class="target mt-3" id="boxShake" style="display:block;">
+          <span class="badge badge-warning">SHAKE</span>
+          <div class="mt-2">Haz clic en “Shake” para ver un efecto de error.</div>
+        </div>
+
+        <pre id="codeShake"></pre>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Highlight -->
+      <div class="mb-2">
+        <h3 class="h6 mb-2">C) Highlight (resaltar temporalmente un bloque)</h3>
+        <div class="btn-group">
+          <button class="btn btn-info" id="btnHighlight">Highlight</button>
+        </div>
+
+        <div class="target mt-3" id="boxHighlight" style="display:block;">
+          <span class="badge badge-info">HIGHLIGHT</span>
+          <div class="mt-2">Resalta el bloque para llamar la atención del usuario.</div>
+        </div>
+
+        <pre id="codeHighlight"></pre>
+      </div>
+    </section>
+
+    <!-- Resumen -->
+    <section class="demo-box" id="sec-resumen">
+      <h2 class="h5 mb-2">Resumen para explicar en clase</h2>
+      <ul class="mb-0">
+        <li><strong>toggle / fadeToggle / slideToggle</strong>: alternan el estado sin if/else manual.</li>
+        <li><strong>fade</strong>: opacidad (entradas/salidas suaves).</li>
+        <li><strong>slide</strong>: altura (acordeones / FAQ).</li>
+        <li><strong>animate</strong>: control total sobre propiedades numéricas (microinteracciones).</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+  <script>
+    // ---------------------------
+    // Menú scroll suave a secciones
+    // ---------------------------
+    $(".js-scroll").on("click", function (e) {
+      e.preventDefault();
+      const targetSelector = $(this).attr("href");
+      const $target = $(targetSelector);
+
+      if ($target.length) {
+        const offset = 120; // ajuste por header sticky
+        $("html, body").animate({ scrollTop: $target.offset().top - offset }, 450);
+      }
+    });
+
+    // ---------------------------
+    // 1) show/hide/toggle
+    // ---------------------------
+    $("#btnShow").on("click", function () {
+      $("#boxShowHide").show();
+    });
+    $("#btnHide").on("click", function () {
+      $("#boxShowHide").hide();
+    });
+    $("#btnToggle").on("click", function () {
+      $("#boxShowHide").toggle();
+    });
+    $("#codeShowHide").text(
+`// show() / hide() / toggle()
+$("#btnShow").on("click", function () {
+  $("#boxShowHide").show();
+});
+$("#btnHide").on("click", function () {
+  $("#boxShowHide").hide();
+});
+$("#btnToggle").on("click", function () {
+  $("#boxShowHide").toggle();
+});`
+    );
+
+    // ---------------------------
+    // 2) fadeIn/fadeOut/fadeToggle
+    // ---------------------------
+    $("#btnFadeIn").on("click", function () {
+      $("#boxFade").fadeIn(400);
+    });
+    $("#btnFadeOut").on("click", function () {
+      $("#boxFade").fadeOut(400);
+    });
+    $("#btnFadeToggle").on("click", function () {
+      $("#boxFade").fadeToggle(400);
+    });
+    $("#codeFade").text(
+`// fadeIn() / fadeOut() / fadeToggle()
+$("#btnFadeIn").on("click", function () {
+  $("#boxFade").fadeIn(400);
+});
+$("#btnFadeOut").on("click", function () {
+  $("#boxFade").fadeOut(400);
+});
+$("#btnFadeToggle").on("click", function () {
+  $("#boxFade").fadeToggle(400);
+});`
+    );
+
+    // ---------------------------
+    // 3) slideDown/slideUp/slideToggle
+    // ---------------------------
+    $("#btnSlideDown").on("click", function () {
+      $("#boxSlide").slideDown(400);
+    });
+    $("#btnSlideUp").on("click", function () {
+      $("#boxSlide").slideUp(400);
+    });
+    $("#btnSlideToggle").on("click", function () {
+      $("#boxSlide").slideToggle(400);
+    });
+    $("#codeSlide").text(
+`// slideDown() / slideUp() / slideToggle()
+$("#btnSlideDown").on("click", function () {
+  $("#boxSlide").slideDown(400);
+});
+$("#btnSlideUp").on("click", function () {
+  $("#boxSlide").slideUp(400);
+});
+$("#btnSlideToggle").on("click", function () {
+  $("#boxSlide").slideToggle(400);
+});`
+    );
+
+    // ---------------------------
+    // 4) animate(): entrada/salida
+    // Nota: seteo inicial antes de mostrar
+    // ---------------------------
+    function prepareAnimateBox() {
+      const $box = $("#boxAnimate");
+      $box.css({
+        display: "none",
+        opacity: 0,
+        marginLeft: "0px"
+      });
+    }
+    prepareAnimateBox();
+
+    $("#btnAnimateIn").on("click", function () {
+      const $box = $("#boxAnimate");
+      // Lo preparamos para entrar desde la izquierda
+      $box.stop(true, true).css({ display: "block", opacity: 0, marginLeft: "-30px" });
+      $box.animate({ opacity: 1, marginLeft: "0px" }, 450);
+    });
+
+    $("#btnAnimateOut").on("click", function () {
+      const $box = $("#boxAnimate");
+      $box.stop(true, true).animate({ opacity: 0, marginLeft: "-30px" }, 450, function () {
+        $box.css({ display: "none" });
+      });
+    });
+
+    $("#btnAnimateReset").on("click", function () {
+      prepareAnimateBox();
+    });
+
+    $("#codeAnimate").text(
+`// animate(): entrada/salida (opacidad + desplazamiento)
+$("#btnAnimateIn").on("click", function () {
+  const $box = $("#boxAnimate");
+  $box.stop(true,true).css({ display:"block", opacity:0, marginLeft:"-30px" });
+  $box.animate({ opacity:1, marginLeft:"0px" }, 450);
+});
+
+$("#btnAnimateOut").on("click", function () {
+  const $box = $("#boxAnimate");
+  $box.stop(true,true).animate({ opacity:0, marginLeft:"-30px" }, 450, function () {
+    $box.css({ display:"none" });
+  });
+});`
+    );
+
+    // ---------------------------
+    // 5A) Pop In/Out (escala simulada con width/padding + opacidad)
+    // jQuery no anima transform sin plugins, por eso simulamos "pop"
+    // ---------------------------
+    function popIn($el, duration) {
+      $el.stop(true,true).css({
+        display: "block",
+        opacity: 0,
+        width: "95%",
+        padding: "10px"
+      });
+      $el.animate({ opacity: 1, width: "100%", padding: "14px" }, duration);
+    }
+
+    function popOut($el, duration) {
+      $el.stop(true,true).animate({ opacity: 0, width: "95%", padding: "10px" }, duration, function () {
+        $el.css({ display: "none" });
+      });
+    }
+
+    $("#btnPopIn").on("click", function(){
+      popIn($("#boxPop"), 350);
+    });
+
+    $("#btnPopOut").on("click", function(){
+      popOut($("#boxPop"), 350);
+    });
+
+    $("#codePop").text(
+`// Pop In/Out (simulado con width/padding + opacity)
+function popIn($el, duration) {
+  $el.stop(true,true).css({ display:"block", opacity:0, width:"95%", padding:"10px" });
+  $el.animate({ opacity:1, width:"100%", padding:"14px" }, duration);
+}
+
+function popOut($el, duration) {
+  $el.stop(true,true).animate({ opacity:0, width:"95%", padding:"10px" }, duration, function () {
+    $el.css({ display:"none" });
+  });
+}`
+    );
+
+    // ---------------------------
+    // 5B) Shake (secuencia de animaciones)
+    // ---------------------------
+    $("#btnShake").on("click", function () {
+      const $el = $("#boxShake");
+      $el.stop(true,true)
+        .animate({ marginLeft: "-12px" }, 60)
+        .animate({ marginLeft: "12px" }, 60)
+        .animate({ marginLeft: "-10px" }, 60)
+        .animate({ marginLeft: "10px" }, 60)
+        .animate({ marginLeft: "0px" }, 60);
+    });
+
+    $("#codeShake").text(
+`// Shake: secuencia rápida (ideal para error/validación)
+$("#btnShake").on("click", function () {
+  const $el = $("#boxShake");
+  $el.stop(true,true)
+    .animate({ marginLeft: "-12px" }, 60)
+    .animate({ marginLeft: "12px" }, 60)
+    .animate({ marginLeft: "-10px" }, 60)
+    .animate({ marginLeft: "10px" }, 60)
+    .animate({ marginLeft: "0px" }, 60);
+});`
+    );
+
+    // ---------------------------
+    // 5C) Highlight (resaltar temporalmente)
+    // No animamos color sin plugin, pero podemos simular con opacidad y borde
+    // ---------------------------
+    $("#btnHighlight").on("click", function () {
+      const $el = $("#boxHighlight");
+      $el.stop(true,true).css({ border: "1px dashed #bbb" });
+
+      // "Pulse": baja y sube opacidad + refuerza borde
+      $el.animate({ opacity: 0.6 }, 120)
+         .animate({ opacity: 1 }, 120)
+         .animate({ opacity: 0.7 }, 120)
+         .animate({ opacity: 1 }, 120);
+
+      // Borde “fuerte” y vuelve a normal
+      $el.css({ border: "2px solid #9ec5fe" });
+      setTimeout(() => $el.css({ border: "1px dashed #bbb" }), 600);
+    });
+
+    $("#codeHighlight").text(
+`// Highlight: "pulse" + borde temporal para llamar atención
+$("#btnHighlight").on("click", function () {
+  const $el = $("#boxHighlight");
+  $el.stop(true,true).css({ border: "1px dashed #bbb" });
+
+  $el.animate({ opacity: 0.6 }, 120)
+     .animate({ opacity: 1 }, 120)
+     .animate({ opacity: 0.7 }, 120)
+     .animate({ opacity: 1 }, 120);
+
+  $el.css({ border: "2px solid #9ec5fe" });
+  setTimeout(() => $el.css({ border: "1px dashed #bbb" }), 600);
+});`
+    );
+  </script>
+
+</body>
+</html>
+```

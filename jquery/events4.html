@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sitio corto con menú de accesibilidad</title>
+
+  <!-- Bootstrap 4 (opcional) -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+
+  <style>
+    body { background:#f7f7f7; }
+    .wrap { display: grid; grid-template-columns: 1fr 260px; gap: 16px; padding: 18px 0; }
+    @media (max-width: 900px){ .wrap { grid-template-columns: 1fr; } }
+
+    .card-soft{
+      background:#fff;
+      border:1px solid #e6e6e6;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.04);
+      padding: 16px;
+    }
+
+    /* Menú accesibilidad (panel lateral) */
+    .a11y-panel{
+      position: sticky;
+      top: 14px;
+      height: fit-content;
+    }
+    .a11y-panel h2{ font-size: 16px; margin: 0 0 10px; }
+    .a11y-btn{
+      width: 100%;
+      text-align: left;
+      margin-bottom: 8px;
+      border-radius: 10px;
+    }
+    .small-note{ font-size: 13px; color:#555; }
+
+    /* Accesibilidad: foco visible */
+    :focus{
+      outline: 3px solid rgba(0,123,255,.55);
+      outline-offset: 2px;
+    }
+
+    /* Estados que aplica el menú */
+    body.font-lg { font-size: 18px; }
+    body.font-xl { font-size: 20px; }
+
+    body.high-contrast{
+      background: #000 !important;
+      color: #fff !important;
+    }
+    body.high-contrast .card-soft{
+      background:#000 !important;
+      color:#fff !important;
+      border-color:#444 !important;
+      box-shadow: none !important;
+    }
+    body.high-contrast a{ color: #9ec5fe !important; }
+    body.high-contrast .btn{ border-color:#777 !important; }
+
+    body.dyslexia{
+      font-family: Arial, Verdana, Tahoma, sans-serif !important;
+      letter-spacing: 0.4px;
+      line-height: 1.7;
+    }
+
+    body.reduce-motion *{
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+
+    /* Un mini efecto (para ver reduce-motion) */
+    .pulse-badge{
+      display:inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border:1px solid #ddd;
+      background:#fafafa;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%,100%{ transform: scale(1); }
+      50%{ transform: scale(1.04); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="wrap">
+
+      <!-- CONTENIDO CORTO -->
+      <main class="card-soft" aria-labelledby="titulo">
+        <h1 id="titulo" class="h4 mb-2">Landing corta: Vasos de Navidad</h1>
+        <p class="small-note mb-3">
+          Ejemplo de sitio corto con un menú de accesibilidad fijo al lado.
+          Prueba cada opción y revisa cómo cambia el contenido.
+        </p>
+
+        <p class="mb-2">
+          Pack de vasos navideños para cenas y regalos. Compra segura y despacho rápido.
+          <span class="pulse-badge">Oferta activa</span>
+        </p>
+
+        <div class="mb-3">
+          <a href="#comprar" class="btn btn-dark">Ir a comprar</a>
+          <a href="#faq" class="btn btn-outline-secondary ml-2">Ver FAQ</a>
+        </div>
+
+        <section id="comprar" class="mt-4">
+          <h2 class="h5">Comprar</h2>
+          <label for="qty">Cantidad</label>
+          <input id="qty" class="form-control mb-2" type="number" value="1" min="1" max="50" />
+          <button class="btn btn-success">Comprar ahora</button>
+        </section>
+
+        <section id="faq" class="mt-4">
+          <h2 class="h5">FAQ</h2>
+          <p class="mb-1"><strong>¿Cuánto demora?</strong> 24–72 horas hábiles.</p>
+          <p class="mb-0"><strong>¿Puedo devolver?</strong> Sí, según condiciones.</p>
+        </section>
+
+        <footer class="mt-4 small-note">
+          Consejo: usa TAB para navegar. El foco está resaltado.
+        </footer>
+      </main>
+
+      <!-- MENÚ ACCESIBILIDAD -->
+      <aside class="card-soft a11y-panel" aria-label="Menú de accesibilidad">
+        <h2>Accesibilidad</h2>
+
+        <button class="btn btn-outline-dark a11y-btn" id="btnFontNormal" type="button">
+          Tamaño texto: normal
+        </button>
+        <button class="btn btn-outline-dark a11y-btn" id="btnFontLg" type="button">
+          Tamaño texto: grande
+        </button>
+        <button class="btn btn-outline-dark a11y-btn" id="btnFontXl" type="button">
+          Tamaño texto: muy grande
+        </button>
+
+        <button class="btn btn-outline-dark a11y-btn" id="btnContrast" type="button" aria-pressed="false">
+          Alto contraste
+        </button>
+
+        <button class="btn btn-outline-dark a11y-btn" id="btnDyslexia" type="button" aria-pressed="false">
+          Fuente “simple” (lectura fácil)
+        </button>
+
+        <button class="btn btn-outline-dark a11y-btn" id="btnMotion" type="button" aria-pressed="false">
+          Reducir movimiento
+        </button>
+
+        <button class="btn btn-danger a11y-btn" id="btnReset" type="button">
+          Reset accesibilidad
+        </button>
+
+        <div class="small-note mt-2">
+          Estas opciones simulan un panel de accesibilidad típico:
+          contraste, tamaño de texto y reducción de animaciones.
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- JS nativo (simple) -->
+  <script>
+    const body = document.body;
+
+    const setPressed = (btn, isPressed) => {
+      btn.setAttribute("aria-pressed", String(isPressed));
+    };
+
+    // Texto
+    document.getElementById("btnFontNormal").addEventListener("click", () => {
+      body.classList.remove("font-lg", "font-xl");
+    });
+
+    document.getElementById("btnFontLg").addEventListener("click", () => {
+      body.classList.add("font-lg");
+      body.classList.remove("font-xl");
+    });
+
+    document.getElementById("btnFontXl").addEventListener("click", () => {
+      body.classList.add("font-xl");
+      body.classList.remove("font-lg");
+    });
+
+    // Contraste
+    const btnContrast = document.getElementById("btnContrast");
+    btnContrast.addEventListener("click", () => {
+      const on = body.classList.toggle("high-contrast");
+      setPressed(btnContrast, on);
+    });
+
+    // Fuente lectura fácil
+    const btnDyslexia = document.getElementById("btnDyslexia");
+    btnDyslexia.addEventListener("click", () => {
+      const on = body.classList.toggle("dyslexia");
+      setPressed(btnDyslexia, on);
+    });
+
+    // Reducir movimiento
+    const btnMotion = document.getElementById("btnMotion");
+    btnMotion.addEventListener("click", () => {
+      const on = body.classList.toggle("reduce-motion");
+      setPressed(btnMotion, on);
+    });
+
+    // Reset
+    document.getElementById("btnReset").addEventListener("click", () => {
+      body.classList.remove("font-lg", "font-xl", "high-contrast", "dyslexia", "reduce-motion");
+      setPressed(btnContrast, false);
+      setPressed(btnDyslexia, false);
+      setPressed(btnMotion, false);
+    });
+  </script>
+</body>
+</html>

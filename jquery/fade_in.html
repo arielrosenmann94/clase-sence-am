@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construcción — Página informativa con Fade In al cargar</title>
+
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      margin: 0;
+      line-height: 1.6;
+      background: #f7f7f7;
+      color: #222;
+    }
+    header{
+      background:#111;
+      color:#fff;
+      padding: 32px 18px;
+    }
+    header h1{ margin:0 0 8px; }
+    header p{ margin:0; opacity:.9; }
+
+    main{
+      max-width: 980px;
+      margin: 18px auto;
+      padding: 0 18px 40px;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid #e5e5e5;
+      border-radius: 12px;
+      padding: 18px;
+      margin: 16px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,.04);
+    }
+
+    /* Estado inicial (antes del fade in) */
+    .fade-item{
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    /* Solo para que se vea "larga" */
+    .grid{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 840px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+
+    ul{ margin: 10px 0 0 20px; }
+    .tag{
+      display:inline-block;
+      font-size: 12px;
+      background:#eef3ff;
+      border:1px solid #d7e2ff;
+      padding: 4px 8px;
+      border-radius: 999px;
+      margin-right: 6px;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="fade-item">
+    <h1>Guía práctica de construcción</h1>
+    <p>Conceptos clave, etapas, materiales y buenas prácticas para ejecutar obras con control y calidad.</p>
+    <span class="tag">Obras</span>
+    <span class="tag">Calidad</span>
+    <span class="tag">Seguridad</span>
+    <span class="tag">Planificación</span>
+  </header>
+
+  <main>
+    <section class="card fade-item">
+      <h2>1) Planificación y presupuesto</h2>
+      <p>
+        Antes de iniciar una obra, la planificación reduce costos, evita retrasos y permite definir alcance.
+        En esta etapa se levantan requerimientos, se estima mano de obra, se evalúan proveedores y se construye
+        un cronograma realista.
+      </p>
+      <ul>
+        <li>Definir el objetivo del proyecto y el alcance (qué incluye y qué no incluye).</li>
+        <li>Presupuesto con contingencia (5%–15% según complejidad).</li>
+        <li>Carta Gantt o cronograma semanal con hitos.</li>
+        <li>Plan de compras por partidas (estructura, instalaciones, terminaciones).</li>
+      </ul>
+    </section>
+
+    <section class="card fade-item">
+      <h2>2) Estudio de suelo y emplazamiento</h2>
+      <p>
+        La calidad del terreno impacta cimientos, drenajes y estabilidad. Un estudio de suelo permite elegir
+        fundaciones adecuadas y anticipar riesgos como napa alta, rellenos o arcillas expansivas.
+      </p>
+      <ul>
+        <li>Topografía: niveles, pendientes y accesos.</li>
+        <li>Drenajes: aguas lluvias, escurrimientos y canalizaciones.</li>
+        <li>Compatibilidad normativa: distanciamientos, alturas, usos, permisos.</li>
+      </ul>
+    </section>
+
+    <section class="card fade-item">
+      <h2>3) Obra gruesa</h2>
+      <p>
+        La obra gruesa define estructura y resistencia. Aquí se ejecutan fundaciones, losas, muros y elementos
+        portantes. Un control de calidad simple (hitos de revisión) reduce errores difíciles de corregir después.
+      </p>
+      <div class="grid">
+        <div class="card" style="background:#fafafa;border-style:dashed;">
+          <h3>Fundaciones</h3>
+          <p>Zapatas, vigas de fundación, losa de fundación, según cálculo y tipo de suelo.</p>
+          <ul>
+            <li>Armado conforme a planos</li>
+            <li>Hormigonado y curado</li>
+            <li>Control de nivelación</li>
+          </ul>
+        </div>
+
+        <div class="card" style="background:#fafafa;border-style:dashed;">
+          <h3>Estructura</h3>
+          <p>Hormigón armado, acero o madera estructural, con uniones y anclajes críticos.</p>
+          <ul>
+            <li>Verificación de plomos</li>
+            <li>Escuadras y diagonales</li>
+            <li>Protección anticorrosiva</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card fade-item">
+      <h2>4) Instalaciones: sanitaria, eléctrica y gas</h2>
+      <p>
+        Las instalaciones deben planificarse antes de cerrar muros y cielos. Un error típico es improvisar rutas
+        de ductos, generando retrabajo y filtraciones.
+      </p>
+      <ul>
+        <li>Sanitaria: pendientes, ventilación, pruebas de estanqueidad.</li>
+        <li>Eléctrica: canalizaciones, tablero, protecciones y circuitos por carga.</li>
+        <li>Gas: trazados autorizados, pruebas y normativa aplicable.</li>
+      </ul>
+    </section>
+
+    <section class="card fade-item">
+      <h2>5) Envolvente térmica y acústica</h2>
+      <p>
+        Mejorar confort y eficiencia energética depende de aislación, sellos y control de puentes térmicos.
+        Una envolvente bien ejecutada reduce consumo y aumenta la vida útil del inmueble.
+      </p>
+      <ul>
+        <li>Aislación en muros y techumbre según zona climática.</li>
+        <li>Sellos en ventanas y encuentros (aire/agua).</li>
+        <li>Barreras de vapor donde corresponda.</li>
+      </ul>
+    </section>
+
+    <section class="card fade-item">
+      <h2>6) Terminaciones</h2>
+      <p>
+        Pinturas, revestimientos, cerámicas, pisos y mobiliario. Aquí la calidad se percibe de inmediato,
+        por lo que conviene trabajar con checklist de recepción por ambiente.
+      </p>
+      <ul>
+        <li>Tolerancias: niveles, juntas y alineación de piezas.</li>
+        <li>Sellos en zonas húmedas (baños/cocina).</li>
+        <li>Revisión final: puertas, grifería, enchufes, iluminación.</li>
+      </ul>
+    </section>
+
+    <section class="card fade-item">
+      <h2>7) Seguridad y orden en obra</h2>
+      <p>
+        La seguridad es parte de la productividad. Orden, señalización y EPP reducen accidentes y paradas.
+        Un plan mínimo considera rutas seguras, almacenamiento y control de herramientas.
+      </p>
+      <ul>
+        <li>EPP: casco, guantes, zapatos de seguridad, antiparras según tarea.</li>
+        <li>Orden y limpieza diaria (escombros, clavos, cables).</li>
+        <li>Zonas de acopio definidas y protegidas de lluvia.</li>
+      </ul>
+    </section>
+
+    <section class="card fade-item">
+      <h2>8) Entrega y postventa</h2>
+      <p>
+        Una entrega profesional incluye documentación y pruebas: manuales, garantías, planos conforme a obra y
+        acta de recepción. Esto reduce reclamos y mejora la experiencia del cliente.
+      </p>
+      <ul>
+        <li>Checklist de recepción por ambiente.</li>
+        <li>Pruebas: agua, electricidad, sellos y funcionamiento.</li>
+        <li>Plan de postventa: plazos y canal de comunicación.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    // Fade In en JS puro (al cargar)
+    function fadeIn(el, duration = 500) {
+      el.style.opacity = "0";
+      el.style.display = ""; // respeta display natural
+      const start = performance.now();
+
+      function tick(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        el.style.opacity = String(progress);
+
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    // Aplica fade-in en cascada cuando la página termina de cargar
+    window.addEventListener("DOMContentLoaded", function () {
+      const items = document.querySelectorAll(".fade-item");
+      items.forEach((el, index) => {
+        // retraso progresivo para que se note el efecto
+        setTimeout(() => fadeIn(el, 1500), index * 1120);
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,489 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vasos de Navidad — Página de compra + Popups aleatorios</title>
+
+  <!-- Bootstrap 4 (opcional para estilo) -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+
+  <style>
+    body{ background:#f7f7f7; }
+    header{
+      background:#111;
+      color:#fff;
+      padding: 28px 0;
+      margin-bottom: 18px;
+    }
+    .hero{
+      background:#fff;
+      border:1px solid #e6e6e6;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.04);
+    }
+    .badge-soft{
+      display:inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border:1px solid #ddd;
+      background:#fafafa;
+      font-size: 12px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+    .card-soft{
+      background:#fff;
+      border:1px solid #e6e6e6;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.04);
+      overflow:hidden;
+    }
+    .card-soft .p-3{ padding: 16px !important; }
+
+    /* ---------- Producto con flip al hacer scroll ---------- */
+    .flip-wrap{ perspective: 900px; }
+    .flip-card{
+      height: 260px;
+      transform-style: preserve-3d;
+      transition: transform .6s ease;
+      position: relative;
+      border-radius: 14px;
+    }
+    .flip-card.is-flipped{ transform: rotateY(180deg); }
+    .flip-face{
+      position:absolute; inset:0;
+      backface-visibility:hidden;
+      border-radius: 14px;
+      border:1px solid #e6e6e6;
+      background:#fff;
+      display:flex; align-items:center; justify-content:center;
+      flex-direction: column;
+      padding: 16px;
+    }
+    .flip-back{
+      transform: rotateY(180deg);
+      background:#111;
+      color:#fff;
+      border-color:#222;
+    }
+    .cup{
+      width: 88px; height: 120px;
+      border: 3px solid #111;
+      border-top: 10px solid #111;
+      border-radius: 0 0 16px 16px;
+      position: relative;
+      margin-bottom: 10px;
+      background: linear-gradient(#fff, #f3f3f3);
+    }
+    .cup:before{
+      content:"";
+      position:absolute;
+      right:-20px; top:28px;
+      width: 26px; height: 48px;
+      border: 3px solid #111;
+      border-left: 0;
+      border-radius: 0 18px 18px 0;
+      background: transparent;
+    }
+
+    /* ---------- Notificación emergente (abajo) ---------- */
+    .toast-sale{
+      position: fixed;
+      left: 16px;
+      bottom: 16px;
+      width: min(360px, calc(100% - 32px));
+      background: #111;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      padding: 12px 12px;
+      display: none;
+      z-index: 2000;
+      overflow: hidden;
+    }
+    .toast-sale .title{
+      font-weight: 600;
+      margin: 0 0 2px;
+      font-size: 14px;
+    }
+    .toast-sale .sub{
+      margin: 0;
+      font-size: 13px;
+      opacity: .9;
+    }
+    .toast-sale .mini{
+      margin-top: 6px;
+      font-size: 12px;
+      opacity: .75;
+    }
+    .toast-sale .closex{
+      position:absolute;
+      top: 8px; right: 10px;
+      color:#fff;
+      opacity:.75;
+      cursor:pointer;
+      user-select:none;
+      font-size: 18px;
+      line-height: 18px;
+    }
+    .toast-sale .bar{
+      position:absolute;
+      left:0; bottom:0;
+      height: 3px;
+      width: 0%;
+      background: rgba(255,255,255,.7);
+    }
+
+    /* animaciones del toast */
+    .toast-pop-in{ animation: toastIn .35s ease forwards; display:block; }
+    .toast-pop-out{ animation: toastOut .28s ease forwards; }
+
+    @keyframes toastIn{
+      from { transform: translateY(16px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes toastOut{
+      from { transform: translateY(0); opacity: 1; }
+      to   { transform: translateY(16px); opacity: 0; }
+    }
+
+    /* ---------- Shake (por tiempo o scroll) ---------- */
+    .shake { animation: shake .35s ease; }
+    @keyframes shake{
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-6px); }
+    }
+
+    /* ---------- Scroll progress ---------- */
+    .scroll-progress{
+      position: fixed;
+      top: 0; left: 0;
+      height: 4px;
+      width: 0%;
+      background: #111;
+      z-index: 2500;
+    }
+
+    .section{
+      background:#fff;
+      border:1px solid #e6e6e6;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.04);
+      margin-bottom: 18px;
+    }
+    .muted{ color:#666; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<header>
+  <div class="container">
+    <h1 class="h3 mb-1">Vasos de Navidad</h1>
+    <p class="mb-0" style="opacity:.9;">Página de compra con notificaciones de compras recientes (simuladas).</p>
+  </div>
+</header>
+
+<div class="container pb-4">
+
+  <div class="hero mb-3">
+    <span class="badge-soft">Envío rápido</span>
+    <span class="badge-soft">Stock limitado</span>
+    <span class="badge-soft">Pago seguro</span>
+    <p class="mb-0 muted">
+      Esta página simula un e-commerce y muestra notificaciones tipo “Juanito compró…” con intervalos aleatorios
+      entre <strong>3 y 15 segundos</strong>.
+    </p>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6 mb-3">
+      <div class="card-soft">
+        <div class="p-3">
+          <h2 class="h5 mb-2">Pack de 6 vasos navideños premium</h2>
+          <p class="muted mb-2">
+            Vasos resistentes, ideal para regalos corporativos, cenas y celebraciones.
+          </p>
+          <div class="d-flex align-items-center mb-2">
+            <h3 class="h4 mb-0 mr-3">$9.990</h3>
+            <span class="badge badge-success">-25%</span>
+          </div>
+          <div class="muted mb-3">Incluye diseño festivo + empaque.</div>
+
+          <div class="form-row align-items-end">
+            <div class="form-group col-6">
+              <label>Cantidad</label>
+              <input class="form-control" type="number" id="qty" value="1" min="1" max="50">
+            </div>
+            <div class="form-group col-6">
+              <button class="btn btn-dark btn-block" id="btnBuy">Comprar ahora</button>
+            </div>
+          </div>
+
+          <div class="muted mb-0">
+            Tip clase: observa cómo los eventos por <strong>tiempo</strong> y por <strong>scroll</strong> disparan efectos.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 mb-3">
+      <div class="section">
+        <h2 class="h6 mb-2">Efecto por scroll: tarjeta se voltea al llegar a esta sección</h2>
+        <p class="muted mb-3">
+          Cuando haces scroll y esta sección entra en pantalla, la tarjeta se voltea automáticamente.
+        </p>
+
+        <div class="flip-wrap">
+          <div class="flip-card" id="flipCard">
+            <div class="flip-face">
+              <div class="cup"></div>
+              <div class="text-center">
+                <div class="font-weight-bold">Vista del producto</div>
+                <div class="muted">Sigue bajando para ver el reverso.</div>
+              </div>
+            </div>
+            <div class="flip-face flip-back">
+              <div class="text-center">
+                <div class="font-weight-bold">Detalles</div>
+                <div class="mt-2">Material: plástico premium</div>
+                <div>Uso: frío / tibio</div>
+                <div>Empaque: listo para regalo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="muted mt-3 mb-0">
+          También se puede “desvoltear” al volver hacia arriba.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="h5 mb-2">Descripción larga (para probar scroll)</h2>
+    <p class="muted mb-0">
+      En campañas navideñas, un gatillo común es mostrar compras recientes para generar confianza.
+      Este demo lo simula con datos aleatorios y un temporizador variable. Además, se incluye una barra
+      de progreso de scroll y efectos activados por umbrales de scroll.
+      <br><br>
+      Texto de relleno: planificación, logística, empaques, control de inventario, promociones,
+      remarketing, tiempos de entrega, servicio al cliente, garantías y postventa.
+      <br><br>
+      Texto de relleno: planificación, logística, empaques, control de inventario, promociones,
+      remarketing, tiempos de entrega, servicio al cliente, garantías y postventa.
+      <br><br>
+      Texto de relleno: planificación, logística, empaques, control de inventario, promociones,
+      remarketing, tiempos de entrega, servicio al cliente, garantías y postventa.
+      <br><br>
+      Texto de relleno: planificación, logística, empaques, control de inventario, promociones,
+      remarketing, tiempos de entrega, servicio al cliente, garantías y postventa.
+    </p>
+  </div>
+
+  <div class="section" id="shakeSection">
+    <h2 class="h5 mb-2">Efecto por scroll: “shake” al entrar a esta sección</h2>
+    <p class="muted mb-0">
+      Cuando esta sección entra a la pantalla, la página aplicará un “shake” al botón de comprar
+      (una sola vez) para llamar la atención.
+    </p>
+  </div>
+
+</div>
+
+<!-- Toast de compra -->
+<div class="toast-sale" id="saleToast" aria-live="polite" aria-atomic="true">
+  <div class="closex" id="toastClose">×</div>
+  <p class="title" id="toastTitle">Compra reciente</p>
+  <p class="sub" id="toastSub">—</p>
+  <div class="mini" id="toastMini">—</div>
+  <div class="bar" id="toastBar"></div>
+</div>
+
+<!-- jQuery CDN -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<script>
+  // ============================
+  // Utilidades
+  // ============================
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function pick(arr) {
+    return arr[randInt(0, arr.length - 1)];
+  }
+
+  function formatCLP(n) {
+    // formateo simple estilo CL
+    return "$" + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  // ============================
+  // Popup de compras aleatorias (3 a 15 seg)
+  // ============================
+  const names = ["Juanito", "Camila", "Sofía", "Matías", "Ignacio", "Fernanda", "Valentina", "Benjamín", "Antonia", "Vicente"];
+  const cities = ["Santiago", "Valparaíso", "Concepción", "La Serena", "Temuco", "Antofagasta", "Rancagua"];
+  const quantities = [1,2,3,4,5,6,8,10];
+
+  let toastTimeout = null;
+  let nextTimeout = null;
+
+  function showSaleToast() {
+    const name = pick(names);
+    const qty = pick(quantities);
+    const city = pick(cities);
+    const minutesAgo = randInt(1, 18);
+
+    const unitPrice = 9990;
+    const total = unitPrice * qty;
+
+    $("#toastSub").text(`${name} compró ${qty} vasos de navidad.`);
+    $("#toastMini").text(`${city} · hace ${minutesAgo} min · total ${formatCLP(total)}`);
+
+    const $toast = $("#saleToast");
+    const $bar = $("#toastBar");
+
+    // reset animaciones
+    $toast.removeClass("toast-pop-out").addClass("toast-pop-in").show();
+    $bar.stop(true, true).css("width", "0%");
+
+    // barra de duración (visible 4.5s)
+    $bar.animate({ width: "100%" }, 4500, "linear");
+
+    // auto-ocultar
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => hideSaleToast(), 4700);
+
+    // programar siguiente aparición aleatoria
+    scheduleNextToast();
+  }
+
+  function hideSaleToast() {
+    const $toast = $("#saleToast");
+    $toast.removeClass("toast-pop-in").addClass("toast-pop-out");
+    setTimeout(() => $toast.hide(), 280);
+  }
+
+  function scheduleNextToast() {
+    const delaySec = randInt(3, 15);
+    if (nextTimeout) clearTimeout(nextTimeout);
+    nextTimeout = setTimeout(showSaleToast, delaySec * 1000);
+  }
+
+  $("#toastClose").on("click", function () {
+    hideSaleToast();
+    scheduleNextToast();
+  });
+
+  // ============================
+  // Efectos por scroll
+  // ============================
+  let flipped = false;
+  let shookOnce = false;
+
+  function elementInView($el, thresholdPx) {
+    const rect = $el[0].getBoundingClientRect();
+    return rect.top <= (window.innerHeight - (thresholdPx || 120)) && rect.bottom >= 0;
+  }
+
+  function handleScrollEffects() {
+    // progress bar
+    const docH = $(document).height();
+    const winH = $(window).height();
+    const scrollTop = $(window).scrollTop();
+    const max = Math.max(1, docH - winH);
+    const pct = Math.min(100, Math.max(0, (scrollTop / max) * 100));
+    $("#scrollProgress").css("width", pct + "%");
+
+    // flip card al entrar/salir del viewport
+    const $flip = $("#flipCard");
+    if (elementInView($flip, 180)) {
+      if (!flipped) {
+        $flip.addClass("is-flipped");
+        flipped = true;
+      }
+    } else {
+      if (flipped) {
+        $flip.removeClass("is-flipped");
+        flipped = false;
+      }
+    }
+
+    // shake botón comprar al entrar en sección (solo 1 vez)
+    const $shakeSection = $("#shakeSection");
+    if (!shookOnce && elementInView($shakeSection, 220)) {
+      shookOnce = true;
+      const $btn = $("#btnBuy");
+      $btn.addClass("shake");
+      setTimeout(() => $btn.removeClass("shake"), 420);
+    }
+  }
+
+  // throttle simple
+  let lastScroll = 0;
+  $(window).on("scroll", function () {
+    const now = Date.now();
+    if (now - lastScroll < 30) return;
+    lastScroll = now;
+    handleScrollEffects();
+  });
+
+  // ============================
+  // Efecto por tiempo (shake “de atención” cada cierto tiempo si no hay interacción)
+  // ============================
+  let lastUserAction = Date.now();
+
+  function markUserAction() { lastUserAction = Date.now(); }
+  $(document).on("click keydown mousemove", markUserAction);
+
+  setInterval(function () {
+    const idleMs = Date.now() - lastUserAction;
+    if (idleMs > 12000) { // 12s sin interacción
+      const $btn = $("#btnBuy");
+      $btn.addClass("shake");
+      setTimeout(() => $btn.removeClass("shake"), 420);
+      lastUserAction = Date.now(); // evita loop agresivo
+    }
+  }, 2000);
+
+  // ============================
+  // Click comprar: mostrar toast inmediato con el qty seleccionado
+  // ============================
+  $("#btnBuy").on("click", function () {
+    const qty = Math.max(1, parseInt($("#qty").val(), 10) || 1);
+    $("#toastSub").text(`Tú compraste ${qty} vasos de navidad.`);
+    $("#toastMini").text(`Confirmación simulada · total ${formatCLP(9990 * qty)}`);
+
+    // mostrar toast inmediato
+    $("#saleToast").removeClass("toast-pop-out").addClass("toast-pop-in").show();
+    $("#toastBar").stop(true, true).css("width", "0%").animate({ width: "100%" }, 4500, "linear");
+
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => hideSaleToast(), 4700);
+
+    scheduleNextToast();
+  });
+
+  // ============================
+  // Inicio
+  // ============================
+  $(function () {
+    handleScrollEffects();
+    scheduleNextToast(); // primera compra aparece aleatorio (3-15s)
+  });
+</script>
+
+</body>
+</html>
+```

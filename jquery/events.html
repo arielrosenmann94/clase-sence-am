@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>jQuery Eventos — Explicación + Demostración + Logger</title>
+
+  <!-- Bootstrap 4 (opcional, solo estilo) -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+  <style>
+    body { background:#f7f7f7; }
+    header { position: sticky; top: 0; z-index: 1000; background: #f7f7f7; padding: 14px 0 10px; }
+    section[id] { scroll-margin-top: 140px; }
+
+    .menu-bar {
+      border: 1px solid #e6e6e6;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.04);
+      margin-bottom: 12px;
+    }
+    .menu-bar a {
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      text-decoration: none;
+      border: 1px solid #ddd;
+      color: #111;
+      background: #fafafa;
+      font-size: 14px;
+    }
+    .menu-bar a:hover { background:#f0f0f0; }
+
+    .demo-box {
+      background: #fff;
+      border: 1px solid #e6e6e6;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.04);
+      margin-bottom: 18px;
+    }
+
+    .small-note { font-size: 13px; color:#555; }
+    code { background: #f2f2f2; padding: 1px 6px; border-radius: 6px; }
+
+    .demo-area {
+      border: 1px dashed #bbb;
+      border-radius: 10px;
+      background: #fcfcfc;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    /* Logger */
+    .log-panel {
+      background: #0e0f12;
+      color: #e6e6e6;
+      border-radius: 12px;
+      padding: 12px;
+      height: 260px;
+      overflow: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      line-height: 1.4;
+      border: 1px solid #1b1d24;
+    }
+    .log-row { padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,.06); }
+    .log-row:last-child { border-bottom: 0; }
+    .log-meta { color: #a9b0bf; }
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 999px;
+      margin-right: 8px;
+      font-size: 11px;
+      color: #e6e6e6;
+    }
+    .pill.ev { color:#cfe3ff; border-color:#2b4c7a; }
+    .pill.tg { color:#d7ffd7; border-color:#2b7a2b; }
+    .pill.info { color:#ffe6b3; border-color:#7a5a2b; }
+
+    /* elementos demo */
+    .hover-box {
+      border: 1px solid #dcdcdc;
+      border-radius: 12px;
+      background: #fff;
+      padding: 14px;
+      transition: background .2s ease;
+    }
+    .hover-box.active { background: #eef7ff; }
+
+    .focus-box input {
+      border-radius: 10px;
+      border: 1px solid #cfcfcf;
+      padding: 10px 12px;
+      width: 100%;
+      outline: none;
+    }
+    .focus-box input:focus { border-color: #6aa7ff; box-shadow: 0 0 0 3px rgba(106,167,255,.22); }
+
+    .img-wrap img { max-width: 240px; border-radius: 12px; border:1px solid #ddd; display:block; }
+    .hint { font-size: 13px; color:#666; margin-top: 8px; }
+
+    pre {
+      background: #0e0f12;
+      color: #e6e6e6;
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 12px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-3">
+
+  <header>
+    <h1 class="h3 mb-2">Manejando eventos con jQuery (con demostraciones y logger)</h1>
+    <p class="text-muted mb-2">
+      Los <strong>eventos</strong> son acciones detectables (click, teclado, mouse, formulario, carga, scroll, etc.).
+      Con jQuery puedes asignar “manejadores” y ejecutar funciones cuando el evento ocurra.
+    </p>
+
+    <nav class="menu-bar">
+      <a href="#sec-intro" class="js-scroll">Intro</a>
+      <a href="#sec-mouse" class="js-scroll">Mouse</a>
+      <a href="#sec-keyboard" class="js-scroll">Teclado</a>
+      <a href="#sec-form" class="js-scroll">Formulario</a>
+      <a href="#sec-load" class="js-scroll">Load</a>
+      <a href="#sec-more" class="js-scroll">Otros eventos</a>
+      <a href="#sec-logger" class="js-scroll">Logger</a>
+    </nav>
+  </header>
+
+  <!-- Intro -->
+  <section class="demo-box" id="sec-intro">
+    <h2 class="h5 mb-2">¿Qué son los eventos?</h2>
+    <p class="mb-2">
+      Un evento ocurre cuando el usuario o el navegador realiza una acción. Ejemplos:
+      hacer clic, mover el mouse, escribir en un input, enviar un formulario, cargar una imagen, etc.
+      En jQuery asignamos un manejador con <code>.on("evento", function(){ ... })</code>.
+    </p>
+    <p class="small-note mb-0">
+      Recomendación práctica: usa <code>.on()</code> (más flexible) en vez de atajos como <code>.click()</code>,
+      especialmente cuando creas elementos dinámicos.
+    </p>
+
+    <pre>
+// Asignar un manejador de eventos (patrón recomendado)
+$("#miBoton").on("click", function () {
+  // código que se ejecuta cuando ocurre el evento
+});</pre>
+  </section>
+
+  <!-- Mouse -->
+  <section class="demo-box" id="sec-mouse">
+    <h2 class="h5 mb-2">Eventos de mouse</h2>
+    <p class="mb-2">
+      Eventos comunes: <code>click</code>, <code>dblclick</code>, <code>mouseenter</code>, <code>mouseleave</code>,
+      <code>mousemove</code>, <code>contextmenu</code> (clic derecho).
+    </p>
+
+    <div class="demo-area">
+      <div class="mb-2">
+        <button class="btn btn-primary" id="btnClick">click</button>
+        <button class="btn btn-secondary" id="btnDblClick">dblclick</button>
+        <button class="btn btn-outline-dark" id="btnRightClick">clic derecho (contextmenu)</button>
+      </div>
+
+      <div class="hover-box" id="hoverBox">
+        Pasa el mouse por aquí (mouseenter / mouseleave). También mueve el mouse (mousemove).
+        <div class="hint">Tip: mira el logger abajo para ver el detalle.</div>
+      </div>
+    </div>
+
+    <pre id="codeMouse"></pre>
+  </section>
+
+  <!-- Teclado -->
+  <section class="demo-box" id="sec-keyboard">
+    <h2 class="h5 mb-2">Eventos de teclado</h2>
+    <p class="mb-2">
+      Eventos comunes: <code>keydown</code> (al presionar), <code>keyup</code> (al soltar).
+      <code>keypress</code> está obsoleto en muchos contextos; para clases conviene enfatizar <code>keydown/keyup</code>.
+    </p>
+
+    <div class="demo-area focus-box">
+      <label class="mb-1">Escribe aquí (keydown / keyup):</label>
+      <input type="text" id="inputTeclado" placeholder="Escribe y mira el logger..." />
+      <div class="hint">Prueba: mantener presionada una tecla, luego soltarla.</div>
+    </div>
+
+    <pre id="codeKeyboard"></pre>
+  </section>
+
+  <!-- Form -->
+  <section class="demo-box" id="sec-form">
+    <h2 class="h5 mb-2">Eventos de formulario</h2>
+    <p class="mb-2">
+      Eventos comunes: <code>submit</code> (enviar), <code>change</code> (cambio de valor), <code>input</code>
+      (cambio inmediato mientras se escribe), <code>focus</code> y <code>blur</code> (entrada/salida del foco).
+    </p>
+
+    <div class="demo-area">
+      <form id="demoForm">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>Nombre (input + focus/blur)</label>
+            <input type="text" class="form-control" id="nombre" placeholder="Tu nombre" />
+          </div>
+          <div class="form-group col-md-6">
+            <label>Tipo de servicio (change)</label>
+            <select class="form-control" id="servicio">
+              <option value="">Selecciona...</option>
+              <option value="web">Desarrollo Web</option>
+              <option value="app">App Web / SaaS</option>
+              <option value="seguridad">Seguridad Web</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-success" type="submit">Enviar (submit)</button>
+        <small class="text-muted d-block mt-2">El submit está interceptado para que no recargue la página.</small>
+      </form>
+    </div>
+
+    <pre id="codeForm"></pre>
+  </section>
+
+  <!-- Load -->
+  <section class="demo-box" id="sec-load">
+    <h2 class="h5 mb-2">Evento load (carga completa de un recurso)</h2>
+    <p class="mb-2">
+      <code>load</code> ocurre cuando un recurso (por ejemplo una imagen) se termina de cargar.
+      Aquí demostramos el evento sobre una imagen.
+    </p>
+
+    <div class="demo-area img-wrap">
+      <button class="btn btn-outline-primary mb-3" id="btnReloadImg">Recargar imagen</button>
+      <img id="demoImg" alt="Imagen demo" />
+      <div class="hint">
+        Al recargar, verás un log cuando la imagen termine de cargar.
+      </div>
+    </div>
+
+    <pre id="codeLoad"></pre>
+  </section>
+
+  <!-- Otros -->
+  <section class="demo-box" id="sec-more">
+    <h2 class="h5 mb-2">Otros eventos útiles (para conocer)</h2>
+    <p class="mb-2">
+      Algunos eventos adicionales: <code>scroll</code>, <code>resize</code>, <code>focusin/focusout</code>
+      (burbujan), <code>copy</code>, <code>paste</code>, <code>cut</code>.
+    </p>
+
+    <div class="demo-area">
+      <div class="mb-2">
+        <button class="btn btn-info" id="btnAddBox">Agregar caja dinámica (delegación)</button>
+        <button class="btn btn-outline-dark" id="btnClearDynamic">Limpiar cajas</button>
+      </div>
+
+      <div id="dynamicArea" class="p-2" style="background:#fff;border:1px dashed #bbb;border-radius:12px;">
+        <div class="hint mb-0">
+          Aquí aparecerán cajas dinámicas. El click se manejará con <strong>event delegation</strong>.
+        </div>
+      </div>
+
+      <div class="hint mt-2">
+        También prueba hacer scroll en la página (evento scroll) y cambiar el tamaño de la ventana (resize).
+      </div>
+    </div>
+
+    <pre id="codeMore"></pre>
+  </section>
+
+  <!-- Logger -->
+  <section class="demo-box" id="sec-logger">
+    <h2 class="h5 mb-2">Logger de eventos (bitácora en vivo)</h2>
+    <p class="mb-2">
+      Este panel registra: fecha/hora, tipo de evento, elemento objetivo y datos relevantes (tecla, valor, etc.).
+      Incluye contador total y acciones para limpiar.
+    </p>
+
+    <div class="d-flex align-items-center justify-content-between mb-2">
+      <div>
+        <span class="badge badge-dark">Total logs: <span id="logCount">0</span></span>
+        <span class="badge badge-secondary ml-2">Último evento: <span id="lastEvent">—</span></span>
+      </div>
+      <div>
+        <button class="btn btn-sm btn-outline-dark" id="btnClearLogs">Limpiar logs</button>
+      </div>
+    </div>
+
+    <div class="log-panel" id="logPanel"></div>
+
+    <pre id="codeLogger"></pre>
+  </section>
+
+</div>
+
+<!-- jQuery CDN -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<script>
+  // ============================
+  // Scroll suave del menú
+  // ============================
+  $(".js-scroll").on("click", function (e) {
+    e.preventDefault();
+    const target = $(this).attr("href");
+    const $target = $(target);
+    if ($target.length) {
+      const offset = 120;
+      $("html, body").animate({ scrollTop: $target.offset().top - offset }, 450);
+    }
+  });
+
+  // ============================
+  // Logger (sistema de medición)
+  // ============================
+  let logCounter = 0;
+
+  function nowTime() {
+    const d = new Date();
+    const hh = String(d.getHours()).padStart(2, "0");
+    const mm = String(d.getMinutes()).padStart(2, "0");
+    const ss = String(d.getSeconds()).padStart(2, "0");
+    const ms = String(d.getMilliseconds()).padStart(3, "0");
+    return `${hh}:${mm}:${ss}.${ms}`;
+  }
+
+  function describeTarget($t) {
+    if (!$t || !$t.length) return "unknown";
+    const tag = ($t.prop("tagName") || "").toLowerCase();
+    const id = $t.attr("id") ? `#${$t.attr("id")}` : "";
+    const cls = $t.attr("class") ? "." + $t.attr("class").trim().replace(/\s+/g, ".") : "";
+    return `${tag}${id}${cls}`;
+  }
+
+  function addLog(eventName, $target, details = "") {
+    logCounter++;
+    $("#logCount").text(logCounter);
+    $("#lastEvent").text(eventName);
+
+    const row = `
+      <div class="log-row">
+        <span class="log-meta">[${nowTime()}]</span>
+        <span class="pill ev">${eventName}</span>
+        <span class="pill tg">${describeTarget($target)}</span>
+        <span class="pill info">${details || "—"}</span>
+      </div>
+    `;
+
+    const $panel = $("#logPanel");
+    $panel.append(row);
+    $panel.scrollTop($panel[0].scrollHeight);
+  }
+
+  $("#btnClearLogs").on("click", function () {
+    $("#logPanel").empty();
+    logCounter = 0;
+    $("#logCount").text("0");
+    $("#lastEvent").text("—");
+    addLog("logger:clear", $(this), "Se limpiaron los registros");
+  });
+
+  // Código visible del logger
+  $("#codeLogger").text(
+`// Logger básico
+function addLog(eventName, $target, details="") {
+  // agrega una fila con hora, evento, target y detalles
+}`
+  );
+
+  // ============================
+  // Mouse events
+  // ============================
+  $("#btnClick").on("click", function (e) {
+    addLog("click", $(e.target), "Botón click presionado");
+  });
+
+  $("#btnDblClick").on("dblclick", function (e) {
+    addLog("dblclick", $(e.target), "Botón doble clic");
+  });
+
+  $("#btnRightClick").on("contextmenu", function (e) {
+    e.preventDefault();
+    addLog("contextmenu", $(e.target), "Clic derecho (se bloqueó el menú del navegador)");
+  });
+
+  $("#hoverBox").on("mouseenter", function (e) {
+    $(this).addClass("active");
+    addLog("mouseenter", $(e.target), "Mouse entra al área");
+  });
+
+  $("#hoverBox").on("mouseleave", function (e) {
+    $(this).removeClass("active");
+    addLog("mouseleave", $(e.target), "Mouse sale del área");
+  });
+
+  $("#hoverBox").on("mousemove", function (e) {
+    // para no llenar de logs: log solo cada cierto movimiento
+    if (!this._lastMove || (Date.now() - this._lastMove) > 250) {
+      this._lastMove = Date.now();
+      addLog("mousemove", $(e.target), `x=${e.offsetX}, y=${e.offsetY}`);
+    }
+  });
+
+  $("#codeMouse").text(
+`// Mouse: click, dblclick, mouseenter, mouseleave, mousemove, contextmenu
+$("#btnClick").on("click", function(e){ ... });
+$("#btnDblClick").on("dblclick", function(e){ ... });
+$("#hoverBox").on("mouseenter", function(e){ ... });
+$("#hoverBox").on("mouseleave", function(e){ ... });
+$("#hoverBox").on("mousemove", function(e){ ... });
+$("#btnRightClick").on("contextmenu", function(e){ e.preventDefault(); ... });`
+  );
+
+  // ============================
+  // Keyboard events
+  // ============================
+  $("#inputTeclado").on("keydown", function (e) {
+    addLog("keydown", $(e.target), `key="${e.key}" code="${e.code}"`);
+  });
+
+  $("#inputTeclado").on("keyup", function (e) {
+    addLog("keyup", $(e.target), `key="${e.key}" code="${e.code}"`);
+  });
+
+  $("#codeKeyboard").text(
+`// Teclado: keydown / keyup
+$("#inputTeclado").on("keydown", function(e){
+  console.log(e.key, e.code);
+});
+$("#inputTeclado").on("keyup", function(e){
+  console.log(e.key, e.code);
+});`
+  );
+
+  // ============================
+  // Form events
+  // ============================
+  $("#demoForm").on("submit", function (e) {
+    e.preventDefault(); // evita recargar la página
+    const nombre = $("#nombre").val();
+    const servicio = $("#servicio").val();
+    addLog("submit", $(e.target), `nombre="${nombre}" servicio="${servicio || "(vacío)"}"`);
+  });
+
+  $("#servicio").on("change", function (e) {
+    addLog("change", $(e.target), `nuevo valor="${$(this).val()}"`);
+  });
+
+  $("#nombre").on("input", function (e) {
+    // input: se dispara mientras escribes
+    addLog("input", $(e.target), `valor="${$(this).val()}"`);
+  });
+
+  $("#nombre").on("focus", function (e) {
+    addLog("focus", $(e.target), "El input recibió foco");
+  });
+
+  $("#nombre").on("blur", function (e) {
+    addLog("blur", $(e.target), "El input perdió foco");
+  });
+
+  $("#codeForm").text(
+`// Form: submit, change, input, focus, blur
+$("#demoForm").on("submit", function(e){
+  e.preventDefault();
+  // ...
+});
+$("#servicio").on("change", function(e){ ... });
+$("#nombre").on("input", function(e){ ... });
+$("#nombre").on("focus", function(e){ ... });
+$("#nombre").on("blur", function(e){ ... });`
+  );
+
+  // ============================
+  // Load event (imagen)
+  // ============================
+  function setRandomImg() {
+    // cache-buster para forzar recarga
+    const url = "https://picsum.photos/320/200?random=" + Date.now();
+    $("#demoImg").attr("src", url);
+    addLog("img:setSrc", $("#demoImg"), "Se cambió src, esperando load...");
+  }
+
+  $("#demoImg").on("load", function (e) {
+    addLog("load", $(e.target), "Imagen cargada completamente");
+  });
+
+  $("#btnReloadImg").on("click", function (e) {
+    addLog("click", $(e.target), "Recargar imagen");
+    setRandomImg();
+  });
+
+  // set inicial
+  setRandomImg();
+
+  $("#codeLoad").text(
+`// load: cuando una imagen termina de cargar
+$("#demoImg").on("load", function(e){
+  console.log("imagen lista");
+});
+
+$("#btnReloadImg").on("click", function(){
+  $("#demoImg").attr("src", "url_nueva?cacheBust=" + Date.now());
+});`
+  );
+
+  // ============================
+  // Otros eventos: scroll / resize / clipboard + delegación
+  // ============================
+  let dynamicCount = 0;
+
+  $("#btnAddBox").on("click", function (e) {
+    dynamicCount++;
+    const id = "dyn-" + dynamicCount;
+    $("#dynamicArea").append(
+      `<div class="p-2 my-2" data-dyn="1" id="${id}" style="border:1px solid #ddd;border-radius:10px;background:#fafafa;">
+         Caja dinámica <strong>#${dynamicCount}</strong>. Haz clic aquí.
+       </div>`
+    );
+    addLog("click", $(e.target), "Se creó una caja dinámica");
+  });
+
+  $("#btnClearDynamic").on("click", function (e) {
+    $("#dynamicArea").find("[data-dyn='1']").remove();
+    addLog("click", $(e.target), "Se limpiaron cajas dinámicas");
+  });
+
+  // Delegación: un solo listener para cualquier caja creada después
+  $("#dynamicArea").on("click", "[data-dyn='1']", function (e) {
+    addLog("click (delegado)", $(this), "Click en caja dinámica");
+  });
+
+  // scroll: throttle para no llenar logs
+  let lastScroll = 0;
+  $(window).on("scroll", function () {
+    const now = Date.now();
+    if (now - lastScroll > 600) {
+      lastScroll = now;
+      addLog("scroll", $(window), `scrollTop=${Math.round($(window).scrollTop())}`);
+    }
+  });
+
+  // resize: throttle
+  let lastResize = 0;
+  $(window).on("resize", function () {
+    const now = Date.now();
+    if (now - lastResize > 600) {
+      lastResize = now;
+      addLog("resize", $(window), `w=${window.innerWidth} h=${window.innerHeight}`);
+    }
+  });
+
+  // copy/paste/cut en input
+  $("#inputTeclado").on("copy paste cut", function (e) {
+    addLog(e.type, $(e.target), "Evento de portapapeles");
+  });
+
+  $("#codeMore").text(
+`// Delegación (elementos dinámicos)
+$("#dynamicArea").on("click", "[data-dyn='1']", function(e){
+  // maneja click aunque el elemento se cree después
+});
+
+// scroll / resize (con throttle para no llenar logs)
+$(window).on("scroll", function(){ ... });
+$(window).on("resize", function(){ ... });
+
+// clipboard
+$("#inputTeclado").on("copy paste cut", function(e){ ... });`
+  );
+
+  // Log inicial
+  addLog("ready", $(document), "DOM listo (document ready)");
+</script>
+
+</body>
+</html>

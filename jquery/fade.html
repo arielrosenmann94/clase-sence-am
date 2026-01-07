@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ejemplo jQuery fadeIn() / fadeOut()</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 24px;
+    }
+
+    /* Arranca oculto para probar fadeIn */
+    p.texto {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #f6f6f6;
+    }
+
+    button {
+      padding: 10px 14px;
+      margin-right: 8px;
+      cursor: pointer;
+      border-radius: 8px;
+      border: 1px solid #bbb;
+      background: white;
+    }
+
+    button:hover {
+      background: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Ejemplo básico: fadeIn() y fadeOut()</h2>
+
+  <button id="btnFadeIn">Aparecer (fadeIn)</button>
+  <button id="btnFadeOut">Desaparecer (fadeOut)</button>
+
+  <p class="texto">
+    Hola, soy un párrafo con clase <strong>.texto</strong>.  
+    Con <code>fadeIn()</code> aparezco con transición y con <code>fadeOut()</code> desaparezco con transición.
+  </p>
+
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+  <script>
+    $("#btnFadeIn").on("click", function () {
+      $("p.texto").fadeIn(1600); // 400ms
+    });
+
+    $("#btnFadeOut").on("click", function () {
+      $("p.texto").fadeOut(400); // 400ms
+    });
+  </script>
+
+  <script>
+  const btnFadeIn = document.getElementById("btnFadeIn");
+  const btnFadeOut = document.getElementById("btnFadeOut");
+  const pTexto = document.querySelector("p.texto");
+
+  // Estado inicial (equivalente a display:none)
+  pTexto.style.opacity = "0";
+  pTexto.style.display = "none";
+
+  function fadeIn(el, duration = 400) {
+    el.style.display = "block";
+    el.style.opacity = "0";
+
+    const start = performance.now();
+
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      el.style.opacity = String(progress);
+
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  function fadeOut(el, duration = 400) {
+    el.style.opacity = "1";
+
+    const start = performance.now();
+
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      el.style.opacity = String(1 - progress);
+
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        el.style.display = "none";
+      }
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  btnFadeIn.addEventListener("click", function () {
+    fadeIn(pTexto, 400);
+  });
+
+  btnFadeOut.addEventListener("click", function () {
+    fadeOut(pTexto, 400);
+  });
+</script>
+
+</body>
+</html>
