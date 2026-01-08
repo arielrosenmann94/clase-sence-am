@@ -1,121 +1,73 @@
-# Animaciones jQuery para clases — Demo SSR (show/hide, fade, slide, animate + menú)
+# clasesam — Material de clases (HTML, CSS, Bootstrap, JavaScript, jQuery + Git)
 
 ## Introducción ejecutiva
-Este proyecto es una página HTML única, lista para usar en clases, que demuestra de forma práctica y didáctica las principales funciones de animación y visibilidad de jQuery. El objetivo es que estudiantes puedan **ver, ejecutar y modificar** ejemplos reales de:
+Este repositorio reúne material práctico para clases orientadas a **desarrollo web front-end** y fundamentos de flujo de trabajo con **Git**. El enfoque es 100% “aprender haciendo”: cada archivo HTML es una **demo ejecutable** (sin build, sin instalaciones) para explicar conceptos clave y luego modificarlos en clase.
 
-- Mostrar/ocultar contenido
-- Transiciones suaves con opacidad
-- Acordeones con animación vertical
-- Microinteracciones personalizadas con `animate()`
-- Patrones típicos de UX para validaciones y feedback (shake, highlight)
-
-La página incorpora un **menú sticky con scroll suave** para navegar rápidamente entre secciones durante la clase.
+Incluye además notas de arquitectura (nivel senior) para un **carrito de compra** en Django SSR, útil como puente hacia desarrollo web backend y e-commerce.
 
 ---
 
-## Bajada técnica (arquitectura y funcionamiento)
-
-### Enfoque
-- **Single Page Demo (HTML único)**: todo está en un solo archivo para facilitar copiar/pegar y ejecutar sin configuración.
-- **SSR estático**: no requiere servidor; se ejecuta directamente en el navegador.
-- **Dependencias vía CDN**:
-  - Bootstrap 4 (solo estilos, opcional)
-  - jQuery 3.5.1 (core de comportamiento)
-
-### Estructura del documento
-- **Header sticky**: permanece fijo al hacer scroll para mantener el menú accesible.
-- **Secciones por ID**: cada sección (`#sec-show-hide`, `#sec-fade`, etc.) contiene:
-  - Explicación breve
-  - Botones de acción
-  - Un “target” (caja) que se anima
-  - Un `<pre>` que imprime el código del ejemplo para enseñanza
-
-### Componentes clave
-1. **Menú con scroll suave**
-   - Intercepta el click en links `.js-scroll`
-   - Usa `$("html, body").animate({ scrollTop: ... }, 450)` con offset para el header sticky
-
-2. **Targets (bloques a animar)**
-   - `.target` parte con `display:none` para que el alumno vea claramente el efecto al iniciar
-   - En algunos casos se fuerzan estilos antes de animar para controlar el “estado inicial”
-
-3. **Uso correcto de `stop(true, true)`**
-   - Antes de animar, se utiliza `stop(true,true)` para:
-     - cortar animaciones previas
-     - evitar acumulación de colas (bug típico en demos con muchos clics)
-
-4. **`animate()` y limitaciones**
-   - jQuery anima **propiedades CSS numéricas**: `opacity`, `marginLeft`, `width`, `height`, etc.
-   - No anima transformaciones complejas como `transform: scale()` sin plugins; por eso el “pop” se **simula** con `width/padding + opacity`
+## Bajada técnica (cómo está construido)
+- **Ejecución directa en navegador**: la mayoría de los ejemplos son **HTML estático** con CSS/JS embebido o referenciado.
+- **Dependencias por CDN** (cuando aplica):
+  - **Bootstrap 4** para estilos rápidos de UI.
+  - **jQuery 3.5.1** para eventos y animaciones.
+- **Assets compartidos** en `assets/`:
+  - CSS base (estilos generales y responsive).
+  - JS base para páginas tipo “public_site”.
+  - Imagen de ejemplo para prácticas.
+- **Módulo jQuery** con demos separadas por tema (show/hide, fade, eventos, etc.) + README dedicado.
+- **Notas** (`notas.md`) con una guía de arquitectura y checklist para terminar un carrito/checkout (enfoque Django SSR).
 
 ---
 
-## Requisitos
-- Navegador moderno (Chrome/Firefox/Edge).
-- Conexión a Internet para cargar los CDN (Bootstrap y jQuery).
+## Contenido principal
+
+### 1) Demos base (archivos en raíz)
+- `clase_html.html`  
+  Base para explicar estructura HTML (head/body, secciones, listas, etc.).
+- `clase_css.html`  
+  Base para explicar estilos y clases CSS.
+- `clase_boostrap.html` / `pagina_web _boostrap.html` / `panel_boostrap.html`  
+  Ejemplos usando Bootstrap para construir UI rápidamente (componentes, layout).
+- `js_1.html`  
+  Ejercicio aplicado en JavaScript (por ejemplo calculadora de IMC).
+- `clasejs_2.html`  
+  Base para continuar JS (eventos, DOM, lógica).
+- `ejemplos.html`  
+  Demo aplicada tipo “Registro — Evento en línea de Programadores 2026” (ideal para formularios y UX).
+- `git.html`  
+  Apoyo visual/guía para temas Git (según contenido del archivo).
+- `pdp.html` / `otroarchiv.html`  
+  Archivos auxiliares para práctica/plantillas.
+
+### 2) Módulo jQuery (carpeta `jquery/`)
+Demos enfocadas en:
+- visibilidad (`show/hide`)
+- opacidad (`fadeIn/fadeOut`)
+- eventos (varias variantes)
+- una página índice con navegación y ejemplos
+
+Incluye documentación en:
+- `jquery/README.md` (explicación ejecutiva + bajada técnica de las animaciones)
+
+### 3) Sitio “public_site” (carpeta `public_site/`)
+Mini sitio multipágina (útil para explicar navegación, assets, estructura de páginas):
+- `public_site/home.html`
+- `public_site/services.html`
+- `public_site/contact.html`
+
+### 4) Assets compartidos (carpeta `assets/`)
+- `assets/css/main.css`  
+- `assets/css/media.css`  
+- `assets/css/public_site.css`  
+- `assets/js/main.js`  
+- `assets/js/public_site.js`  
+- `assets/img/perrito.jpeg`  
+
+### 5) Notas de arquitectura (archivo `notas.md`)
+Documento de nivel técnico (arquitectura + checklist) para implementar o cerrar un **carrito de compra** (enfoque SSR, recomendado para Django).
 
 ---
 
-## Cómo ejecutar (rápido)
-1. Copia el código en un archivo, por ejemplo:
-   - `animaciones-jquery.html`
-2. Ábrelo en el navegador:
-   - Doble click, o
-   - Desde terminal:
-     - Linux: `xdg-open animaciones-jquery.html`
-     - macOS: `open animaciones-jquery.html`
-     - Windows: `start animaciones-jquery.html`
-
----
-
-## Qué incluye (secciones)
-
-### 1) show() / hide() / toggle()
-- Controlan la visibilidad con `display:none` sin transición.
-- Útil para mostrar/ocultar bloques de forma instantánea.
-
-### 2) fadeIn() / fadeOut() / fadeToggle()
-- Transición basada en opacidad.
-- Útil para mensajes, avisos, contenido “suave”.
-
-### 3) slideDown() / slideUp() / slideToggle()
-- Transición vertical ajustando altura.
-- Útil para FAQ, acordeones, paneles.
-
-### 4) animate(): animaciones personalizadas
-- “Entrada/salida” combinando opacidad y desplazamiento horizontal.
-- Demuestra:
-  - seteo de estado inicial
-  - callback al finalizar para ocultar
-
-### 5) Extras (patrones para clase)
-- **Pop In/Out (simulado)**: usa `width/padding + opacity` por limitación de `transform`.
-- **Shake**: secuencia corta para feedback de error o validación.
-- **Highlight**: “pulse” de opacidad + borde temporal para llamar atención.
-
----
-
-## Puntos didácticos recomendados (para explicar en clase)
-- Diferencia entre:
-  - `toggle()` vs `fadeToggle()` vs `slideToggle()` (misma idea, distinta UX)
-- Importancia de:
-  - `stop(true,true)` para evitar colas
-  - preparar estado inicial antes de animar (`css()` + `animate()`)
-- Limitaciones reales:
-  - jQuery no anima transform sin plugins; cómo resolver (simulación o CSS transitions)
-
----
-
-## Personalización rápida
-- Cambiar velocidades:
-  - Ajusta `400`, `450`, `350` en los métodos para más rápido/lento.
-- Ajustar offset del menú:
-  - Variable `offset = 120` en el scroll suave.
-- Mostrar targets por defecto:
-  - Cambia `.target { display: none; }` a `display:block;` en casos específicos.
-
----
-
-## Estructura sugerida del repo (opcional)
-Si quieres publicarlo como repo didáctico:
-
+## Estructura del repositorio (referencial)
