@@ -1,6 +1,18 @@
-# Estructura de carpetas
+# Alke Wallet
 
+Escriben la intro ejecutiva.
+
+# Estructura de carpetas
 alke-wallet
+    assets
+        css
+            styles.css
+        js
+            scripts.js
+    *.html
+    sendmoney.html
+    README.md
+
 
 
 # Como reproducir
