@@ -21,16 +21,6 @@ print(esto_es_verdadero)
 print(esto_es_falso)
 print(type(esto_es_falso))
 
-esto_es_lista = ["Ariel", 31, "santiago", 2026, 22.5, True]
-
-print(esto_es_lista)
-print(type(esto_es_lista))
-
-esto_es_tuple = ("Juan", 31, "santiago", 2026, 22.5, True)
-
-print(esto_es_tuple)
-print(type(esto_es_tuple))
-
 x = None
 print("el valor de x es", x)
 print(type(x))
@@ -45,3 +35,19 @@ print(type(y))
 y = "5"
 print('el valor de "y" ahora es:', y)
 print("el tipo de dato de 'y' es:", type(y))
+
+esto_es_tuple = ("Juan", 31, "santiago", 2026, 22.5, True)
+
+print(esto_es_tuple)
+print(type(esto_es_tuple))
+
+
+esto_es_lista = ["Ariel", 31, "santiago", 2026, 22.5, True]
+
+print(esto_es_lista)
+print(type(esto_es_lista))
+
+otra_lista = ["string", "cadenas de texto", 25, 25.6, True, False, ["esto es otra lista", "dentro de la lista", 34, True], 78, ("esto es una tupla", 24, True)  ]
+
+print(otra_lista)
+print(type(otra_lista))

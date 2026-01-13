@@ -19,30 +19,3 @@ print("se termió de ejecutar")
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-fingerprint_database = "X"
-fingerprint_input = input("Ingrese su huella digital: ")
-family_member = None
-
-if fingerprint_input == fingerprint_database:
-    print("La puerta se abre")
-elif (fingerprint_database == None) and (family_member == True):
-    print("Quiere regstrar su huella para entrar?")
-else:
-    print("Acceso denegado")
