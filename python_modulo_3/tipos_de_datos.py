@@ -51,3 +51,21 @@ otra_lista = ["string", "cadenas de texto", 25, 25.6, True, False, ["esto es otr
 
 print(otra_lista)
 print(type(otra_lista))
+
+print("")
+l = [1 , 2 , 1, "Hola", True ]
+t = (1, 2 , 1, "Hola", True)
+
+# También esxisten los SET
+s = {1, 1, 2, "hola", True} #El SET elimina los bool y los elementos duplicados
+print(s)
+print(type(s))
+
+#abajo es un diccionario arriba un SET
+d = {"clave": 1, "otra clave": "Otro valor"} 
+
+rojo = 1
+amarillo = 2
+azul = 3 
+
+colores = (rojo, amarillo, azul)

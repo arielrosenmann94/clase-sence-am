@@ -10,7 +10,7 @@ cliente = {
     "ubicación": "Olimpo"
 }
 
-print("Este es el diccionario 'persona' completo: ", cliente)
+'''print("Este es el diccionario 'persona' completo: ", cliente)
 print(type(cliente))
 
 nombre_cliente = cliente["nombre"]
@@ -21,7 +21,54 @@ print("Datos actualizados del cliente: ", cliente)
 
 cliente["correo"] = "soyapolo@olimpo.com"
 print(cliente)
+'''
+personas = {
+    "nombre": "Juan", 
+    "apellido": "Perez",
+    "rut": "8547000-6"
+}
+
+personas = [
+    {"id": 1,
+     "nombre": "Juan", 
+    "apellido": "Perez",
+    "rut": "8547000-6"  },
+
+    { "id": 2,
+     "nombre": "Juan", 
+    "apellido": "Perez",
+    "rut": "8547000-6"},
+
+    {"id": 3,
+    "nombre": "Juan", 
+    "apellido": "Perez",
+    "rut": "8547000-6"
+    }
+]
+
+diccionaro_personas = {
+    1: {"nombre": "Juan", 
+    "apellido": "Perez",
+    "rut": "8547000-6"  },
+
+    2: {
+     "nombre": "Juan", 
+    "apellido": "Perez",
+    "rut": "8547000-6"},
+
+    3: {"nombre": "Juan", 
+    "apellido": "Perez",
+    "rut": "8547000-6"
+    }
+}
 
 
+print(diccionaro_personas)
+print(diccionaro_personas[3])
+print(diccionaro_personas[3]["nombre"])
+
+cliente_premium = diccionaro_personas[3]["nombre"]
+
+print(cliente_premium)
 
 
