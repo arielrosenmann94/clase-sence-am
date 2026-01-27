@@ -19,6 +19,7 @@ while confirmation.lower() == "s":
     client["id"] = contador
     client["nombre"] = input("Ingrese el nombre del cliente:\n")
     client["apellido"] = input("Ingrese el apellido del cliente:\n")
+    
     client["telefono"] = input("Ingrese el teléfono:\n")
     while not client["telefono"].isdigit() or not len(client["telefono"]) == 11 or not client["telefono"].startswith("569"): 
             client["telefono"] = input("Formato inválido. Por favor ingrese únicamente números incluyendo el 569: \n")

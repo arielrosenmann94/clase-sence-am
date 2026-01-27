@@ -10,7 +10,7 @@ cliente = {
     "ubicación": "Olimpo"
 }
 
-'''print("Este es el diccionario 'persona' completo: ", cliente)
+print("Este es el diccionario 'persona' completo: ", cliente)
 print(type(cliente))
 
 nombre_cliente = cliente["nombre"]
@@ -21,7 +21,7 @@ print("Datos actualizados del cliente: ", cliente)
 
 cliente["correo"] = "soyapolo@olimpo.com"
 print(cliente)
-'''
+
 personas = {
     "nombre": "Juan", 
     "apellido": "Perez",
@@ -71,4 +71,12 @@ cliente_premium = diccionaro_personas[3]["nombre"]
 
 print(cliente_premium)
 
+clientes = [
+    {"id": 1, "rut":"8222333-6", "nombre": "maria rojas"},
+    {"id": 2, "rut":"8222333-7", "nombre": "Marcos rojas"}
+]
+
+deudas = [
+    {"id": 1, "id_cliente": 2, "monto_deuda": 55000 }
+]
 
