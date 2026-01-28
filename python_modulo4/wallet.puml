@@ -1,0 +1,474 @@
+@startuml hola
+title Wallet Service — Modelo Realista (COMPATIBLE PlantUML 1.2024.3)
+skinparam classAttributeIconSize 0
+hide circle
+
+' =========================
+' Identity & Access
+' =========================
+package "Identity & Access" {
+  class User {
+    +user_id: String
+    +email: String
+    +status: UserStatus
+    +created_at: String
+  }
+
+  class Profile {
+    +full_name: String
+    +phone_e164: String
+    +country: String
+    +dob: String
+  }
+
+  class AuthSession {
+    +session_id: String
+    +created_at: String
+    +expires_at: String
+    +ip: String
+  }
+
+  enum UserStatus {
+    ACTIVE
+    SUSPENDED
+    CLOSED
+  }
+}
+
+User "1" *-- "1" Profile : composition
+User "1" o-- "0..*" AuthSession : aggregation
+
+' =========================
+' Wallet Core
+' =========================
+package "Wallet Core" {
+  class Wallet {
+    +wallet_id: String
+    +status: WalletStatus
+    +default_currency: CurrencyCode
+    +created_at: String
+  }
+
+  enum WalletStatus {
+    ACTIVE
+    FROZEN
+    CLOSED
+  }
+
+  enum CurrencyCode {
+    USD
+    EUR
+    CLP
+    BRL
+    ARS
+  }
+
+  class Balance {
+    +available_minor: long
+    +pending_minor: long
+    +currency: CurrencyCode
+    +updated_at: String
+  }
+
+  class LedgerAccount {
+    +account_id: String
+    +type: AccountType
+    +currency: CurrencyCode
+  }
+
+  enum AccountType {
+    CASH
+    FEES
+    RESERVE
+    CHARGEBACK
+    FX
+  }
+}
+
+User "1" -- "0..*" Wallet : owns
+Wallet "1" *-- "1" Balance : composition
+Wallet "1" *-- "2..*" LedgerAccount : composition
+
+' =========================
+' Ledger & Transactions
+' =========================
+package "Ledger & Transactions" {
+  class Transaction {
+    +tx_id: String
+    +type: TxType
+    +status: TxStatus
+    +amount_minor: long
+    +currency: CurrencyCode
+    +idempotency_key: String
+    +created_at: String
+  }
+
+  enum TxType {
+    TOPUP
+    WITHDRAWAL
+    TRANSFER
+    PAYMENT
+    REFUND
+    FX_CONVERSION
+    FEE
+  }
+
+  enum TxStatus {
+    PENDING
+    POSTED
+    FAILED
+    REVERSED
+  }
+
+  class LedgerEntry {
+    +entry_id: String
+    +direction: EntryDirection
+    +amount_minor: long
+    +currency: CurrencyCode
+    +posted_at: String
+  }
+
+  enum EntryDirection {
+    DEBIT
+    CREDIT
+  }
+
+  class Journal {
+    +journal_id: String
+    +posting_rule: String
+  }
+
+  class Fee {
+    +fee_id: String
+    +kind: FeeKind
+    +amount_minor: long
+    +currency: CurrencyCode
+  }
+
+  enum FeeKind {
+    FIXED
+    PERCENT
+    FX_SPREAD
+    NETWORK
+  }
+
+  class LimitRule {
+    +rule_id: String
+    +scope: LimitScope
+    +period: Period
+    +max_amount_minor: long
+    +currency: CurrencyCode
+  }
+
+  enum LimitScope {
+    USER
+    WALLET
+    PAYMENT_METHOD
+    MERCHANT
+  }
+
+  enum Period {
+    DAY
+    WEEK
+    MONTH
+  }
+}
+
+Wallet "1" o-- "0..*" Transaction : has
+Transaction "1" *-- "2..*" LedgerEntry : composition
+Journal "1" o-- "0..*" Transaction : groups
+Transaction "0..*" --> "0..*" Fee : applies
+Wallet "0..*" o-- "0..*" LimitRule : constrainedBy
+LedgerEntry "1" --> "1" LedgerAccount : postsTo
+
+' =========================
+' Payments
+' =========================
+package "Payments" {
+  abstract class PaymentMethod {
+    +pm_id: String
+    +status: PMStatus
+    +created_at: String
+  }
+
+  enum PMStatus {
+    ACTIVE
+    DISABLED
+    EXPIRED
+  }
+
+  class Card {
+    +brand: String
+    +last4: String
+    +exp_month: int
+    +exp_year: int
+    +token_ref: String
+  }
+
+  class BankAccount {
+    +bank_name: String
+    +account_mask: String
+    +country: String
+    +token_ref: String
+  }
+
+  class PaymentIntent {
+    +pi_id: String
+    +amount_minor: long
+    +currency: CurrencyCode
+    +status: PIStatus
+    +created_at: String
+  }
+
+  enum PIStatus {
+    REQUIRES_PM
+    REQUIRES_CONFIRMATION
+    PROCESSING
+    SUCCEEDED
+    CANCELED
+  }
+
+  class Payout {
+    +payout_id: String
+    +amount_minor: long
+    +currency: CurrencyCode
+    +status: PayoutStatus
+    +requested_at: String
+  }
+
+  enum PayoutStatus {
+    QUEUED
+    SENT
+    FAILED
+    SETTLED
+  }
+
+  class ProviderCharge {
+    +provider: String
+    +provider_ref: String
+    +network_status: String
+  }
+}
+
+User "1" o-- "0..*" PaymentMethod : registers
+PaymentMethod <|-- Card
+PaymentMethod <|-- BankAccount
+
+PaymentIntent "1" --> "1" Wallet : fundsFrom
+PaymentIntent "1" --> "0..1" PaymentMethod : uses
+PaymentIntent "1" --> "0..1" ProviderCharge : providerTrace
+Transaction "0..1" --> "0..1" PaymentIntent : createdFrom
+
+Payout "1" --> "1" Wallet : withdrawsFrom
+Payout "1" --> "1" PaymentMethod : to
+Transaction "0..1" --> "0..1" Payout : createdFrom
+
+' =========================
+' FX
+' =========================
+package "FX" {
+  class ExchangeRateSnapshot {
+    +fx_id: String
+    +base: CurrencyCode
+    +quote: CurrencyCode
+    +rate: decimal
+    +as_of: String
+    +source: String
+  }
+
+  class FxQuote {
+    +quote_id: String
+    +expires_at: String
+    +rate: decimal
+    +spread: decimal
+  }
+}
+
+Transaction "0..1" --> "0..1" ExchangeRateSnapshot : pricedBy
+FxQuote "1" --> "1" ExchangeRateSnapshot : uses
+Transaction "0..1" --> "0..1" FxQuote : bookedWith
+
+' =========================
+' Risk & Compliance
+' =========================
+package "Risk & Compliance" {
+  class KycCase {
+    +kyc_id: String
+    +status: KycStatus
+    +opened_at: String
+    +closed_at: String
+  }
+
+  enum KycStatus {
+    NOT_STARTED
+    IN_REVIEW
+    APPROVED
+    REJECTED
+  }
+
+  class Document {
+    +doc_id: String
+    +type: DocType
+    +storage_ref: String
+  }
+
+  enum DocType {
+    ID_FRONT
+    ID_BACK
+    PROOF_OF_ADDRESS
+    SELFIE
+  }
+
+  class AmlAlert {
+    +alert_id: String
+    +score: int
+    +reason: String
+    +created_at: String
+  }
+
+  class RiskDecision {
+    +decision_id: String
+    +result: Decision
+    +reason: String
+    +created_at: String
+  }
+
+  enum Decision {
+    ALLOW
+    REVIEW
+    BLOCK
+  }
+}
+
+User "1" o-- "0..1" KycCase : kyc
+KycCase "1" *-- "0..*" Document : composition
+Transaction "0..*" --> "0..*" AmlAlert : triggers
+RiskDecision "0..*" --> "0..1" Transaction : aboutTx
+RiskDecision "0..*" --> "0..1" Wallet : aboutWallet
+
+' =========================
+' Disputes
+' =========================
+package "Disputes" {
+  class Dispute {
+    +dispute_id: String
+    +status: DisputeStatus
+    +reason: String
+    +opened_at: String
+  }
+
+  enum DisputeStatus {
+    OPEN
+    WON
+    LOST
+    CANCELED
+  }
+
+  class Chargeback {
+    +cb_id: String
+    +amount_minor: long
+    +currency: CurrencyCode
+    +status: CbStatus
+  }
+
+  enum CbStatus {
+    INITIATED
+    POSTED
+    REVERSED
+  }
+}
+
+Dispute "0..*" --> "1" Transaction : disputesTx
+Dispute "0..1" *-- "0..1" Chargeback : composition
+Chargeback "1" --> "1" LedgerAccount : postsToChargebackAcct
+
+' =========================
+' Merchant & Settlement
+' =========================
+package "Merchant & Settlement" {
+  class Merchant {
+    +merchant_id: String
+    +name: String
+    +mcc: String
+    +status: MerchantStatus
+  }
+
+  enum MerchantStatus {
+    ACTIVE
+    SUSPENDED
+  }
+
+  class SettlementBatch {
+    +batch_id: String
+    +period_start: String
+    +period_end: String
+    +status: BatchStatus
+  }
+
+  enum BatchStatus {
+    OPEN
+    CALCULATED
+    PAID
+    FAILED
+  }
+
+  class SettlementLine {
+    +line_id: String
+    +gross_minor: long
+    +fees_minor: long
+    +net_minor: long
+    +currency: CurrencyCode
+  }
+}
+
+Merchant "1" o-- "0..*" SettlementBatch : settles
+SettlementBatch "1" *-- "1..*" SettlementLine : composition
+SettlementLine "0..*" --> "1" Transaction : includesTx
+Transaction "0..*" --> "0..1" Merchant : forMerchant
+
+' =========================
+' Ops
+' =========================
+package "Ops" {
+  class Notification {
+    +notif_id: String
+    +channel: Channel
+    +status: NotifStatus
+    +created_at: String
+  }
+
+  enum Channel {
+    EMAIL
+    SMS
+    PUSH
+  }
+
+  enum NotifStatus {
+    QUEUED
+    SENT
+    FAILED
+  }
+
+  class AuditLog {
+    +audit_id: String
+    +actor: String
+    +action: String
+    +created_at: String
+    +ip: String
+  }
+
+  class DomainEvent {
+    +event_id: String
+    +type: String
+    +occurred_at: String
+    +payload_ref: String
+  }
+}
+
+User "1" o-- "0..*" Notification : receives
+Notification "0..*" ..> DomainEvent : triggeredBy
+AuditLog "0..*" --> "0..1" User : actorUser
+DomainEvent "0..*" --> "0..1" Transaction : aboutTx
+DomainEvent "0..*" --> "0..1" Wallet : aboutWallet
+
+@enduml
