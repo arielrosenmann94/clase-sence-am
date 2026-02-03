@@ -4,7 +4,7 @@ class Usuario:
     def __init__(self, **kwargs):
         for c in self.campos:
             setattr(self, c, kwargs.get(c))
-        if self.estado is None:
+        if self.estado is None or self.estado is "":
             self.estado = "Activo"
 
     def resumen(self):
@@ -63,10 +63,13 @@ class Staff(Usuario):
         resumen_base = super().resumen()
         return f"{resumen_base} | Staff rol = {self.rol}, Permisos={sorted(self.permisos)}"
     
+try:
+    cliente_1 = Cliente(user_id= 1, nombre= "Carla", email= "carla@mimail.cl", estado= "Activo", plan= "Pro", saldo= 10000)
+except Exception as e:
+    print("Error client_1" , type(e).__name__, "-", e)
 
-cliente_1 = Cliente(user_id= 1, nombre= "Carla", email= "carla@mimail.cl", estado= "Activo", plan= "Pro", saldo= 10000)
 
-staff_1 = Staff(user_id= 10, nombre= "Josefa", email= "josefa@miempresa.cl", estado= "Activo", rol= "Gerenta", permisos= ["cliente:editar", "tickets:Responder"])
+'''staff_1 = Staff(user_id= 10, nombre= "Josefa", email= "josefa@miempresa.cl", estado= "Activo", rol= "Gerenta", permisos= ["cliente:editar", "tickets:Responder"])
 
 
 print(cliente_1.resumen())
@@ -77,3 +80,4 @@ cliente_1.pagar(monto=2000)
 
 print("Saldo pendiente:", cliente_1.saldo)
 
+'''
