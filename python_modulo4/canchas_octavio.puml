@@ -1,0 +1,178 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+'========================
+' Enumeraciones / Tipos
+'========================
+enum TipoCancha {
+  FUTBOL_11
+  TENIS
+}
+
+enum ModalidadTenis {
+  SINGLES
+  DOBLES
+}
+
+enum Turno {
+  MANANA
+  TARDE
+}
+
+enum EstadoReserva {
+  PENDIENTE
+  CONFIRMADA
+  CANCELADA
+}
+
+enum TipoItem {
+  PELOTA_TENIS
+  RAQUETA
+  PELOTA_FUTBOL
+  PETO
+}
+
+'========================
+' Entidades principales
+'========================
+class Recinto {
+  +nombre: String
+  +direccion: String
+  +horaApertura: int = 11
+  +horaCierre: int = 23
+  +diasAtencion: String = "Lun-Dom"
+}
+
+abstract class Canchas {
+  +id: int
+  +nombre: String
+  +tipo: TipoCancha
+}
+
+class CanchaFutbol {
+  +tipo: TipoCancha = FUTBOL_11
+  +capacidadJugadores: int = 22
+}
+
+class CanchaTenis1 {
+  +tipo: TipoCancha = TENIS
+  +permiteSingles: boolean = true
+  +permiteDobles: boolean = true
+}
+class CanchaTenis2 {
+  +tipo: TipoCancha = TENIS
+  +permiteSingles: boolean = true
+  +permiteDobles: boolean = true
+}
+
+class Reserva {
+  +id: int
+  +fecha: Date
+  +horaInicio: int
+  +horaFin: int
+  +estado: EstadoReserva
+  +monto: int
+  +confirmar()
+  +cancelar()
+}
+
+class Cliente {
+  +id: int
+  +nombreCompleto: String
+  +telefono: String
+}
+
+class EmpleadoMostrador {
+  +id: int
+  +nombreCompleto: String
+  +turno: Turno
+}
+
+class PersonalAseo {
+  +id: int
+  +nombreCompleto: String
+}
+
+'========================
+' Bodega / Préstamos
+'========================
+class Bodega {
+  +id: int
+  +ubicacion: String
+}
+
+class ItemInventario {
+  +id: int
+  +tipo: TipoItem
+  +descripcion: String
+  +stockTotal: int
+  +stockDisponible: int
+  +prestar(cantidad:int)
+  +devolver(cantidad:int)
+}
+
+class Prestamo {
+  +id: int
+  +fecha: Date
+  +estado: String  'Activo/Cerrado (simple)
+  +cerrar()
+}
+
+class LineaPrestamo {
+  +cantidad: int
+}
+
+'========================
+' Reglas por tipo de cancha
+'========================
+class ReglaReservaTenis {
+  +modalidad: ModalidadTenis
+  +cantidadJugadores: int  '2 o 4
+}
+
+'========================
+' Relaciones
+'========================
+Recinto "1" o-- "3" Canchas : contiene
+Canchas <|-- CanchaFutbol
+Canchas <|-- CanchaTenis1
+Canchas <|-- CanchaTenis2
+
+Cliente "1" -- "0..*" Reserva : realiza
+Canchas "1" -- "0..*" Reserva : se_arrienda_en
+EmpleadoMostrador "1" -- "0..*" Reserva : registra/gestiona
+
+Recinto "1" o-- "1" Bodega : tiene
+Bodega "1" o-- "0..*" ItemInventario : almacena
+
+Cliente "1" -- "0..*" Prestamo : solicita
+EmpleadoMostrador "1" -- "0..*" Prestamo : registra
+Prestamo "1" o-- "1..*" LineaPrestamo
+LineaPrestamo "*" --> "1" ItemInventario : item
+
+Reserva "0..1" --> "0..1" ReglaReservaTenis : si canchas es tenis
+
+note right of Recinto
+Atención: Lunes a Domingo
+Horario: 11 a 23 hrs
+(Validar reservas dentro del rango)
+end note
+
+note right of CanchaTenis1
+Modalidad:
+- Singles (2 jugadores)
+- Dobles (4 jugadores)
+end note
+
+note right of CanchaTenis2
+Modalidad:
+- Singles (2 jugadores)
+- Dobles (4 jugadores)
+end note
+
+note right of CanchaFutbol
+Fútbol 11:
+Capacidad referencial 22 jugadores
+end note
+
+@enduml

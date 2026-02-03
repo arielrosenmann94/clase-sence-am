@@ -1,0 +1,78 @@
+@startuml
+skinparam style strictuml
+title Sistema de Arriendo - Fútbol 11 y Tenis (Single/Doble)
+
+' --- ENUMS ---
+enum Turno {
+    MAÑANA
+    TARDE
+}
+
+enum ModalidadDeporte {
+    FUTBOL_11
+    TENIS_SINGLE
+    TENIS_DOBLE
+}
+
+' --- PERSONAL ---
+class Administrador {
+    - nombre: String
+    - turno: Turno
+    --
+    + registrarArriendo(cancha, modalidad)
+}
+
+class PersonalAseo {
+    - nombre: String
+}
+
+' --- INFRAESTRUCTURA ---
+package "Canchas Disponibles" {
+    class CanchaFutbol1 {
+        - id: String = "F1"
+        - precioHora: int
+    }
+    class CanchaTenis1 {
+        - id: String = "T1"
+        - precioHora: int
+    }
+    class CanchaTenis2 {
+        - id: String = "T2"
+        - precioHora: int
+    }
+}
+
+' --- BODEGA ---
+class Bodega {
+    - cantPelotasFutbol: int
+    - cantPelotasTenis: int
+    - cantRaquetas: int
+    - cantPetos: int
+    --
+    + descontarStock(modalidad: ModalidadDeporte)
+}
+
+' --- GESTIÓN DE ARRIENDO ---
+class Arriendo {
+    - horaInicio: int
+    - horaFin: int
+    - montoTotal: int
+    - modalidad: ModalidadDeporte
+    --
+    + calcularMonto(): int
+}
+
+' --- RELACIONES ---
+Administrador "2" -- "1" Arriendo : "Manejan"
+Arriendo "n" -- "1" CanchaFutbol1
+Arriendo "n" -- "1" CanchaTenis1
+Arriendo "n" -- "1" CanchaTenis2
+Arriendo ..> Bodega : "Afecta stock según modalidad"
+PersonalAseo "2" -- "3" CanchaFutbol1 : "Mantienen"
+
+note bottom of Arriendo
+  Si modalidad es TENIS_DOBLE -> pedir 4 raquetas.
+  Si modalidad es FUTBOL_11 -> pedir petos.
+end note
+
+@enduml

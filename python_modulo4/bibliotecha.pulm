@@ -1,0 +1,333 @@
+@startuml biblioteca_profesional_senior
+title Biblioteca Gratuita — Sistema de Préstamos (Diagrama Senior)
+
+' =========================
+' Estilo
+' =========================
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam roundcorner 10
+skinparam ArrowColor #2C3E50
+skinparam BorderColor #2C3E50
+skinparam class BackgroundColor white
+hide empty methods
+hide empty fields
+
+' =========================
+' ENUMS (Valores cerrados)
+' =========================
+enum EstadoPersona {
+  ACTIVA
+  SUSPENDIDA
+  BLOQUEADA
+}
+
+enum EstadoLibro {
+  DISPONIBLE
+  PRESTADO
+  RESERVADO
+  EN_REPARACION
+  PERDIDO
+  DADO_DE_BAJA
+}
+
+enum EstadoPrestamo {
+  ACTIVO
+  DEVUELTO
+  VENCIDO
+  ANULADO
+}
+
+enum TipoSancion {
+  SUSPENSION_TEMPORAL
+  REPOSICION_LIBRO
+  BLOQUEO_PERMANENTE
+}
+
+enum TipoEmpleado {
+  BIBLIOTECARIO
+  ENCARGADO_SALA
+  PERSONAL_ASEO
+  ADMIN
+}
+
+' =========================
+' PERSONAS (Herencia con sentido)
+' =========================
+abstract class Persona {
+  - id: int
+  - rut: String
+  - nombre: String
+  - telefono: String
+  - email: String
+  - estado: EstadoPersona
+  --
+  + actualizarContacto(telefono: String, email: String): void
+  + cambiarEstado(nuevo: EstadoPersona): void
+}
+
+class Usuario extends Persona {
+  - fechaRegistro: Date
+  - maxPrestamosActivos: int
+  --
+  + puedePedirPrestamo(): Boolean
+  + prestamosActivos(): List<Prestamo>
+  + reservasActivas(): List<Reserva>
+}
+
+abstract class Empleado extends Persona {
+  - codigoEmpleado: String
+  - tipo: TipoEmpleado
+  - turno: String
+  --
+  + registrarEntrada(): void
+  + registrarSalida(): void
+}
+
+class Bibliotecario extends Empleado {
+  + crearPrestamo(usuario: Usuario, ejemplar: Ejemplar): Prestamo
+  + registrarDevolucion(prestamo: Prestamo): void
+  + cancelarPrestamo(prestamo: Prestamo): void
+  + aplicarSancion(usuario: Usuario, tipo: TipoSancion, dias: int, motivo: String): Sancion
+}
+
+class EncargadoSala extends Empleado {
+  + catalogarLibro(libro: Libro, seccion: Seccion): void
+  + moverEjemplar(ejemplar: Ejemplar, nuevaEstanteria: Estanteria): void
+  + marcarEnReparacion(ejemplar: Ejemplar): void
+  + darDeBajaEjemplar(ejemplar: Ejemplar, motivo: String): void
+}
+
+class PersonalAseo extends Empleado {
+  + registrarLimpieza(area: String): void
+  + reportarIncidente(descripcion: String): void
+}
+
+' =========================
+' INTERFACES (contratos)
+' =========================
+interface INotificador {
+  + notificarUsuario(usuario: Usuario, mensaje: String): void
+}
+
+class EmailNotificador {
+  + notificarUsuario(usuario: Usuario, mensaje: String): void
+}
+
+class SmsNotificador {
+  + notificarUsuario(usuario: Usuario, mensaje: String): void
+}
+
+INotificador <|.. EmailNotificador
+INotificador <|.. SmsNotificador
+
+' =========================
+' INVENTARIO / CATÁLOGO
+' =========================
+class Biblioteca {
+  - id: int
+  - nombre: String
+  - direccion: String
+  --
+  + buscarLibro(texto: String): List<Libro>
+  + obtenerPolitica(): PoliticaPrestamo
+}
+
+class Seccion {
+  - id: int
+  - nombre: String
+  - descripcion: String
+}
+
+class Estanteria {
+  - id: int
+  - codigo: String
+  - pasillo: String
+  - nivel: String
+  - capacidad: int
+  --
+  + capacidadDisponible(): int
+}
+
+class Libro {
+  - isbn: String
+  - titulo: String
+  - autor: String
+  - editorial: String
+  - anioPublicacion: int
+  - genero: String
+  --
+  + esPrestable(): Boolean
+}
+
+class Ejemplar {
+  - idEjemplar: int
+  - codigoBarra: String
+  - estado: EstadoLibro
+  - fechaIngreso: Date
+  --
+  + marcarEstado(nuevo: EstadoLibro): void
+  + estaDisponible(): Boolean
+}
+
+' =========================
+' PRÉSTAMOS / RESERVAS / SANCIONES
+' =========================
+class PoliticaPrestamo {
+  - diasPrestamo: int
+  - maxRenovaciones: int
+  - multaDiaria: int
+  - maxPrestamosActivos: int
+  --
+  + calcularFechaVencimiento(desde: Date): Date
+  + calcularMulta(diasAtraso: int): int
+  + validarUsuario(usuario: Usuario): Boolean
+}
+
+class Prestamo {
+  - id: int
+  - fechaInicio: Date
+  - fechaVencimiento: Date
+  - fechaDevolucionReal: Date
+  - renovaciones: int
+  - estado: EstadoPrestamo
+  --
+  + estaVencido(hoy: Date): Boolean
+  + diasAtraso(hoy: Date): int
+  + renovar(politica: PoliticaPrestamo): Boolean
+  + cerrarDevolucion(fechaReal: Date): void
+}
+
+class Reserva {
+  - id: int
+  - fechaReserva: Date
+  - expiraEn: Date
+  - activa: Boolean
+  --
+  + expiro(hoy: Date): Boolean
+  + cancelar(): void
+}
+
+class Sancion {
+  - id: int
+  - tipo: TipoSancion
+  - motivo: String
+  - fechaInicio: Date
+  - fechaFin: Date
+  - resuelta: Boolean
+  --
+  + estaVigente(hoy: Date): Boolean
+  + resolver(): void
+}
+
+class Donacion {
+  - id: int
+  - donante: String
+  - fecha: Date
+  - observaciones: String
+  --
+  + registrar(): void
+}
+
+' =========================
+' SERVICIOS (Dependencias punteadas)
+' =========================
+class ServicioPrestamos {
+  + prestar(usuario: Usuario, ejemplar: Ejemplar): Prestamo
+  + devolver(prestamo: Prestamo): void
+  + renovar(prestamo: Prestamo): Boolean
+}
+
+class ServicioSanciones {
+  + evaluarAtraso(prestamo: Prestamo, hoy: Date): Sancion
+  + aplicar(usuario: Usuario, tipo: TipoSancion, dias: int, motivo: String): Sancion
+}
+
+class ServicioInventario {
+  + ingresarEjemplar(libro: Libro, estanteria: Estanteria): Ejemplar
+  + mover(ejemplar: Ejemplar, nuevaEstanteria: Estanteria): void
+  + darDeBaja(ejemplar: Ejemplar, motivo: String): void
+}
+
+' =========================
+' RELACIONES CON ROMBOS (con sentido)
+' =========================
+
+' Biblioteca "posee" su política (si borras biblioteca, política no tiene sentido)
+Biblioteca "1" *-- "1" PoliticaPrestamo : composición
+
+' Biblioteca contiene secciones (parte estructural)
+Biblioteca "1" *-- "1..*" Seccion : composición
+
+' Sección contiene estanterías (estructura)
+Seccion "1" *-- "1..*" Estanteria : composición
+
+' Estantería "agrega" ejemplares (un ejemplar puede moverse a otra estantería)
+Estanteria "1" o-- "0..*" Ejemplar : agregación
+
+' Libro "posee" ejemplares (si se borra el libro del catálogo, sus ejemplares pierden sentido)
+Libro "1" *-- "1..*" Ejemplar : composición
+
+' Biblioteca agrega libros (catálogo puede cambiar/trasladarse según diseño)
+Biblioteca "1" o-- "0..*" Libro : agregación
+
+' Donación agrega libros/ejemplares (registro histórico de qué se donó)
+Donacion "1" o-- "1..*" Ejemplar : agregación
+
+' =========================
+' RELACIONES DE NEGOCIO
+' =========================
+
+' Usuario realiza préstamos (histórico: el préstamo sigue existiendo como registro)
+Usuario "1" o-- "0..*" Prestamo : historial
+
+' Pero Prestamo requiere exactamente un Usuario
+Prestamo "1" --> "1" Usuario : usuario
+
+' Prestamo siempre es sobre 1 ejemplar
+Prestamo "1" --> "1" Ejemplar : ejemplar
+
+' Reserva: usuario puede reservar un libro (no un ejemplar específico)
+Usuario "1" o-- "0..*" Reserva : reservas
+Reserva "1" --> "1" Libro : libro
+
+' Sanciones: dependen del usuario (si borras usuario, se van sus sanciones)
+Usuario "1" *-- "0..*" Sancion : sanciones
+
+' Empleados actúan sobre préstamos/inventario
+Bibliotecario "1" -- "0..*" Prestamo : gestiona
+EncargadoSala "1" -- "0..*" Ejemplar : gestiona
+
+' =========================
+' SERVICIOS (punteado = dependencia/uso)
+' =========================
+ServicioPrestamos ..> PoliticaPrestamo : usa reglas
+ServicioPrestamos ..> ServicioInventario : actualiza estado
+ServicioPrestamos ..> ServicioSanciones : evalúa sanción
+ServicioPrestamos ..> INotificador : notifica
+
+ServicioSanciones ..> PoliticaPrestamo : usa multa
+ServicioInventario ..> Estanteria : mueve
+ServicioInventario ..> EncargadoSala : operado por
+
+' =========================
+' NOTAS (Reglas claras)
+' =========================
+note right of Prestamo
+  Regla clave:
+  Un Ejemplar no puede tener
+  2 préstamos ACTIVOS.
+end note
+
+note bottom of Usuario
+  Si estado != ACTIVA
+  => no puede pedir préstamo.
+end note
+
+note left of Reserva
+  Reserva es sobre Libro (ISBN),
+  luego se asigna un Ejemplar
+  disponible al prestar.
+end note
+
+@enduml

@@ -1,0 +1,130 @@
+@startuml teatro_tickets_10_errores_simple
+title Teatro — Compra de Entradas y Tickets (nivel básico)
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam roundcorner 10
+skinparam ArrowColor #2C3E50
+skinparam BorderColor #2C3E50
+skinparam class BackgroundColor white
+
+' =====================
+' ENUMS
+' =====================
+enum EstadoCompra {
+  PENDIENTE
+  PAGADA
+  CANCELADA
+}
+
+enum TipoEntrada {
+  GENERAL
+  ESTUDIANTE
+  VIP
+}
+
+' =====================
+' CLASES
+' =====================
+class Usuario {
+  - id: uuid 
+  - nombre: String
+  - email: String
+  - password: String
+  - tarjetaNumero: String
+  - tarjetaCVV: String
+  - activo: Boolean
+}
+
+class Teatro {
+  - id: int
+  - nombre: String
+  - direccion: String
+}
+
+class Funcion {
+  - id: int
+  - fechaHora: Date
+  - precioBase: double
+}
+
+class Asiento {
+  - fila: String
+  - numero: int
+  - estado: String
+}
+
+class Entrada {
+  - id: int
+  - tipo: String
+  - precio: double
+}
+
+class Compra {
+  - id: int
+  - fecha: Date
+  - estado: EstadoCompra
+  - total: double
+  - cantidad: int
+}
+
+class Ticket {
+  - id: int
+  - codigoQR: String
+  - estado: String
+  + reenviarPorEmail(email: String): void
+}
+
+' =====================
+' CONTRATOS
+' =====================
+interface IPasarelaPago {
+  + cobrar(monto: double, referencia: String): Boolean
+}
+
+interface INotificador {
+  + notificar(email: String, mensaje: String): void
+}
+
+interface ICompraRepository {
+  + guardar(compra: Compra): void
+}
+
+interface ITicketRepository {
+  + guardar(ticket: Ticket): void
+}
+
+class ServicioCompra {
+  + crearCompra(usuario: Usuario, funcion: Funcion, entrada: Entrada, cantidad: int): Compra
+  + pagarCompra(compra: Compra): Boolean
+}
+
+class ServicioTickets {
+  + emitirTickets(compra: Compra): List<Ticket>
+}
+
+' =====================
+' RELACIONES
+' =====================
+Teatro "1" o-- "0..*" Funcion : programa
+Funcion "1" *-- "1..*" Asiento : asientos
+
+Compra "1" --> "1" Entrada : tipoEntrada
+Compra "1" o-- "0..*" Ticket : genera
+Ticket "1" --> "1" Asiento : asigna
+Ticket "1" --> "1" Entrada : correspondeA
+Compra "1" --> "1" Funcion : esPara
+
+Usuario "1" *-- "0..*" Compra : posee
+Usuario "1" *-- "0..*" Ticket : contiene
+
+Entrada "1" --> "0..*" Compra : perteneceA
+
+ServicioCompra ..> IPasarelaPago : usa
+ServicioCompra ..> ICompraRepository : persiste
+ServicioCompra ..> INotificador : notifica
+
+ServicioTickets ..> ITicketRepository : persiste
+ServicioTickets ..> INotificador : notifica
+
+@enduml

@@ -1,4 +1,4 @@
-#Forma "A": para definir una clase
+'''#Forma "A": para definir una clase
 class Personas:
     def __init__(self, id, nombre, rut, correo):
                 #      1  juan  18669554-3 juan@mail.com
@@ -36,7 +36,7 @@ datos_persona = {
 p2 = Personas(datos_persona)
 
 print(p2.nombre)
-
+'''
 #Forma C: para definir una clase
 class Personas:
     datos = ["id", "nombre", "rut", "correo"]

@@ -1,0 +1,91 @@
+@startuml diagrama_clases_biblioteca
+title Sistema de Préstamos de Libros - Biblioteca Gratuita
+
+' =====================
+' Clases Base
+' =====================
+
+class Persona {
+    - nombre : String
+    - rut : String
+}
+
+class Empleado {
+    - cargo : String
+}
+
+Persona <|-- Empleado
+
+' =====================
+' Tipos de Empleados
+' =====================
+
+class PersonalAseo
+class Bibliotecario
+class EncargadoSala
+
+Empleado <|-- PersonalAseo
+Empleado <|-- Bibliotecario
+Empleado <|-- EncargadoSala
+
+' =====================
+' Usuario Biblioteca
+' =====================
+
+class Usuario {
+    - id_usuario : int
+    - nombre : String
+    - telefono : String
+}
+
+' =====================
+' Estantería / Colección
+' =====================
+
+class Estanteria {
+    - id_estanteria : int
+    - sector : String
+    - pasillo : String
+    - nivel : String
+    - descripcion : String
+}
+
+' =====================
+' Libro
+' =====================
+
+class Libro {
+    - isbn : String
+    - titulo : String
+    - autor : String
+    - disponible : boolean
+}
+
+' =====================
+' Préstamo
+' =====================
+
+class Prestamo {
+    - id_prestamo : int
+    - fecha_prestamo : Date
+    - fecha_devolucion_estimada : Date
+    - fecha_devolucion_real : Date
+    - dias_atraso : int
+    - castigo_dias : int
+
+    + calcularFechaDevolucion()
+    + calcularDiasAtraso()
+    + calcularCastigo()
+}
+
+' =====================
+' Relaciones
+' =====================
+
+Usuario "1" -- "0..*" Prestamo : solicita >
+Libro "1" -- "0..*" Prestamo : es prestado en >
+Bibliotecario "1" -- "0..*" Prestamo : gestiona >
+
+Estanteria "1" o-- "0..*" Libro : contiene >
+
+@enduml

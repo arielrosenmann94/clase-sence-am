@@ -1,0 +1,158 @@
+@startuml diagrama_clases_biblioteca_profesional
+title Sistema de Préstamos de Libros - Biblioteca Gratuita (Diagrama Profesional)
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #2C3E50
+skinparam BorderColor #2C3E50
+skinparam class BackgroundColor white
+
+' =====================
+' ENUMS (Estados)
+' =====================
+enum EstadoLibro {
+  DISPONIBLE
+  PRESTADO
+  RESERVADO
+  EN_REPARACION
+  PERDIDO
+}
+
+enum EstadoPrestamo {
+  ACTIVO
+  DEVUELTO
+  VENCIDO
+  ANULADO
+}
+
+enum TipoEmpleado {
+  BIBLIOTECARIO
+  ENCARGADO_SALA
+  PERSONAL_ASEO
+}
+
+' =====================
+' PERSONAS
+' =====================
+abstract class Persona {
+  - id: int
+  - nombre: String
+  - rut: String
+  - telefono: String
+  - email: String
+  --
+  + actualizarContacto(telefono: String, email: String): void
+  + getNombre(): String
+}
+
+class Usuario extends Persona {
+  - id_usuario: int
+  - fecha_registro: Date
+  - estado_activo: Boolean
+  - max_prestamos: int
+  --
+  + solicitarPrestamo(libro: Libro): Prestamo
+  + devolverPrestamo(prestamo: Prestamo): Boolean
+  + puedePedirPrestamo(): Boolean
+  + getPrestamosActivos(): List<Prestamo>
+}
+
+abstract class Empleado extends Persona {
+  - codigo_empleado: String
+  - tipo: TipoEmpleado
+  - turno: String
+  --
+  + registrarEntrada(): void
+  + registrarSalida(): void
+}
+
+class Bibliotecario extends Empleado {
+  + validarPrestamo(usuario: Usuario, libro: Libro): Boolean
+  + crearPrestamo(usuario: Usuario, libro: Libro): Prestamo
+  + registrarDevolucion(prestamo: Prestamo): Boolean
+  + marcarLibroPerdido(libro: Libro): void
+}
+
+class EncargadoSala extends Empleado {
+  + moverLibro(libro: Libro, nuevaEstanteria: Estanteria): void
+  + catalogarLibro(libro: Libro, estanteria: Estanteria): void
+  + registrarReparacion(libro: Libro): void
+}
+
+class PersonalAseo extends Empleado {
+  + registrarLimpieza(sector: String): void
+  + reportarIncidencia(descripcion: String): void
+}
+
+' =====================
+' CATALOGO / INVENTARIO
+' =====================
+class Estanteria {
+  - id_estanteria: int
+  - sector: String
+  - pasillo: String
+  - nivel: String
+  - descripcion: String
+  --
+  + ubicarLibro(libro: Libro): void
+  + retirarLibro(libro: Libro): void
+  + capacidadDisponible(): int
+}
+
+class Libro {
+  - isbn: String
+  - titulo: String
+  - autor: String
+  - estado: EstadoLibro
+  - fecha_ingreso: Date
+  --
+  + esPrestable(): Boolean
+  + marcarPrestado(): void
+  + marcarDevuelto(): void
+  + marcarEnReparacion(): void
+  + marcarPerdido(): void
+}
+
+' =====================
+' PRESTAMOS
+' =====================
+class Prestamo {
+  - id_prestamo: int
+  - fecha_prestamo: Date
+  - fecha_devolucion_estimada: Date
+  - fecha_devolucion_real: Date
+  - dias_atraso: int
+  - castigo_dias: int
+  - estado: EstadoPrestamo
+  --
+  + calcularFechaDevolucion(dias: int): Date
+  + calcularDiasAtraso(hoy: Date): int
+  + calcularCastigo(diasAtraso: int): int
+  + estaVencido(hoy: Date): Boolean
+  + cerrarDevolucion(fechaReal: Date): void
+}
+
+' =====================
+' RELACIONES (Cardinalidad + significado)
+' =====================
+
+' Usuario y préstamos (un usuario puede tener muchos préstamos)
+Usuario "1" -- "0..*" Prestamo : solicita
+
+' Un préstamo siempre es de un solo libro
+Prestamo "1" --> "1" Libro : libro
+
+' Un libro puede estar en muchos préstamos (histórico)
+Libro "1" -- "0..*" Prestamo : historial
+
+' Bibliotecario gestiona préstamos (crea y cierra)
+Bibliotecario "1" -- "0..*" Prestamo : gestiona
+
+' Estantería contiene libros (agregación: el libro puede cambiar de estantería)
+Estanteria "1" o-- "0..*" Libro : contiene
+
+' Encargado de sala gestiona libros (mueve/cataloga)
+EncargadoSala "1" -- "0..*" Libro : gestiona
+
+@enduml
