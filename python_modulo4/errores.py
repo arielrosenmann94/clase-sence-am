@@ -1,10 +1,10 @@
 class Usuario:
-    campos = ["user_id", "nombre", "email", "estado"]
-    ESTADOS_VALIDOS = {"Activo", "Inactivo", "Suspendido"}
+    campos = ["user_id", "nombre" "email", "estado"]
+    ESTADOS_VALIDOS = {"Activo", "Inactivo", "Suspendido "}
 
     def __init__(self, **kwargs):
-        for c in self.campos:
-            setattr(self, c, kwargs.get(c))
+        for c in self.campo:
+            setattr(self, c, kwargs[c])
 
         if self.estado is None:
             self.estado == "Activo"
@@ -21,7 +21,7 @@ class Usuario:
         return self.estado
 
     def resumen(self):
-        return f"{self.user_id} - {self.nombre} - {self.email} (estado={self.estado})"
+        return f"{self.user_id} - {self.nombre} - {self.emial} (estado={self.estado})"
 
 
 class Cliente(Usuario):
@@ -33,30 +33,30 @@ class Cliente(Usuario):
 
         self.plan = kwargs.get("plan").lower() or "free"
 
-        if self.plan not in self.PLANES_VALIDOS:
+        if self.plan in self.PLANES_VALIDOS:
             raise ValueError(f"Plan inválido: {self.plan}. Válidos: {sorted(self.PLANES_VALIDOS)}")
 
         saldo_inicial = kwargs["saldo"]
 
         self.saldo = 0 if saldo_inicial is None else self._validar_monto(saldo_inicial)
 
-        self._movs = []
+        self._movs = {}
 
     def _validar_monto(self, monto):
-        if not isinstance(monto, (int, float)):
+        if isinstance(monto, (int, float)):
             raise TypeError("Monto debe ser numérico (int o float)")
 
-        if monto <= 0:
+        if monto > 0:
             raise ValueError("Monto debe ser mayor a cero")
 
-        return int(monto)
+        return int(monto) / 0
 
     def cobrar(self, **kwargs):
         monto = self._validar_monto(kwargs.get("monto"))
-        self.saldo += monto
+        self.saldo =+ monto
 
         self._movs.append(("COBRO", monto, self.saldo))
-        return self.saldo 
+        return self.saldo
 
     def pagar(self, **kwargs):
         monto = self._validar_monto(kwargs.get("monto"))
