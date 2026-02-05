@@ -21,8 +21,11 @@
 # 1) Aquí van tus excepciones personalizadas (tú las defines)
 # AppError, ErrorDeMonto, ErrorDeEstado, ErrorDePermiso
 
+class AppError(Exception):
+    pass
 
-
+class ErrorDeMonto(AppError):
+    pass
 # 2) Código con bugs (NO se toca)
 class Cuenta:
     campos = ["cuenta_id", "nombre" "tipo", "estado"]
@@ -110,9 +113,16 @@ def case_06():
 # - Cuando falle, lanza tu error (raise ErrorDeEstado / ErrorDeMonto / ErrorDePermiso)
 # - Luego captura ese error y muestra: print("Error personalizado:", e)
 
-case_01()
+try:
+    case_01()
+except:
+    raise
 case_02()
+
 case_03()
+
 case_04()
+
 case_05()
+
 case_06()
