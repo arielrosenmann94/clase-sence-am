@@ -1,12 +1,7 @@
 [
-  {
-    "cliente_id": 1,
-    "nombre": "Carla",
-    "email": "carla@nuevo.cl"
-  },
-  {
-    "cliente_id": 2,
-    "nombre": "Josefa Andrea",
-    "email": "josefa@miempresa.cl"
-  }
+    {
+        "nombre": "holitas",
+        "apellido": "Comoestais",
+        "correo": "hola"
+    }
 ]
