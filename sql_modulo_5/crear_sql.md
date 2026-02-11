@@ -58,6 +58,74 @@ Este documento enseña lo esencial para:
 
 - `BOOLEAN`: verdadero/falso (`true`/`false`)
 
+### 1.5 Controlar la cantidad de dígitos en números
+
+> En SQL los tipos enteros (`SMALLINT`/`INT`/`BIGINT`) se limitan por **rango**, no por "cantidad de dígitos".
+> Si necesitas controlar exactamente cuántos dígitos acepta una columna, tienes 3 formas correctas:
+
+#### Opción 1: `NUMERIC(n,0)` / `DECIMAL(n,0)` ✅ (la más directa)
+
+Restringe a un máximo de `n` dígitos y 0 decimales.
+
+```sql
+CREATE TABLE ejemplo (
+  codigo NUMERIC(9,0)
+);
+```
+
+- Permite: `0` hasta `999999999` (y negativos hasta `-999999999`).
+- Si intentas `1000000000` (10 dígitos) → **error**.
+
+Si quieres solo positivos:
+
+```sql
+CREATE TABLE ejemplo (
+  codigo NUMERIC(9,0) CHECK (codigo >= 0)
+);
+```
+
+#### Opción 2: `INT` + `CHECK` ✅ (si quieres seguir usando INT)
+
+`INT` soporta rangos mayores, así que limitas por constraint:
+
+Máximo 9 dígitos (positivo):
+
+```sql
+CREATE TABLE ejemplo (
+  codigo INT CHECK (codigo BETWEEN 0 AND 999999999)
+);
+```
+
+Máximo 9 dígitos (incluye negativos):
+
+```sql
+CREATE TABLE ejemplo (
+  codigo INT CHECK (codigo BETWEEN -999999999 AND 999999999)
+);
+```
+
+#### Opción 3: `CHAR(n)` para códigos con ceros a la izquierda ⚠️
+
+Si necesitas "exactamente 9 dígitos" incluyendo ceros iniciales (ej: `001234567`), los tipos numéricos **no sirven** porque el cero a la izquierda no se conserva (`001234567` = `1234567`).
+
+Lo correcto es guardarlo como texto:
+
+```sql
+CREATE TABLE ejemplo (
+  codigo CHAR(9) CHECK (codigo ~ '^[0-9]{9}$')
+);
+```
+
+- `~`: operador de regex en PostgreSQL.
+- `'^[0-9]{9}$'`: exactamente 9 caracteres numéricos.
+
+#### Recomendación rápida
+
+| Caso                                              | Tipo recomendado                      |
+| ------------------------------------------------- | ------------------------------------- |
+| Hasta N dígitos, numérico real                    | `NUMERIC(N,0)` o `INT` + `CHECK`      |
+| Código/identificador con posibles ceros iniciales | `CHAR(N)` / `VARCHAR(N)` + validación |
+
 ---
 
 ## 2) ¿Qué es un CONSTRAINT (restricción)?
