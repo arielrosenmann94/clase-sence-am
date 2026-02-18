@@ -371,7 +371,6 @@ CREATE TABLE pedidos (
 ### Resumen visual: Orden de operaciones
 
 ```
-CREAR:     Abuelos → Padres → Hijos → Nietos (Sin FK → Con FK)
 INSERTAR:  Abuelos → Padres → Hijos → Nietos (Sin FK → Con FK)
 ELIMINAR:  Nietos → Hijos → Padres → Abuelos (Con FK → Sin FK)
 EDITAR:    Nietos → Hijos → Padres → Abuelos (Con FK → Sin FK) (previo a evaluación)
