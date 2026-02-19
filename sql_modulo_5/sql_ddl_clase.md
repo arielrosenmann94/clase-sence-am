@@ -115,12 +115,12 @@ Esta es una pregunta clásica de entrevista laboral:
 
 DDL no solo sirve para tablas. También puede:
 
-| Comando           | ¿Qué hace?                                       |
-| ----------------- | ------------------------------------------------ |
-| `CREATE INDEX`    | Crea un índice para acelerar búsquedas           |
-| `CREATE VIEW`     | Crea una "vista virtual" (una consulta guardada) |
-| `CREATE DATABASE` | Crea una base de datos nueva                     |
-|                   |
+| Comando                          | ¿Qué hace?                                       |
+| -------------------------------- | ------------------------------------------------ |
+| `CREATE INDEX`                   | Crea un índice para acelerar búsquedas           |
+| `CREATE VIEW`                    | Crea una "vista virtual" (una consulta guardada) |
+| `CREATE DATABASE`                | Crea una base de datos nueva                     |
+| `ALTER TABLE ... ADD CONSTRAINT` | Agrega restricciones (PK, FK, CHECK)             |
 
 > Hoy nos enfocamos en **CREATE TABLE** porque es la base de todo.
 
