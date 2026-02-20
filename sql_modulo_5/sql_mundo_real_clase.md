@@ -27,6 +27,7 @@ Motor: PostgreSQL
 | 🗑️ Borrar datos            | ¿Realmente se borran o solo se esconden?                        |
 | 🔄 Transacciones           | ¿Cómo protejo operaciones complejas? ¿Qué es un SAVEPOINT?      |
 | 🕐 Fechas y zonas horarias | ¿Por qué la hora está mal en mi app?                            |
+| 🤖 SQL y la IA             | ¿Cómo se preparan los datos para la Inteligencia Artificial?    |
 | 💼 SQL en tu carrera       | ¿Qué piden en entrevistas técnicas?                             |
 
 ---
