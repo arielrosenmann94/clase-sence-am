@@ -7,49 +7,49 @@
 
 ## 🎯 Contexto del Proyecto
 
-Usted forma parte de un equipo de desarrollo al que se le ha encomendado la siguiente misión: **Alke Wallet** requiere el diseño de su base de datos relacional. El sistema debe permitir que los usuarios puedan:
+Eres parte de un equipo de desarrollo al que se le asignó la siguiente tarea: **Alke Wallet** necesita que se diseñe su base de datos relacional. El sistema debe permitir que los usuarios puedan:
 
-- Almacenar y gestionar su saldo en moneda local o criptomonedas
+- Almacenar y gestionar sus saldos o criptomonedas
 - Realizar transferencias entre usuarios
-- Consultar el historial de movimientos y transacciones
+- Consultar el historial de movimientos
 
-Su tarea consiste en construir el modelo de datos, crear las tablas correspondientes y elaborar las consultas necesarias para el funcionamiento del sistema.
+El objetivo de esta evaluación es diseñar el modelo, crear las tablas y ejecutar las consultas necesarias para que el sistema funcione correctamente.
 
 ---
 
 ## 📦 Entregables
 
-### Archivos requeridos
+### Archivos a entregar
 
-| Archivo                 | Formato aceptado                    | Contenido                                                   |
-| ----------------------- | ----------------------------------- | ----------------------------------------------------------- |
-| **Documento principal** | `.docx` (Word) o `.md` (Markdown)   | Todas las sentencias SQL junto con las capturas de pantalla |
-| **Script SQL**          | `.sql`                              | Archivo con el código completo listo para su ejecución      |
-| **Diagrama ER**         | `.png`, `.jpg`, `.pdf` o fotografía | El Modelo Entidad-Relación del sistema                      |
+| Archivo                 | Formato aceptado                    | Contenido                                         |
+| ----------------------- | ----------------------------------- | ------------------------------------------------- |
+| **Documento principal** | `.docx` (Word) o `.md` (Markdown)   | Todas las sentencias SQL + capturas de pantalla   |
+| **Script SQL**          | `.sql`                              | El archivo con todo el código listo para ejecutar |
+| **Diagrama ER**         | `.png`, `.jpg`, `.pdf` o fotografía | El modelo Entidad-Relación del sistema            |
 
 > [!TIP]
-> El documento puede entregarse en **Word** (`.docx`) o en **Markdown** (`.md`), según la preferencia y comodidad del estudiante. La opción Markdown puede redactarse directamente desde VS Code.
+> Puede entregar la tarea en **Word** (`.docx`) o en **Markdown** (`.md`), según le resulte más cómodo. Si opta por Markdown, puede escribirlo directamente desde VS Code.
 
 ### Contenido obligatorio del documento
 
-| #   | Elemento                 | Descripción                                                         |
-| --- | ------------------------ | ------------------------------------------------------------------- |
-| 1   | **Creación de la BD**    | Sentencia SQL para crear la base de datos `AlkeWallet`              |
-| 2   | **Creación de tablas**   | DDL (`CREATE TABLE`) de las 3 tablas con sus claves y restricciones |
-| 3   | **Inserción de datos**   | DML (`INSERT`) con datos de prueba en las 3 tablas                  |
-| 4   | **Consultas requeridas** | Las 5 consultas SQL detalladas más adelante                         |
-| 5   | **Transaccionalidad**    | Demostración del uso de `START TRANSACTION`, `COMMIT` y `ROLLBACK`  |
-| 6   | **Diagrama ER**          | Diagrama completo que refleje las relaciones entre entidades        |
-| 7   | **Capturas de pantalla** | Evidencia visual de la ejecución correcta de cada paso              |
+| #   | Elemento                 | Descripción                                                             |
+| --- | ------------------------ | ----------------------------------------------------------------------- |
+| 1   | **Creación de la BD**    | La sentencia SQL para crear la base de datos `AlkeWallet`               |
+| 2   | **Creación de tablas**   | El DDL (`CREATE TABLE`) de las 3 tablas, con sus claves y restricciones |
+| 3   | **Inserción de datos**   | El DML (`INSERT`) con datos de prueba en las 3 tablas                   |
+| 4   | **Consultas requeridas** | Las 5 consultas SQL detalladas más abajo                                |
+| 5   | **Transaccionalidad**    | Demostrar el uso de `START TRANSACTION`, `COMMIT` y `ROLLBACK`          |
+| 6   | **Diagrama ER**          | El diagrama completo mostrando cómo se relacionan las tablas            |
+| 7   | **Capturas de pantalla** | Evidencia visual de que las sentencias se ejecutaron correctamente      |
 
 > [!IMPORTANT]
-> El documento debe estar **estructurado y correctamente etiquetado**, paso a paso y en orden. Se espera claridad y prolijidad en su presentación.
+> El documento debe estar **ordenado y bien etiquetado**, paso a paso. Debe ser claro y comprensible.
 
 ---
 
 ## 🗂️ Las 3 Entidades (Tablas)
 
-Se deben construir las siguientes tablas con sus atributos correspondientes. Preste especial atención a los tipos de datos, claves y restricciones que considere pertinentes.
+Se deben diseñar las siguientes tablas con sus atributos. Prestar atención a los tipos de datos, claves y restricciones correspondientes.
 
 ### Tabla `usuario`
 
@@ -69,7 +69,7 @@ Se deben construir las siguientes tablas con sus atributos correspondientes. Pre
 | `currency_name`   | —              |
 | `currency_symbol` | —              |
 
-### Tabla `transaccion` (La que registra los movimientos de fondos)
+### Tabla `transaccion` (registra los movimientos de saldo)
 
 | Atributo           | Rol                       |
 | ------------------ | ------------------------- |
@@ -80,7 +80,7 @@ Se deben construir las siguientes tablas con sus atributos correspondientes. Pre
 | `transaction_date` | —                         |
 
 > [!TIP]
-> **Reflexione sobre las relaciones:** ¿De qué manera se vincula un usuario con la moneda que utiliza? Si una de las consultas solicita "la moneda elegida por un usuario en particular", ¿qué columna adicional debería incorporarse al diseño?
+> **Analice con cuidado las relaciones:** ¿Cómo se vincula un usuario con la moneda que está utilizando? Si una de las consultas solicita "la moneda elegida por un usuario", ¿qué columna adicional sería necesario agregar?
 
 ---
 
@@ -88,100 +88,100 @@ Se deben construir las siguientes tablas con sus atributos correspondientes. Pre
 
 ### Paso 1 — Crear la Base de Datos
 
-- Crear la base de datos `AlkeWallet` mediante `CREATE DATABASE`
-- Seleccionarla para comenzar a trabajar
-- Verificar su existencia con `SHOW DATABASES;`
+- Crear la base de datos `AlkeWallet` (con `CREATE DATABASE`)
+- Seleccionarla para comenzar a utilizarla
+- Verificar su creación con `SHOW DATABASES;`
 
-📸 **Captura de pantalla:** evidencia de que la base de datos fue creada correctamente.
+📸 **Captura de pantalla:** mostrar que la base de datos existe.
 
 ---
 
 ### Paso 2 — Crear las 3 Tablas (DDL)
 
-Construir las tablas `usuario`, `moneda` y `transaccion` teniendo en cuenta:
+Diseñar las tablas `usuario`, `moneda` y `transaccion` considerando:
 
-- La elección adecuada de **tipos de datos** para cada columna
-- La correcta definición de **claves primarias** (`PRIMARY KEY`)
-- El establecimiento de **claves foráneas** (`FOREIGN KEY`) donde corresponda
-- La aplicación de restricciones que garanticen la integridad: `NOT NULL`, `UNIQUE`, `DEFAULT`, según se considere pertinente
-- El **orden de creación** (primero las tablas independientes, luego las dependientes)
+- Seleccionar los **tipos de datos** apropiados para cada columna
+- Definir correctamente las **claves primarias** (`PRIMARY KEY`)
+- Establecer las **claves foráneas** (`FOREIGN KEY`) donde corresponda
+- Aplicar restricciones de integridad: `NOT NULL`, `UNIQUE`, `DEFAULT`, según convenga
+- Respetar el **orden de creación** (primero las tablas independientes, luego las que dependen de otras)
 
 📸 **Captura de pantalla:** resultado del `DESCRIBE` de cada tabla.
 
 ---
 
-### Paso 3 — Inserción de Datos de Prueba (DML)
+### Paso 3 — Insertar Datos de Prueba (DML)
 
-Insertar registros en las 3 tablas a fin de poder ejecutar las consultas posteriores:
+Ingresar datos en las 3 tablas para poder realizar las consultas:
 
 - Al menos **3 monedas** distintas
-- Al menos **4 usuarios** con datos de ejemplo
-- Al menos **5 transacciones** entre distintos usuarios
+- Al menos **4 usuarios** con datos variados
+- Al menos **5 transacciones** entre los usuarios
 
-📸 **Captura de pantalla:** resultado de `SELECT * FROM` en cada tabla para verificar los datos insertados.
+📸 **Captura de pantalla:** resultado de `SELECT * FROM` en cada tabla para verificar los datos ingresados.
 
 ---
 
 ### Paso 4 — Las 5 Consultas Obligatorias
 
-Elabore y ejecute las siguientes consultas:
+Escribir y ejecutar las siguientes consultas:
 
-| #   | Consulta                                                                   | Tipo              |
-| --- | -------------------------------------------------------------------------- | ----------------- |
-| 1   | Obtener el **nombre de la moneda** seleccionada por un usuario determinado | `SELECT` + `JOIN` |
-| 2   | Listar **todas las transacciones** registradas en el sistema               | `SELECT`          |
-| 3   | Ver todas las transacciones realizadas por **un único usuario**            | `SELECT` + filtro |
-| 4   | **Modificar** el correo electrónico de un usuario                          | `UPDATE`          |
-| 5   | **Eliminar** los datos de una transacción específica (fila completa)       | `DELETE`          |
+| #   | Consulta                                                             | Tipo              |
+| --- | -------------------------------------------------------------------- | ----------------- |
+| 1   | Obtener el **nombre de la moneda** elegida por un usuario específico | `SELECT` + `JOIN` |
+| 2   | Traer **todas las transacciones** registradas                        | `SELECT`          |
+| 3   | Ver todas las transacciones realizadas por **un único usuario**      | `SELECT` + filtro |
+| 4   | **Actualizar** el correo electrónico de un usuario                   | `UPDATE`          |
+| 5   | **Eliminar** los datos de una transacción (la fila completa)         | `DELETE`          |
 
-📸 **Captura de pantalla:** resultado de cada consulta ejecutada correctamente.
+📸 **Captura de pantalla:** el resultado de cada consulta ejecutada.
 
 > [!NOTE]
-> Para las consultas 4 y 5 (`UPDATE` y `DELETE`), incluya una captura del estado **antes** y otra **después** de la operación, de modo que sea posible verificar que el cambio se aplicó correctamente.
+> Para las consultas 4 y 5 (`UPDATE` y `DELETE`), incluir una captura del estado **antes** y **después** para verificar que el cambio se aplicó correctamente.
 
 ---
 
 ### Paso 5 — Transaccionalidad (ACID)
 
-Demuestre que comprende el funcionamiento de las transacciones en SQL:
+Demostrar el uso correcto de transacciones en SQL:
 
-- Realice una **transferencia de fondos** entre dos usuarios utilizando:
+- Realizar una **transferencia de saldo** entre dos usuarios utilizando:
   - `START TRANSACTION`
-  - Las sentencias necesarias (descontar del emisor, acreditar al receptor y registrar el movimiento)
+  - Las sentencias necesarias (descontar de uno, agregar al otro y registrar el movimiento)
   - `COMMIT` para confirmar la operación
-- Produzca deliberadamente un error (por ejemplo, una **violación de clave foránea**) y deshaga la operación mediante `ROLLBACK`
+- Provocar un error intencional (por ejemplo, un **error de clave foránea**) y revertirlo con `ROLLBACK`
 
-📸 **Captura de pantalla:** consola mostrando que el `COMMIT` o el `ROLLBACK` se ejecutaron correctamente.
+📸 **Captura de pantalla:** de la consola mostrando que el `COMMIT` o el `ROLLBACK` se ejecutaron correctamente.
 
 ---
 
 ### Paso 6 — Diagrama Entidad-Relación (ER)
 
-Elabore el diagrama que represente el modelo de datos del sistema. Puede utilizar cualquiera de las siguientes herramientas:
+Elaborar el diagrama del sistema. Se puede utilizar cualquiera de las siguientes herramientas:
 
 - **DBeaver**
 - [dbdiagram.io](https://dbdiagram.io)
 - [drawSQL](https://drawsql.app)
 - La extensión draw.io en VS Code
-- ✏️ **Diagrama a mano** — es válido siempre que sea legible y esté correctamente fotografiado.
+- ✏️ **A mano** — es válido siempre que la letra sea legible y el diagrama esté bien presentado con una fotografía clara.
 
 **El diagrama debe mostrar obligatoriamente:**
 
 - Las 3 tablas con todos sus campos
-- Las relaciones entre ellas (identificando si son 1:N, N:M, etc.)
-- Las claves primarias y foráneas claramente señaladas
+- Las relaciones entre ellas (indicando el tipo: 1:N, N:M, etc.)
+- Las PK y FK claramente identificadas
 
-📸 **Captura o exportación** del diagrama.
+📸 **Captura de pantalla o exportación** del diagrama.
 
 ---
 
-## 🔧 Herramientas Recomendadas
+## 🔧 Herramientas Sugeridas
 
-| Herramienta                               | Propósito                                     |
-| ----------------------------------------- | --------------------------------------------- |
-| DBeaver                                   | Ejecución de sentencias SQL                   |
-| Visual Studio Code                        | Redacción y organización del archivo `.sql`   |
-| Herramienta ER (dbdiagram, drawSQL, etc.) | Construcción del diagrama de la base de datos |
+| Herramienta                               | Utilidad                                       |
+| ----------------------------------------- | ---------------------------------------------- |
+| DBeaver                                   | Para ejecutar las sentencias SQL               |
+| Visual Studio Code                        | Para organizar el archivo `.sql`               |
+| Herramienta ER (dbdiagram, drawSQL, etc.) | Para construir el diagrama de la base de datos |
 
 ---
 
@@ -189,24 +189,24 @@ Elabore el diagrama que represente el modelo de datos del sistema. Puede utiliza
 
 ### Aspectos Técnicos
 
-| Criterio                   | Descripción                                                                 |
-| -------------------------- | --------------------------------------------------------------------------- |
-| **Diseño de la BD**        | Tablas correctamente construidas con tipos de datos apropiados              |
-| **Integridad de datos**    | Uso adecuado de `NOT NULL`, `UNIQUE` y `DEFAULT`                            |
-| **Claves primarias**       | Presencia y correcta definición de `PRIMARY KEY` en todas las tablas        |
-| **Integridad referencial** | `FOREIGN KEY` correctamente declaradas y relaciones entre tablas coherentes |
-| **DDL**                    | Correcto funcionamiento de `CREATE DATABASE` y `CREATE TABLE`               |
-| **DML**                    | Correcto funcionamiento de `INSERT`, `SELECT`, `UPDATE` y `DELETE`          |
+| Criterio                   | Descripción                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------ |
+| **Diseño de la BD**        | Tablas correctamente estructuradas y tipos de datos apropiados                 |
+| **Integridad de datos**    | Uso correcto de `NOT NULL`, `UNIQUE` y `DEFAULT`                               |
+| **Claves primarias**       | Todas las `PRIMARY KEY` presentes y bien definidas                             |
+| **Integridad referencial** | Las `FOREIGN KEY` correctamente establecidas y las tablas vinculadas           |
+| **DDL**                    | Los comandos `CREATE DATABASE` y `CREATE TABLE` funcionan sin errores          |
+| **DML**                    | Los comandos `INSERT`, `SELECT`, `UPDATE` y `DELETE` se ejecutan correctamente |
 
 ### Aspectos Estructurales (ACID)
 
-| Propiedad        | Significado                                           | Evidencia esperada                          |
+| Propiedad        | Significado                                           | Cómo demostrarlo                            |
 | ---------------- | ----------------------------------------------------- | ------------------------------------------- |
-| **A**tomicidad   | La transacción se ejecuta completa o no se ejecuta    | `START TRANSACTION` + `COMMIT` / `ROLLBACK` |
+| **A**tomicidad   | La transacción se realiza completa o no se realiza    | `START TRANSACTION` + `COMMIT` / `ROLLBACK` |
 | **C**onsistencia | Las reglas de integridad se respetan en todo momento  | Restricciones `FK`, `NOT NULL`, `UNIQUE`    |
-| **I**solamiento  | Las transacciones no interfieren entre sí             | Uso correcto del bloque transaccional       |
-| **D**urabilidad  | Los cambios confirmados persisten de forma permanente | Datos presentes tras el `COMMIT`            |
+| **I**solamiento  | Las transacciones no interfieren entre sí             | Uso correcto del bloque de transacciones    |
+| **D**urabilidad  | Los cambios confirmados persisten de forma permanente | Los datos permanecen después del `COMMIT`   |
 
 ---
 
-> **💼 Portafolio profesional:** Este proyecto constituye un material de valor para el portafolio de cada estudiante. Se recomienda cuidar la presentación y destacar las decisiones de diseño más relevantes, ya que puede resultar de utilidad en procesos de selección laboral.
+> **💼 Portafolio:** Este proyecto es una excelente oportunidad para el portafolio profesional. Se recomienda dedicarle especial atención al diseño y presentación, ya que puede ser de gran utilidad al buscar las primeras oportunidades laborales o al destacar el trabajo realizado.

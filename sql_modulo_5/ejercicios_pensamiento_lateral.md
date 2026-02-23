@@ -1,10 +1,10 @@
 # 🧠 Desafíos de Pensamiento Lateral en SQL
 
-¡Bienvenidos a los desafíos lógicos! Aquí no gana el que escriba el SQL más largo ni el que se sepa de memoria las funciones más raras. Aquí gana el que entienda los conjuntos de datos y encuentre **soluciones creativas a problemas poco comunes**.
+¡Bienvenidos a los desafíos lógicos! Aquí no gana quien escribe el SQL más largo ni quien memoriza las funciones más raras. Aquí gana quien entiende los conjuntos de datos y encuentra **soluciones creativas a problemas poco comunes**.
 
-Cada ejercicio tiene un **escenario**, un **script y datos de prueba** para que crees las tablas en tu base de datos, y una **restricción** (una regla de oro que NO puedes romper).
+Cada ejercicio tiene un **escenario**, un **script y datos de prueba** para crear las tablas en el motor SQL, y una **restricción** (una regla de oro que no puede romperse).
 
-Prepárate para pensar "fuera de la caja" 📦.
+Prepárese para pensar "fuera de la caja" 📦.
 
 ---
 
@@ -43,10 +43,10 @@ Escribe una consulta SQL que devuelva a los **7 pasajeros que SÍ viajarán** (l
 
 ### 🚫 LA REGLA DE ORO (Restricción)
 
-**NO PUEDES USAR `ORDER BY`, `LIMIT`, `TOP` ni `FETCH FIRST`.**
-_(Técnicamente `ORDER BY peso_equipaje_kg ASC LIMIT 7` lo resuelve en 2 segundos, pero estaría prohibido)._
+**No se puede usar `ORDER BY`, `LIMIT`, `TOP` ni `FETCH FIRST`.**
+_(Técnicamente `ORDER BY peso_equipaje_kg ASC LIMIT 7` lo resuelve en 2 segundos, pero está prohibido para este ejercicio)._
 
-> **💡 Pista analógica:** Si no puedes ordenarlos de menor a mayor para cortar la lista... ¿cómo sabrías si el equipaje de una persona en particular está entre los 3 más pesados de todos? Trata de comparar la tabla con ella misma.
+> **💡 Pista analógica:** Si no es posible ordenarlos de menor a mayor para cortar la lista... ¿cómo se sabría si el equipaje de una persona en particular está entre los 3 más pesados de todos? Intente comparar la tabla consigo misma.
 
 ---
 
@@ -86,9 +86,9 @@ _Ojo: Como ves en los datos, una persona puede entrar y salir varias veces en el
 
 ### 🚫 LA REGLA DE ORO (Restricción)
 
-No tienes campo de "estado actual", solo el log de eventos. Debes resolverlo usando agrupaciones lógicas, **no puedes buscar manualmente en los datos** (imagina que la tabla tiene 1 millón de registros).
+No se cuenta con un campo de "estado actual", solo el registro de eventos. Se debe resolver usando agrupaciones lógicas, **no es posible buscar manualmente en los datos** (imagine que la tabla tiene 1 millón de registros).
 
-> **💡 Pista analógica:** Si alguien entró al edificio y nunca salió... ¿qué relación matemática simple existe entre la cantidad de veces que hizo 'ENTRADA' y la cantidad de veces que hizo 'SALIDA'?
+> **💡 Pista analógica:** Si alguien entró al edificio y nunca salió... ¿qué relación matemática simple existe entre la cantidad de veces que realizó 'ENTRADA' y la cantidad de veces que realizó 'SALIDA'?
 
 ---
 
@@ -141,6 +141,6 @@ Escribe una consulta que compare ambas tablas y te devuelva **exactamente el reg
 
 ### 🚫 LA REGLA DE ORO (Restricción)
 
-**NO PUEDES USAR LA CLÁUSULA `WHERE` ni un `JOIN` DE NINGÚN TIPO.**
+**No se puede usar la cláusula `WHERE` ni un `JOIN` DE NINGÚN TIPO.**
 
-> **💡 Pista analógica:** Si tienes una bolsa blanca con 4 pelotas, y una bolsa negra con 4 pelotas... y sabes que 3 de ellas son idénticas en ambas bolsas pero 1 es diferente. ¿Qué operación de la teoría de conjuntos te permite sacar las que son exactamente iguales y quedarte solo con la diferencia?
+> **💡 Pista analógica:** Si se tienen dos bolsas, una blanca y una negra, cada una con 4 pelotas, y se sabe que 3 de ellas son idénticas en ambas bolsas pero 1 es diferente. ¿Qué operación de la teoría de conjuntos permite extraer las que son exactamente iguales y quedarse solo con la diferencia?

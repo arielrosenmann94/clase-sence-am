@@ -1,14 +1,14 @@
 # 🦖 Desafío: Jurassic SQL - Sobrevive al Parque
 
-¡Bienvenido a tu primer día de trabajo, Arquitecto de Datos! 🦕
+¡Bienvenido a su primer día de trabajo, Arquitecto de Datos! 🦕
 
 ## 📖 La Historia
 
 Eres el nuevo encargado de la base de datos de **"Jurassic SQL"**, un moderno parque de diversiones con dinosaurios reales que, lamentablemente, tiene un pésimo historial de seguridad.
 
-El antiguo informático fue devorado por un T-Rex porque la base de datos del sistema de jaulas falló. Antes del trágico accidente, solo alcanzó a dejar el **Modelo conceptual (Entidad-Relación)** dibujado a mano en una pizarra. Tú debes pasar ese diseño conceptual a código SQL real para que el parque pueda abrir mañana y el sistema funcione de verdad.
+El antiguo informático fue devorado por un T-Rex porque la base de datos del sistema de jaulas falló. Antes del trágico accidente, solo alcanzó a dejar el **Modelo conceptual (Entidad-Relación)** dibujado a mano en una pizarra. El objetivo es transformar ese diseño conceptual en código SQL real para que el parque pueda abrir mañana y el sistema funcione correctamente.
 
-Si fallas... digamos que los velociraptors están hambrientos y saben abrir puertas. 🚪🦖
+Si el sistema falla... los velociraptors están hambrientos y saben abrir puertas. 🚪🦖
 
 ---
 
@@ -55,18 +55,18 @@ Aquí tienes el diagrama original que te dejaron, tal como se dibujó en la clas
 
 ## 🎯 Tu Misión (El Ejercicio)
 
-Abre tu editor de SQL y escribe un gran _Script_ con las sentencias `CREATE TABLE` correspondientes para transformar este modelo conceptual en un **modelo relacional** funcional.
+Abra el editor de SQL y escriba un _Script_ completo con las sentencias `CREATE TABLE` correspondientes para transformar este modelo conceptual en un **modelo relacional** funcional.
 
-**Lista de chequeo para sobrevivir:**
+**Lista de verificación:**
 
-- [ ] Debes crear todas las tablas, asignando tipos de datos lógicos (como `INT`, `VARCHAR`, `DATE`, `BOOLEAN`).
-- [ ] Todo debe tener su respectiva llave primaria (`PRIMARY KEY`).
-- [ ] Todo debe estar conectado correctamente con llaves foráneas (`FOREIGN KEY`) donde corresponda, para que nada quede "suelto".
+- [ ] Crear todas las tablas, asignando tipos de datos lógicos (como `INT`, `VARCHAR`, `DATE`, `BOOLEAN`).
+- [ ] Cada tabla debe tener su respectiva clave primaria (`PRIMARY KEY`).
+- [ ] Todas las entidades deben estar correctamente vinculadas con claves foráneas (`FOREIGN KEY`) donde corresponda, para que nada quede "suelto".
 
 ### 🚫 LA REGLA DE ORO (Trampa Conceptual)
 
-Fíjate en la relación transversal entre **Empleado** y **Dinosaurio**. El diagrama indica en la pizarra $M:N$.
+Observe la relación transversal entre **Empleado** y **Dinosaurio**. El diagrama indica en la pizarra $M:N$.
 
-*¿Puedes escribir una relación `Muchos a Muchos` directamente colocando una Foreign Key dentro de la tabla Empleado o dentro de la tabla Dinosaurio? ¿O acaso hacer eso generaría un desastre y tendrías que aplicar una "regla de transformación" especial que aprendimos en clase (*guiño guiño*) para salir del apuro SQL?*
+_¿Es posible escribir una relación `Muchos a Muchos` directamente colocando una clave foránea dentro de la tabla Empleado o dentro de la tabla Dinosaurio? ¿O acaso eso generaría un problema que requiere aplicar una "regla de transformación" especial, tal como se estudió en clase?_
 
-¡Construye TODO lo que necesites para evitar que Jurassic SQL acabe en bancarrota!
+¡Construya todo lo que sea necesario para evitar que Jurassic SQL acabe en bancarrota!

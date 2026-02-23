@@ -1,18 +1,18 @@
 # 🏴‍☠️ Guía de Estudio Autónomo: El Tesoro del GROUP BY
 
-¡Ahoy, estudiante de los datos! ⚓
+¡Bienvenido a los desafíos analíticos! ⚓
 
-Estás a punto de embarcarte en la aventura de aprender a usar `GROUP BY` y `HAVING`. Muchos han intentado entender cómo agrupar datos y han terminado en el fondo del mar, enredados entre sumas y filtros que no funcionan.
+Está a punto de embarcarse en la aventura de aprender a usar `GROUP BY` y `HAVING`. Muchos han intentado entender cómo agrupar datos y han terminado en el fondo del mar, enredados entre sumas y filtros que no funcionaban.
 
-Pero tú tienes ventaja. Hoy usarás el **"Método de los Cofres Piratas"** para estudiar esto a tu propio ritmo.
+Pero usted tiene ventaja. Hoy utilizará el **"Método de los Cofres Piratas"** para estudiar esto a su propio ritmo.
 
-Lee la teoría, imagina el proceso visualmente y luego resuelve los desafíos en tu motor SQL.
+Lea la teoría, visualice el proceso mentalmente y luego resuelva los desafíos en su motor SQL.
 
 ---
 
-## 🛠️ Paso 1: Carga el Botín en tu Barco (Preparación)
+## 🛠️ Paso 1: Carga los datos en su entorno (Preparación)
 
-Abre DBeaver, pgAdmin o la consola SQL que prefieras, copia este código y ejecútalo. Esto creará la tabla con los tesoros que saquearon 4 piratas en 3 barcos distintos:
+Abra DBeaver, pgAdmin o la consola SQL que utilice, copie este código y ejecútelo. Esto creará la tabla con los tesoros saqueados por 4 piratas en 3 barcos distintos:
 
 ```sql
 CREATE TABLE lateral_botin_flota (
@@ -36,7 +36,7 @@ INSERT INTO lateral_botin_flota (barco, pirata, tipo_tesoro, valor_monedas) VALU
 ('El Holandés', 'Davy', 'Esmeralda', 600);
 ```
 
-¡Listo! Todos los tesoros están revueltos en la cubierta. Ahora vamos a organizarlos.
+¡Listo! Todos los tesoros están disponibles. Ahora se procede a organizarlos.
 
 ---
 
@@ -46,20 +46,20 @@ INSERT INTO lateral_botin_flota (barco, pirata, tipo_tesoro, valor_monedas) VALU
 
 ### 📖 La Teoría Visual
 
-Imagina que el contramaestre grita: _"¡Quiero saber cuánto dinero recaudó CADA BARCO!"_
+Imagine que el contramaestre grita: _"¡Quiero saber cuánto dinero recaudó CADA BARCO!"_
 
-Si haces un `SELECT SUM(valor_monedas)` simple, SQL sumará TODO (4950 monedas) y te dará un solo número. Eso no te sirve para saber cuánto hizo cada barco. Necesitas separarlo.
+Si se ejecuta un `SELECT SUM(valor_monedas)` simple, SQL sumará TODO (4950 monedas) y devolverá un solo número. Eso no sirve para saber cuánto obtuvo cada barco. Es necesario separarlo.
 
-El `GROUP BY` es como gritar: **"¡Traigan 3 cofres grandes! Escriban 'La Perla Negra' en el primero, 'La Venganza' en el segundo, y 'El Holandés' en el tercero. ¡Y ahora tiren cada fila (tesoro) adentro de su respectivo cofre!"**
+El `GROUP BY` es como ordenar: **"¡Traigan 3 cofres grandes! Escriban 'La Perla Negra' en el primero, 'La Venganza' en el segundo, y 'El Holandés' en el tercero. ¡Y ahora coloquen cada fila (tesoro) dentro de su cofre correspondiente!"**
 
 Una vez que los cofres están armados y cerrados, SQL aplica la función matemática (`SUM`, `COUNT`, `AVG`) **SOLO al contenido que quedó dentro del cofre**.
 
 ### ⚔️ Desafío 1: El Botín por Barco
 
-**Tu Misión:** Escribe una consulta SQL que devuelva dos columnas: el nombre del `barco` y su `botin_total` (la suma de sus `valor_monedas`).
+**Misión:** Escribir una consulta SQL que devuelva dos columnas: el nombre del `barco` y su `botin_total` (la suma de sus `valor_monedas`).
 
-_<details><summary>💡 Pista para el Desafío 1 (Haz clic para ver)</summary>_
-_Selecciona las columnas barco y SUM(valor_monedas). Luego dile a SQL que agrupe explícitamente usando la orden `GROUP BY barco`._
+_<details><summary>💡 Pista para el Desafío 1 (Haga clic para ver)</summary>_
+_Seleccione las columnas barco y SUM(valor_monedas). Luego indíquele a SQL que agrupe explícitamente usando la instrucción `GROUP BY barco`._
 _</details>_
 
 ---
@@ -68,17 +68,17 @@ _</details>_
 
 ### 📖 La Teoría Visual
 
-El Capitán dice: _"¡Está excelente saber cuánto hizo cada barco, pero ahora quiero saber cuánto recolectó CADA PIRATA EN SU RESPECTIVO BARCO!"_
+El Capitán dice: _"¡Está bien saber cuánto obtuvo cada barco, pero ahora quiero saber cuánto recolectó CADA PIRATA EN SU RESPECTIVO BARCO!"_
 
-¿Qué cambia? Ahora no nos bastan 3 cofres grandes, necesitamos **subgrupos**. Si le dices a SQL `GROUP BY barco, pirata`, SQL dirá: _"¡Abran el cofre grande de La Perla Negra y metan dos cofres pequeños, uno etiquetado 'Jack' y otro 'Will'! Y metan los tesoros ahí."_
+¿Qué cambia? Ahora no bastan 3 cofres grandes, se necesitan **subgrupos**. Si se indica a SQL `GROUP BY barco, pirata`, SQL dirá: _"¡Abran el cofre grande de La Perla Negra y coloquen dos cofres pequeños, uno etiquetado 'Jack' y otro 'Will'! Y distribuyan los tesoros ahí."_
 
 SQL crea un cofre nuevo por cada **combinación única** de barco y pirata.
 
-> ⚠️ **LA LEY INQUEBRANTABLE:** Si en tu `SELECT` pides ver el `barco` y el `pirata`, **AMBAS columnas** deben estar escritas después del `GROUP BY`. Si le pides a SQL que te muestre al "pirata" pero solo le dijiste `GROUP BY barco`, SQL dará un error porque no sabrá de qué pirata sacar el nombre si la caja entera se llama "La Perla Negra".
+> ⚠️ **LA LEY INQUEBRANTABLE:** Si en el `SELECT` se solicita ver el `barco` y el `pirata`, **AMBAS columnas** deben estar escritas después del `GROUP BY`. Si se solicita que SQL muestre al "pirata" pero solo se indica `GROUP BY barco`, SQL lanzará un error porque no sabrá de qué pirata extraer el nombre si la caja completa se llama "La Perla Negra".
 
 ### ⚔️ Desafío 2: La Cuenta Personal
 
-**Tu Misión:** Muestra el `barco`, el `pirata` y su suma total de tesoros bajo el alias `botin_personal`.
+**Misión:** Mostrar el `barco`, el `pirata` y su suma total de tesoros bajo el alias `botin_personal`.
 
 ---
 
@@ -86,23 +86,23 @@ SQL crea un cofre nuevo por cada **combinación única** de barco y pirata.
 
 ### 📖 La Teoría Visual (¡ESTO ES LO MÁS IMPORTANTE DEL TUTORIAL!)
 
-El Capitán pide: _"Hazme un reporte de cuánto botín total tiene cada pirata. **PERO**, solo muéstrame a los piratas que sumen **más de 500 monedas en total**, el resto no me importa."_
+El Capitán solicita: _"Genere un reporte de cuánto botín total tiene cada pirata. **PERO**, muéstreme solo a los piratas que sumen **más de 500 monedas en total**, el resto no importa."_
 
-Si tienes poca experiencia, la lógica te diría que uses un `WHERE`:
+Si se tiene poca experiencia, la lógica indicaría usar un `WHERE`:
 ❌ `... WHERE valor_monedas > 500 GROUP BY pirata;`
 
-**¡ESTO DESTRUIRÁ TUS DATOS! ¿Por qué?**
-Porque el `WHERE` es un **Guardia Ciego**. Él trabaja patrullando la cubierta del barco _ANTES_ de que existan los cofres.
-El Guardia Ciego mira el primer tesoro de Jack (500 de oro) y dice _"¿Es MAYOR a 500? No. ¡Tíralo al mar!"_. Luego mira las 100 de plata de Jack y también las tira al mar. En resumen, **los borra de la faz de la tierra antes de que se haga la suma real**.
-Cuando se arma la caja de botín de Jack, la suma dará cero. Jack desapareció del reporte, a pesar de que en verdad sí superaba los 500 (500 + 100 = 600) y **debía** aparecer en tu lista final.
+**¡ESTO DESTRUIRÁ SUS DATOS! ¿Por qué?**
+Porque el `WHERE` es un **Guardia Ciego**. Trabaja patrullando la cubierta del barco _ANTES_ de que existan los cofres.
+El Guardia Ciego mira el primer tesoro de Jack (500 de oro) y dice _"¿Es MAYOR a 500? No. ¡Lo desecho!"_. Luego mira las 100 de plata de Jack y también las descarta. En resumen, **los elimina antes de que se realice la suma real**.
+Cuando se arma la caja de botín de Jack, la suma dará cero. Jack desaparece del reporte, a pesar de que en realidad sí superaba los 500 (500 + 100 = 600) y **debía** aparecer en la lista final.
 
 **La Solución: El HAVING**
-Para evaluar "sumas matemáticas que ya están calculadas", necesitas un **Tasador** que llegue a trabajar **DESPUÉS** de que los cofres están cerrados. Ese tasador mágico se llama `HAVING`.
-Se coloca _siempre_ después del `GROUP BY`. Él abre la caja final y dice: _"A ver Jack, ¿La suma completa de todas tus cosas adentro (`SUM(valor_monedas)`) suma más de 500? Perfecto, ¡pasas al reporte!"_
+Para evaluar "sumas matemáticas ya calculadas", se necesita un **Tasador** que trabaje **DESPUÉS** de que los cofres están cerrados. Ese tasador se llama `HAVING`.
+Se coloca _siempre_ después del `GROUP BY`. Él abre la caja final y dice: _"A ver Jack, ¿La suma completa de todo su contenido (`SUM(valor_monedas)`) supera los 500? Perfecto, ¡pasa al reporte!"_
 
 ### ⚔️ Desafío 3: El Club de los 500
 
-**Tu Misión:** Agrupa por `pirata`, suma todos sus tesoros e imprime el reporte. Usa la instrucción correcta al final para que **SOLO** aparezcan en pantalla los piratas que superaron las 500 monedas acumuladas (Deberían salirte solo Davy, Jack y Barbanegra).
+**Misión:** Agrupar por `pirata`, sumar todos sus tesoros e imprimir el reporte. Usar la instrucción correcta al final para que **SOLO** aparezcan los piratas que superaron las 500 monedas acumuladas (deberían aparecer solo Davy, Jack y Barbanegra).
 
 ---
 
@@ -110,45 +110,45 @@ Se coloca _siempre_ después del `GROUP BY`. Él abre la caja final y dice: _"A 
 
 ### 📖 La Teoría Visual
 
-Una vez que agrupaste en un cofre sellado (ej. por `barco`), puedes pedirle al analista que se ponga varios tipos de monóculos frente al ojo y revise el interior del cofre de **múltiples formas diferentes al mismo tiempo**, todo sin escribir otro query distinto:
+Una vez agrupado en un cofre sellado (por ejemplo, por `barco`), se puede solicitar al analista que aplique varios tipos de análisis al interior del cofre de **múltiples formas diferentes al mismo tiempo**, todo sin escribir otra consulta distinta:
 
-- _"Súmalo todo"_ (`SUM`)
-- _"Cuéntame cuántas unidades / pilas de tesoros hay en total"_ (`COUNT`)
-- _"Dime cuánto vale la cosa más barata que hay aquí dentro"_ (`MIN`)
-- _"Dime cuánto vale la cosa más valiosa"_ (`MAX`)
-- _"Saca un promedio matemático de todo lo que robaron"_ (`AVG`)
+- _"Sume todo"_ (`SUM`)
+- _"Cuente cuántas unidades hay en total"_ (`COUNT`)
+- _"Dígame cuánto vale el elemento de menor valor"_ (`MIN`)
+- _"Dígame cuánto vale el elemento de mayor valor"_ (`MAX`)
+- _"Calcule el promedio matemático de todo"_ (`AVG`)
 
 ### ⚔️ Desafío 4: El Gran Resumen Estadístico
 
-**Tu Misión:** Agrupa por `barco` y en tu `SELECT` inicial, extrae estas 5 estadísticas (dales nombres bonitos usando `AS`):
+**Misión:** Agrupar por `barco` y en el `SELECT`, extraer estas 5 estadísticas (con alias usando `AS`):
 
-1. El barco (obvio).
+1. El barco (identificación).
 2. Cuántos objetos trajeron (`COUNT` al id_saqueo)
 3. Suma total de ganancias.
-4. El tesoro más mísero (mínimo).
-5. El tesoro más valeroso (máximo).
+4. El tesoro de menor valor (mínimo).
+5. El tesoro de mayor valor (máximo).
 
 ---
 
 ## 🏴‍☠️ Nivel 5: Desafío Jefe - Lógica en Inversa (Pensamiento Lateral)
 
-_Si resuelves esto solo, estás listo para dominar el mundo SQL analítico._
+_Si se resuelve esto de manera autónoma, el estudiante está preparado para dominar el análisis SQL._
 
 La Reina Pirata decreta lo siguiente:
-_"Muéstrame a cada pirata y suma absolutamente todo su botín._
-_¡PERO DETESTO LA PLATA! Si descubro que el cofre de un pirata contiene **AUNQUE SEA UN 'Doblón de Plata'** escondido adentro... ¡Tira TODO su cofre entero (incluso el oro) al mar y bórralo de la lista oficial!"_
+_"Muéstreme a cada pirata y sume absolutamente todo su botín._
+_¡PERO DETESTO LA PLATA! Si se descubre que el cofre de un pirata contiene **AUNQUE SEA UN 'Doblón de Plata'** escondido adentro... ¡Que se elimine TODO su cofre (incluso el oro) de la lista oficial!"_
 
-### ⚔️ Desafío 5: Salvando los Cuellos
+### ⚔️ Desafío 5: Salvando los Resultados
 
-Este ejercicio es traicionero.
+Este ejercicio es complejo.
 
-1. Si usas el Guardia Ciego (`WHERE tipo_tesoro != 'Doblón de Plata'`), cometerás el error novato. El guardia ciego quitará solo las moneditas de plata pero igual dejará entrar el oro de Anne y de Jack a sus cofres... Y tú **necesitas descartar el cofre de Jack COMPLETO**.
-2. ¡Necesitas sumar el cofre de todos y luego hacer el descarte condicional en la fase del Tasador (`HAVING`) evaluando el interior!
+1. Si se usa el Guardia Ciego (`WHERE tipo_tesoro != 'Doblón de Plata'`), se comete el error clásico de principiante. El guardia ciego eliminará solo las monedas de plata pero dejará entrar el oro de Anne y de Jack a sus cofres... Y lo que se necesita es **descartar el cofre de Jack COMPLETO**.
+2. Se debe sumar el cofre de todos y luego hacer el descarte condicional en la fase del Tasador (`HAVING`), evaluando el contenido interior.
 
-**Tu Misión:** Escribe una consulta que agrupe por `pirata` mostrando su botín total. Su Usa `HAVING` para borrar de la cara de la tierra a cualquier pirata que haya traído plata, dejando finalmente listados **SOLO** a Will, Barbanegra y Davy, mostrando sus botines limpios e íntegros.
+**Misión:** Escribir una consulta que agrupe por `pirata` mostrando su botín total. Usar `HAVING` para excluir a cualquier pirata que haya traído plata, dejando finalmente listados **SOLO** a Will, Barbanegra y Davy, mostrando sus botines completos.
 
-_<details><summary>☠️ El Truco Final (Haz clic aquí si te rinndest)</summary>_
-_El Tasador (El `HAVING`) puede evaluar condicionales lógicas si sabes combinarlas con una función matemática (por ej SUM)._
-_Intenta hacer que el Tasador invente un "filtro a la mala" adentro del cajón: **Cuenta cuántos tipos de tesoro eran de plata**. Si descubres que es igual a 0, estás a salvo y dejas pasar al pirata:_
+_<details><summary>☠️ El Truco Final (Haga clic aquí si necesita ayuda)</summary>_
+_El Tasador (`HAVING`) puede evaluar condicionales lógicos si se combinan con una función matemática (por ejemplo, SUM)._
+_Intente hacer que el Tasador aplique un "filtro lógico" al interior del grupo: **Cuente cuántos elementos de tesoro eran de plata**. Si el resultado es igual a 0, el pirata puede aparecer en el listado:_
 _`HAVING SUM(CASE WHEN tipo_tesoro = 'Doblón de Plata' THEN 1 ELSE 0 END) = 0;`_
 _</details>_
