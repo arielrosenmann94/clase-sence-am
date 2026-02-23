@@ -968,7 +968,69 @@ Antes de hablar de ataques, necesitas entender cómo funciona una app por dentro
 
 ---
 
-## 🔓 ¿Qué es SQL Injection?
+## � BONUS — Consultas dentro de texto de blog
+
+Si tenés una tabla `blog` con una columna de tipo `TEXT` que guarda el contenido de cada post, podés hacer consultas **dentro de ese texto**.
+
+```sql
+CREATE TABLE blog (
+  id        SERIAL PRIMARY KEY,
+  titulo    VARCHAR(200),
+  contenido TEXT
+);
+```
+
+### Buscar posts que contienen una palabra — palabra por palabra
+
+```sql
+SELECT titulo
+FROM blog
+WHERE contenido ILIKE '%javascript%';
+```
+
+| Código           | Qué significa                                    |
+| ---------------- | ------------------------------------------------ |
+| `SELECT titulo`  | "Traeme la columna titulo"                       |
+| `FROM blog`      | "De la tabla blog"                               |
+| `WHERE`          | "Solo los que cumplan esta condición"            |
+| `contenido`      | "La columna donde está el texto del post"        |
+| `ILIKE`          | "Contiene este texto" (no distingue mayúsculas)  |
+| `'%javascript%'` | `%` es comodín: "cualquier cosa antes y después" |
+
+### Extraer un resumen (primeros 200 caracteres) — palabra por palabra
+
+```sql
+SELECT titulo,
+       LEFT(contenido, 200) AS resumen
+FROM blog;
+```
+
+| Código                 | Qué significa                                    |
+| ---------------------- | ------------------------------------------------ |
+| `LEFT(contenido, 200)` | "Tomá los primeros 200 caracteres del contenido" |
+| `AS resumen`           | "Llamá a ese resultado 'resumen'"                |
+
+### Full-Text Search — búsqueda inteligente por relevancia
+
+```sql
+SELECT titulo
+FROM blog
+WHERE to_tsvector('spanish', contenido) @@ to_tsquery('spanish', 'inyeccion');
+```
+
+| Código                               | Qué significa                                           |
+| ------------------------------------ | ------------------------------------------------------- |
+| `to_tsvector('spanish', contenido)`  | "Convertí el texto en un índice de palabras en español" |
+| `@@`                                 | "Contiene / coincide con..."                            |
+| `to_tsquery('spanish', 'inyeccion')` | "...la búsqueda de 'inyeccion' en español"              |
+
+> **¿Por qué `to_tsvector` en vez de `ILIKE`?**
+> `ILIKE` busca el string exacto, es lento en textos largos.
+> `to_tsvector` entiende el idioma: ignora artículos ("el", "la", "de"), maneja plurales y con un índice es **mucho más rápido**. Es lo que usan plataformas como WordPress por dentro.
+
+---
+
+## �🔓 ¿Qué es SQL Injection?
 
 **SQL Injection** (abreviado **SQLi**) es un truco que usa un atacante para **colar órdenes maliciosas** a través de los campos de texto de una aplicación (formularios de login, barras de búsqueda, URLs) y hacer que la base de datos las ejecute como si fueran órdenes legítimas.
 
@@ -1455,4 +1517,3 @@ Si el programador que construyó esa aplicación **no protegió su código**, un
 ---
 
 > **⚠️ Aviso Legal:** Este contenido es **exclusivamente educativo**. Realizar ataques de SQL Injection contra sistemas sin autorización explícita es **ilegal** y puede acarrear consecuencias penales. Siempre practica en entornos controlados y con permiso.
-
