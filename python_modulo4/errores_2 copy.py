@@ -11,7 +11,7 @@ class CuentaContable:
 
     def cambiar_estado(self, **kwargs):
         nuevo = kwargs.get("estado")
-        if nuevo is None:
+        if nuevo is None or nuevo is "" :
             raise ValueError("Falta 'estado'")
 
         if nuevo in self.TIPOS_VALIDOS:

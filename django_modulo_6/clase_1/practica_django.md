@@ -3,7 +3,7 @@
 ### De cero a una app con Models, Views, URLs y Templates
 
 > Este documento es la guía práctica de la clase. Seguí cada paso en orden y sin saltear ninguno.
-> Antes de comenzar, asegurate de tener **Python 3.12+** instalado en tu computadora.
+> Antes de comenzar, asegúrate de tener **Python 3.12+** instalado en tu computadora.
 
 ---
 
@@ -17,7 +17,7 @@ python3 --version
 python --version
 ```
 
-Si ves algo como `Python 3.12.0`, estás listo. Si no tenés Python instalado, descargalo desde [python.org](https://www.python.org/downloads/).
+Si ves algo como `Python 3.12.0`, estás listo. Si no tienes Python instalado, descárgalo desde [python.org](https://www.python.org/downloads/).
 
 ---
 
@@ -69,7 +69,7 @@ Al activarlo, verás el prefijo `(venv)` al inicio de la línea en la terminal:
 (venv) usuario@maquina:~/catalogoapp$
 ```
 
-> ⚠️ Si cerrás la terminal y volvés, tenés que activar el entorno de nuevo. El prefijo `(venv)` debe estar siempre visible cuando trabajás en el proyecto.
+> ⚠️ Si cerrás la terminal y volvés, tienes que activar el entorno de nuevo. El prefijo `(venv)` debe estar siempre visible cuando trabajás en el proyecto.
 
 ### 1.4 Instalar Django
 
@@ -122,7 +122,7 @@ catalogoapp/              ← tu carpeta de trabajo
 python manage.py runserver
 ```
 
-Abrí el navegador en `http://127.0.0.1:8000/`. Deberías ver la pantalla de bienvenida de Django 🎉
+Abre el navegador en `http://127.0.0.1:8000/`. Deberías ver la pantalla de bienvenida de Django 🎉
 
 Para detener el servidor: `Ctrl + C`
 
@@ -159,7 +159,7 @@ catalogoapp/
 
 ### Registrar la app en el proyecto
 
-Abrí `catalogoapp/settings.py` y buscá la lista `INSTALLED_APPS`. Agregá `'productos'` al final:
+Abre `catalogoapp/settings.py` y busca la lista `INSTALLED_APPS`. Agrega `'productos'` al final:
 
 ```python
 # catalogoapp/settings.py
@@ -183,7 +183,7 @@ INSTALLED_APPS = [
 
 Un **modelo** es una clase Python que define la estructura de una tabla en la base de datos.
 
-Abrí `productos/models.py` y **reemplazá** todo el contenido con:
+Abre `productos/models.py` y **reemplaza** todo el contenido con:
 
 ```python
 # productos/models.py
@@ -257,7 +257,7 @@ Running migrations:
 
 ✅ Ahora la tabla `productos_producto` existe en la base de datos.
 
-> 💡 Cada vez que modifiques `models.py` (agregues un campo, cambies un tipo, etc.), tenés que repetir los pasos 5.1 y 5.2.
+> 💡 Cada vez que modifiques `models.py` (agregues un campo, cambies un tipo, etc.), tienes que repetir los pasos 5.1 y 5.2.
 
 ---
 
@@ -267,7 +267,7 @@ El panel admin de Django permite gestionar los datos sin escribir una sola líne
 
 ### Paso 6.1 — Registrar el modelo en admin.py
 
-Abrí `productos/admin.py` y **reemplazá** todo el contenido con:
+Abre `productos/admin.py` y **reemplaza** todo el contenido con:
 
 ```python
 # productos/admin.py
@@ -297,7 +297,7 @@ Django te hará tres preguntas:
 ```
 Username: admin
 Email address: admin@ejemplo.com
-Password: (escribí una contraseña, no se muestra al tipear)
+Password: (escribe una contraseña, no se muestra al tipear)
 Password (again): (repetila)
 Superuser created successfully.
 ```
@@ -309,7 +309,7 @@ Superuser created successfully.
 python manage.py runserver
 ```
 
-Abrí `http://127.0.0.1:8000/admin/`, iniciá sesión y cargá 3 o 4 productos de ejemplo. Los vas a necesitar para probar la vista en el siguiente paso.
+Abre `http://127.0.0.1:8000/admin/`, inicia sesión y carga 3 o 4 productos de ejemplo. Los vas a necesitar para probar la vista en el siguiente paso.
 
 ---
 
@@ -317,7 +317,7 @@ Abrí `http://127.0.0.1:8000/admin/`, iniciá sesión y cargá 3 o 4 productos d
 
 La **vista** es la función que recibe la solicitud del usuario, consulta los datos y decide qué mostrar.
 
-Abrí `productos/views.py` y **reemplazá** todo el contenido con:
+Abre `productos/views.py` y **reemplaza** todo el contenido con:
 
 ```python
 # productos/views.py
@@ -370,9 +370,9 @@ Las URLs le dicen a Django qué vista llamar cuando el usuario visita una direcc
 
 ### Paso 8.1 — Crear urls.py dentro de la app
 
-Este archivo **no existe todavía**. Tenés que crearlo a mano.
+Este archivo **no existe todavía**. Tienes que crearlo a mano.
 
-Dentro de la carpeta `productos/`, creá un nuevo archivo llamado **`urls.py`**:
+Dentro de la carpeta `productos/`, crea un nuevo archivo llamado **`urls.py`**:
 
 ```python
 # productos/urls.py   ← ARCHIVO NUEVO (crearlo desde cero)
@@ -402,7 +402,7 @@ Ahora viene la parte más importante: Django, por defecto, **no sabe que nuestra
 
 Imaginalo como un **conmutador telefónico de una empresa**: llama un cliente al número principal (el proyecto) y la recepcionista tiene que transferir la llamada a la oficina de "Productos" (la app). La función `include()` es esa transferencia.
 
-Abrí **`catalogoapp/urls.py`** (el archivo que ya existía desde el principio) y **reemplazá** todo su contenido con:
+Abre **`catalogoapp/urls.py`** (el archivo que ya existía desde el principio) y **reemplaza** todo su contenido con:
 
 ```python
 # catalogoapp/urls.py   ← ARCHIVO PRINCIPAL DEL PROYECTO
@@ -416,7 +416,7 @@ urlpatterns = [
     # Esta es la línea clave que agregamos nosotros:
     path('productos/', include('productos.urls')),
     #     ↑                       ↑
-    #     │                       └── "Buscá las rutas específicas dentro del archivo productos/urls.py"
+    #     │                       └── "Busca las rutas específicas dentro del archivo productos/urls.py"
     #     └── "Cuando alguien escriba tupagina.com/productos/..."
 ]
 ```
@@ -442,7 +442,7 @@ Django te obliga a ser ordenado. No ponemos todas las rutas juntas en el archivo
    "¡A ejecutar la vista lista_productos!"
 ```
 
-Este sistema modular te permite que si mañana querés cambiar la dirección a `mis-ofertas/` en vez de `productos/`, **solo cambiás una línea** en el proyecto principal y todas las rutas de la app interna siguen funcionando mágicamente.
+Este sistema modular te permite que si mañana quieres cambiar la dirección a `mis-ofertas/` en vez de `productos/`, **solo cambiás una línea** en el proyecto principal y todas las rutas de la app interna siguen funcionando mágicamente.
 
 ---
 
@@ -462,7 +462,7 @@ mkdir productos\templates
 
 ### Paso 9.2 — Crear el archivo HTML
 
-Dentro de `productos/templates/`, creá el archivo **`lista_productos.html`**:
+Dentro de `productos/templates/`, crea el archivo **`lista_productos.html`**:
 
 ```html
 <!-- productos/templates/lista_productos.html -->
@@ -522,7 +522,7 @@ Dentro de `productos/templates/`, creá el archivo **`lista_productos.html`**:
     </ul>
     {% else %}
     <p>
-      No hay productos cargados todavía. Ingresá al
+      No hay productos cargados todavía. ingresa al
       <a href="/admin/">panel de administración</a> para agregar algunos.
     </p>
     {% endif %}
@@ -545,7 +545,7 @@ Dentro de `productos/templates/`, creá el archivo **`lista_productos.html`**:
 
 ## Paso 10 — Verificar la estructura completa
 
-Antes de correr el servidor, verificá que la estructura del proyecto esté así:
+Antes de correr el servidor, verifica que la estructura del proyecto esté así:
 
 ```
 catalogoapp/
@@ -588,7 +588,7 @@ catalogoapp/
 python manage.py runserver
 ```
 
-Abrí las siguientes URLs en el navegador:
+Abre las siguientes URLs en el navegador:
 
 | URL                                | Qué debe mostrar                            |
 | ---------------------------------- | ------------------------------------------- |
@@ -605,11 +605,11 @@ Si ves la lista de productos que cargaste desde el admin, **¡todo está funcion
 | Error                                                                      | Causa probable                                            | Solución                                                        |
 | -------------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------- |
 | `ModuleNotFoundError: No module named 'django'`                            | El entorno virtual no está activo                         | Activá el venv (`source venv/bin/activate`)                     |
-| `TemplateDoesNotExist: lista_productos.html`                               | El archivo HTML no existe o está en la carpeta incorrecta | Verificá que esté en `productos/templates/lista_productos.html` |
-| `OperationalError: no such table: productos_producto`                      | No corriste `migrate`                                     | Corré `python manage.py migrate`                                |
-| `Page not found (404)` en `/productos/`                                    | La URL no está configurada correctamente                  | Verificá `catalogoapp/urls.py` y `productos/urls.py`            |
-| `ImportError: cannot import name 'lista_productos' from 'productos.views'` | La función no existe o tiene un nombre diferente          | Verificá `views.py`                                             |
-| `django.core.exceptions.ImproperlyConfigured`                              | La app no está en `INSTALLED_APPS`                        | Agregá `'productos'` a `settings.py`                            |
+| `TemplateDoesNotExist: lista_productos.html`                               | El archivo HTML no existe o está en la carpeta incorrecta | Verifica que esté en `productos/templates/lista_productos.html` |
+| `OperationalError: no such table: productos_producto`                      | No corriste `migrate`                                     | Corre `python manage.py migrate`                                |
+| `Page not found (404)` en `/productos/`                                    | La URL no está configurada correctamente                  | Verifica `catalogoapp/urls.py` y `productos/urls.py`            |
+| `ImportError: cannot import name 'lista_productos' from 'productos.views'` | La función no existe o tiene un nombre diferente          | Verifica `views.py`                                             |
+| `django.core.exceptions.ImproperlyConfigured`                              | La app no está en `INSTALLED_APPS`                        | Agrega `'productos'` a `settings.py`                            |
 
 ---
 
@@ -634,7 +634,7 @@ Si ves la lista de productos que cargaste desde el admin, **¡todo está funcion
 
 ---
 
-> 💬 **¿Algún paso no funcionó?** Revisá la tabla de errores comunes o consultá al docente. La mayoría de los problemas son por el orden de los pasos o por algún archivo en la carpeta incorrecta.
+> 💬 **¿Algún paso no funcionó?** Revisa la tabla de errores comunes o consultá al docente. La mayoría de los problemas son por el orden de los pasos o por algún archivo en la carpeta incorrecta.
 
 ---
 
@@ -684,7 +684,7 @@ INSTALLED_APPS = [
 
 ### Paso 12.2 — Crear la vista de inicio
 
-Abrí `core/views.py` y escribí:
+Abre `core/views.py` y escribe:
 
 ```python
 # core/views.py
@@ -698,7 +698,7 @@ def home(request):
 
 ### Paso 12.3 — Crear el template de la home
 
-Creá la carpeta de templates de la app `core`:
+Crea la carpeta de templates de la app `core`:
 
 ```bash
 # Linux / Mac
@@ -708,7 +708,7 @@ mkdir -p core/templates
 mkdir core\templates
 ```
 
-Dentro de `core/templates/`, creá `home.html`:
+Dentro de `core/templates/`, crea `home.html`:
 
 ```html
 <!-- core/templates/home.html -->
@@ -771,7 +771,7 @@ urlpatterns = [
 
 ### Paso 12.5 — Conectar en el proyecto principal
 
-Abrí `catalogoapp/urls.py` y agregá la ruta de `core`:
+Abre `catalogoapp/urls.py` y agrega la ruta de `core`:
 
 ```python
 # catalogoapp/urls.py
@@ -789,7 +789,7 @@ urlpatterns = [
 
 ### Resultado final
 
-Ahora tenés tres URLs funcionales:
+Ahora tienes tres URLs funcionales:
 
 | URL                                | Qué muestra                                 |
 | ---------------------------------- | ------------------------------------------- |
