@@ -260,7 +260,7 @@ class BusquedaProductoForm(forms.Form):
 
 En `productos/views.py`:
 
-````python
+```python
 def buscar_producto(request):
     form = BusquedaProductoForm()
     resultados = []
@@ -272,7 +272,7 @@ def buscar_producto(request):
             resultados = Producto.objects.filter(nombre__icontains=termino)
 
     return render(request, 'buscar.html', {'form': form, 'resultados': resultados})
-
+```
 ### 5.3 Crear el template de búsqueda
 
 Crea el archivo `productos/templates/buscar.html` con el siguiente contenido:
