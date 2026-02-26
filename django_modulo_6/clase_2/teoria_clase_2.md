@@ -643,7 +643,6 @@ Diccionario que contiene los datos del formulario ya **validados y limpiados**. 
   <button type="submit">Buscar</button>
 </form>
 
-
 {% if resultados %}
 <ul>
   {% for producto in resultados %}
@@ -711,8 +710,8 @@ La etiqueta `{% extends "base.html" %}` **debe ser la primera línea** del templ
 
 ```html
 <!-- lista_productos.html -->
-{% extends "base.html" %} {% block title %}Catálogo{% endblock %} 
-{% block content %}
+{% extends "base.html" %} {% block title %}Catálogo{% endblock %} {% block
+content %}
 <h1>🛒 Catálogo de Productos</h1>
 <!-- ... contenido específico de esta página ... -->
 {% endblock %}

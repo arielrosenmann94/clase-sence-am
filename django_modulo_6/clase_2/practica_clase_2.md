@@ -38,7 +38,7 @@ Abre `config/settings.py` y busca las siguientes líneas para actualizarlas:
 ```python
 ROOT_URLCONF = 'config.urls'
 WSGI_APPLICATION = 'config.wsgi.application'
-ASGI_APPLICATION = 'config.asgi.application' #si no ves esta línea, no la colocas.
+ASGI_APPLICATION = 'config.asgi.application'
 ```
 
 ### 1.4 Actualizar `wsgi.py` y `asgi.py`
@@ -260,7 +260,7 @@ class BusquedaProductoForm(forms.Form):
 
 En `productos/views.py`:
 
-```python
+````python
 def buscar_producto(request):
     form = BusquedaProductoForm()
     resultados = []
@@ -272,7 +272,7 @@ def buscar_producto(request):
             resultados = Producto.objects.filter(nombre__icontains=termino)
 
     return render(request, 'buscar.html', {'form': form, 'resultados': resultados})
-```
+
 ### 5.3 Crear el template de búsqueda
 
 Crea el archivo `productos/templates/buscar.html` con el siguiente contenido:
