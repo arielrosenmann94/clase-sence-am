@@ -482,7 +482,6 @@ venv/
 env/
 .venv/
 
-
 # Secretos — CRÍTICO
 .env
 
