@@ -297,8 +297,8 @@ Django te hará tres preguntas:
 ```
 Username: admin
 Email address: admin@ejemplo.com
-Password: (escribe una contraseña, no se muestra al tipear)
-Password (again): (repetila)
+Password: (escribe una contraseña, no se muestra al escribir)
+Password (again): (repítela)
 Superuser created successfully.
 ```
 
@@ -604,7 +604,7 @@ Si ves la lista de productos que cargaste desde el admin, **¡todo está funcion
 
 | Error                                                                      | Causa probable                                            | Solución                                                        |
 | -------------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------- |
-| `ModuleNotFoundError: No module named 'django'`                            | El entorno virtual no está activo                         | Activá el venv (`source venv/bin/activate`)                     |
+| `ModuleNotFoundError: No module named 'django'`                            | El entorno virtual no está activo                         | Activa el venv (`source venv/bin/activate`)                     |
 | `TemplateDoesNotExist: lista_productos.html`                               | El archivo HTML no existe o está en la carpeta incorrecta | Verifica que esté en `productos/templates/lista_productos.html` |
 | `OperationalError: no such table: productos_producto`                      | No corriste `migrate`                                     | Corre `python manage.py migrate`                                |
 | `Page not found (404)` en `/productos/`                                    | La URL no está configurada correctamente                  | Verifica `catalogoapp/urls.py` y `productos/urls.py`            |
@@ -640,7 +640,7 @@ Si ves la lista de productos que cargaste desde el admin, **¡todo está funcion
 
 ## 🏠 Paso 12 (Opcional) — Crear una Home personalizada
 
-> ⚠️ **Nota sobre la pantalla de bienvenida de Django:** La pantalla del cohete 🚀 que muestra "The install worked successfully!" **desaparece en cuanto definís la primera URL** en `urlpatterns`. Es una pantalla de diagnóstico, no una página de inicio real. Una vez que empezás a configurar rutas, ya no se puede recuperar. Lo que necesitás a partir de ahora es crear tu propia pantalla de inicio.
+> ⚠️ **Nota sobre la pantalla de bienvenida de Django:** La pantalla del cohete 🚀 que muestra "The install worked successfully!" **desaparece en cuanto defines la primera URL** en `urlpatterns`. Es una pantalla de diagnóstico, no una página de inicio real. Una vez que empezás a configurar rutas, ya no se puede recuperar. Lo que necesitás a partir de ahora es crear tu propia pantalla de inicio.
 
 ---
 

@@ -52,7 +52,7 @@ Cada clave del diccionario se convierte en una variable disponible en el templat
 <p>Hay {{ total }} productos disponibles.</p>
 ```
 
-Regla fundamental: **la vista calcula, el template muestra**. Si necesitás filtrar una lista, lo hacés en la vista antes de pasarla. El template solo itera sobre lo que ya está listo.
+Regla fundamental: **la vista calcula, el template muestra**. Si necesitás filtrar una lista, lo haces en la vista antes de pasarla. El template solo itera sobre lo que ya está listo.
 
 ---
 
@@ -209,9 +209,7 @@ static/
 {% load static %}
 
 <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
-
 <img src="{% static 'images/logo.png' %}" alt="Logo" />
-
 <script src="{% static 'js/app.js' %}"></script>
 ```
 
@@ -296,19 +294,14 @@ static/
 ## Template hijo — solo lo que cambia
 
 ```html
-{% extends "base.html" %} {% block title %}Listado de Productos{% endblock %} 
-{% block content %}
-
-<link rel="stylesheet" href="{% static 'css/detalle.css' %}" />
-{% endblock %}
+{% extends "base.html" %} {% block title %}Listado de Productos{% endblock %} {%
+block content %}
 <h1>Productos</h1>
 {% for p in productos %}
 <p>{{ p }}</p>
 {% empty %}
 <p class="text-muted">No hay productos disponibles.</p>
-{% endfor %} 
-
-{% endblock %}
+{% endfor %} {% endblock %}
 ```
 
 ## Bloques más usados
