@@ -540,7 +540,7 @@ Las sombras negras (`box-shadow: 0 4px 6px rgba(0,0,0,0.1)`) funcionan pero se v
 ```css
 .card {
   background: #6366f1;
-  box-shadow: 0 8px 30px rgba(109, 111, 221, 0.35); /* sombra violeta */
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.35); /* sombra violeta */
 }
 
 .btn-primary {

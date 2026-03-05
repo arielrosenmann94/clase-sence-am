@@ -143,61 +143,87 @@ mi_proyecto/
 
 ---
 
-# Fase 3 — Construcción paso a paso
-
-> Las instrucciones son intencionalmente breves. Usá lo que saben, la documentación y el error como guía.
+# Fase 3 — Construcción: El orden lógico del programador
 
 ---
 
-**1.** Crea una carpeta para el proyecto en tu computadora.
+> El orden en que se construye una aplicación define cuán fácil será encontrar un error si algo falla. Vamos a seguir el flujo profesional: de afuera hacia adentro (Entorno → Configuración → Rutas → Lógica → Templates).
 
-**2.** Crea el entorno virtual dentro de esa carpeta.
+---
 
-**3.** Activa el entorno virtual.
+## 1. Preparación del terreno (Entorno)
 
-**4.** Instala Django.
+Antes de crear el primer archivo Django, necesitamos un espacio de trabajo aislado y limpio.
 
-**5.** Verifica que la instalación fue correcta.
+- **1.1** Crea una carpeta exclusiva para este proyecto en tu computadora.
+- **1.2** Crea el **entorno virtual (venv)** dentro de esa carpeta.
+- **1.3** **Activa** el entorno virtual (verifica que veas el prefijo `(venv)` en tu terminal).
+- **1.4** Instala **Django** usando pip.
+- **1.5** (Opcional pero recomendado) Crea un archivo `requirements.txt` con la versión de Django instalada.
 
-**6.** Crea el proyecto Django con el nombre que definiste en la Fase 2.
+---
 
-**7.** Crea la app con el nombre que definiste en la Fase 2.
+## 2. Los cimientos (Scaffolding)
 
-**8.** Registrá la app en `settings.py`.
+Ahora generamos la estructura básica que Django necesita para arrancar.
 
-**9.** Configura los archivos estáticos en `settings.py` — las tres variables necesarias.
+- **2.1** Crea el **proyecto** Django (recuerda usar el punto `.` al final para no crear carpetas extra).
+- **2.2** Crea la **aplicación** específica para tu CV.
+- **2.3** Registra tu nueva app en el archivo `settings.py` (sección `INSTALLED_APPS`).
+- **2.4** Ejecuta tu primer `runserver` para verificar que la página de bienvenida de Django aparece correctamente.
 
-**10.** Configura la carpeta de templates en `settings.py`.
+---
 
-**11.** Crea la estructura de carpetas: `templates/`, `static/css/`, `static/images/`.
+## 3. Configuración del motor (Settings)
 
-**12.** Crea `base.html` con la estructura base, Bootstrap vía CDN y los bloques que definiste en el diseño. El navbar debe tener links a todas las páginas que diseñaste.
+Antes de programar las vistas, preparamos el proyecto para manejar archivos y plantillas.
 
-**13.** Crea la vista principal en `views.py` con el contexto que diseñaste en la Fase 2.
+- **3.1** Configura la variable `STATIC_URL` y añade `STATICFILES_DIRS` para decirle a Django dónde vas a guardar tu CSS e imágenes.
+- **3.2** Configura la carpeta global de `TEMPLATES` en el diccionario `TEMPLATES` dentro de `settings.py` para poder usar un `base.html` centralizado.
+- **3.3** Crea físicamente las carpetas `static/` (con sus subcarpetas `css/` e `images/`) y la carpeta `templates/` en la raíz del proyecto.
 
-**14.** Crea el archivo `urls.py` de la app y registrá la ruta principal.
+---
 
-**15.** Incluí las URLs de la app en el `urls.py` del proyecto.
+## 4. El sistema de navegación (Routing)
 
-**16.** Crea `inicio.html` — que extienda `base.html` y muestre los datos del contexto con variables, `{% if %}` y `{% for %}` donde corresponda.
+Definimos las "direcciones" de nuestro sitio.
 
-**17.** Verifica que el servidor corre sin errores: `python manage.py runserver`.
+- **4.1** En el `urls.py` del **proyecto**, usa la función `include` para derivar las rutas hacia tu aplicación.
+- **4.2** Crea el archivo `urls.py` dentro de tu **aplicación**.
+- **4.3** Registra la ruta vacía `''` en el `urls.py` de la app y asígnale un nombre (`name='inicio'`).
 
-**18.** Haz que al menos una sección use `{% for %}` para iterar sobre una lista (habilidades, proyectos, experiencia).
+---
 
-**19.** Haz que al menos una sección use `{% if %}` para mostrar u ocultar algo según una condición.
+## 5. El cerebro de la operación (Views & Logic)
 
-**20.** Añadí una imagen (foto de perfil u otra) usando `{% static %}` y `{% load static %}`.
+Aquí es donde defines qué datos va a tener tu CV. Recuerda que en esta fase no usamos base de datos todavía.
 
-**21.** Crea un archivo CSS propio en `static/css/` y aplicale al menos 3 estilos personalizados que complementen Bootstrap.
+- **5.1** Crea una función en `views.py` para tu página principal.
+- **5.2** Dentro de la función, crea un diccionario llamado `contexto`.
+- **5.3** Llena ese diccionario con toda la información de tu CV (nombre, título, lista de habilidades, lista de experiencias, etc.).
+- **5.4** Haz que la función retorne un `render` que use tu template y le pase este diccionario.
 
-**22.** Asegúrate de que todos los links del navbar usen `{% url %}` con el nombre de la URL — ningún link hardcodeado.
+---
 
-**23.** Crea una página `404.html` que extienda `base.html` y muestre un mensaje amigable.
+## 6. La cara visible (Templates & Static)
 
-**24.** Navega a una URL inexistente para ver qué muestra Django. ¿Qué configuraría para que aparezca tu 404 personalizado?
+Finalmente, armamos lo que el usuario va veamos.
 
-**25.** Revisa el resultado en el navegador. ¿El diseño refleja lo que pensaste en la Fase 1?
+- **6.1** Crea `base.html`. Debe tener la estructura HTML5 completa, el CDN de Bootstrap, un Navbar, un Footer y al menos dos bloques (`title` y `content`).
+- **6.2** Crea el template `inicio.html`. Lo primero que debe hacer es usar `{% extends %}` para heredar de `base.html`.
+- **6.3** Dentro del bloque de contenido, usa las variables de tu contexto `{{ variable }}` para mostrar la información.
+- **6.4** Usa etiquetas `{% for %}` para recorrer tus listas de habilidades o proyectos.
+- **6.5** Usa etiquetas `{% if %}` para mostrar información solo si existe (por ejemplo, redes sociales o foto).
+- **6.6** Carga tus archivos estáticos: usa `{% load static %}` al principio del archivo y la etiqueta `{% static %}` para tu CSS y tu foto de perfil.
+
+---
+
+## 7. Pulido y Verificación
+
+- **7.1** Verifica que todos los links del Navbar usen la etiqueta `{% url %}`.
+- **7.2** Crea un archivo CSS personalizado para ajustar colores y márgenes que Bootstrap no cubra.
+- **7.3** Crea un template para el error 404 y configura `settings.py` para probarlo (temporalmente con `DEBUG = False`).
+- **7.4** Revisa el CV en modo celular. ¿Es responsivo? Asegúrate de usar las clases de grilla de Bootstrap (`container`, `row`, `col`).
 
 ---
 
