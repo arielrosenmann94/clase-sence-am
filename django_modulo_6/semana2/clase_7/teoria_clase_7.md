@@ -263,7 +263,7 @@ def mi_formulario(request):
 
 ## Qué es CSRF
 
-Imaginate que estás logueado en tu banco. En otra pestaña, abrís un sitio malicioso. Ese sitio, sin que te des cuenta, envía un formulario a la URL de tu banco usando tu sesión activa — como si fueras tú quien lo hizo.
+Imaginate que estás logueado en tu banco. En otra pestaña, abres un sitio malicioso. Ese sitio, sin que te des cuenta, envía un formulario a la URL de tu banco usando tu sesión activa — como si fueras tú quien lo hizo.
 
 Eso es **CSRF** (_Cross-Site Request Forgery_): un ataque donde una página externa ejecuta acciones en otra app usando la sesión del usuario sin su consentimiento.
 
@@ -276,6 +276,13 @@ Una página externa no puede conocer ese token, así que no puede falsificar el 
 ```html
 <form method="POST">
   {% csrf_token %} ← Django inserta el campo oculto con el token {{ form.as_p }}
+  <button type="submit">Enviar</button>
+</form>
+```
+
+```html
+<form method="POST">
+  {% csrf_token %} {{ form.as_p }}
   <button type="submit">Enviar</button>
 </form>
 ```
