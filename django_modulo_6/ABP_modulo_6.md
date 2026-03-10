@@ -251,7 +251,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 El zip debe incluir **todo el proyecto** con esta estructura mínima:
 
 ```
-alke_web_base.zip
+mi_proyecto_base.zip
 └── mi_proyecto/
     ├── manage.py
     ├── requirements.txt        ← generado con: pip freeze > requirements.txt
@@ -290,11 +290,11 @@ El documento debe tener **estas cinco secciones** y no necesita ser largo — un
 
 Incluir al menos **3 capturas**:
 
-| Captura                               | Qué mostrar                                             |
-| ------------------------------------- | ------------------------------------------------------- |
-| El proyecto corriendo en el navegador | La URL `127.0.0.1:8000/inicio/` con el contenido propio |
-| El panel de administración Django     | La URL `127.0.0.1:8000/admin/` con el login de Django   |
-| El código de una vista o template     | Una captura del editor mostrando el código              |
+| Captura                               | Qué mostrar                                           |
+| ------------------------------------- | ----------------------------------------------------- |
+| El proyecto corriendo en el navegador | La URL `127.0.0.1:8000` con el contenido propio       |
+| El panel de administración Django     | La URL `127.0.0.1:8000/admin/` con el login de Django |
+| El código de una vista o template     | Una captura del editor mostrando el código            |
 
 ---
 
