@@ -18,7 +18,41 @@ No se diseña la base de datos. No se corren consultas en el shell. La validaci�
 
 ## Credenciales de la base de datos
 
-El profesor te entrega los datos de conexión:
+El profesor te entrega los datos de conexión. Usa la opción según tu equipo:
+
+### Opción A — Via Pooler (IPv4, recomendada)
+
+Si tu equipo no soporta IPv6 o tienes problemas de conexión, usa esta:
+
+```
+Motor:      PostgreSQL
+Host:       aws-0-us-west-2.pooler.supabase.com
+Puerto:     6543
+Nombre:     postgres
+Usuario:    student_readonly.pepuqhrltqfdagvhoxxc
+Contraseña: lectura123
+```
+
+```python
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    },
+    "supabase_ro": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "postgres",
+        "USER": "student_readonly.pepuqhrltqfdagvhoxxc",
+        "PASSWORD": "lectura123",
+        "HOST": "aws-0-us-west-2.pooler.supabase.com",
+        "PORT": "6543",
+    },
+}
+```
+
+### Opción B — Conexión Directa (IPv6)
+
+Solo si la Opción A no funciona:
 
 ```
 Motor:      PostgreSQL
@@ -28,8 +62,6 @@ Nombre:     postgres
 Usuario:    student_readonly
 Contraseña: lectura123
 ```
-
-Debes usar estos datos para configurar el bloque `DATABASES` en el archivo `settings.py` de la siguiente manera:
 
 ```python
 DATABASES = {
@@ -48,7 +80,7 @@ DATABASES = {
 }
 ```
 
-> ℹ️ **NOTA IMPORTANTE:** Estamos usando una **arquitectura híbrida**. El sistema de usuarios y administración de Django vivirá en tu archivo local `db.sqlite3` (base de datos `"default"`), pero los datos del restaurante vendrán de la base de datos externa en Supabase (base de datos `"supabase_ro"`).
+> ℹ️ **NOTA:** Estamos usando una **arquitectura híbrida**. El sistema de usuarios y administración de Django vivirá en tu archivo local `db.sqlite3` (base de datos `"default"`), pero los datos del restaurante vendrán de Supabase (base de datos `"supabase_ro"`).
 
 ---
 
