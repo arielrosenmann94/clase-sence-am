@@ -411,23 +411,23 @@ Producto.objects.filter(activo=True).count()
 
 Los lookups son los operadores del ORM. Siempre van después del nombre del campo separados por doble guión bajo:
 
-| Lookup         | Operación             | Equivalente SQL             |
-| -------------- | --------------------- | --------------------------- |
-| `__exact`      | Igual (es el default) | `= valor`                   |
-| `__iexact`     | Igual sin mayúsculas  | `ILIKE 'valor'`             |
-| `__contains`   | Contiene el texto     | `LIKE '%valor%'`            |
+| Lookup         | Operación               | Equivalente SQL             |
+| -------------- | ----------------------- | --------------------------- |
+| `__exact`      | Igual (es el default)   | `= valor`                   |
+| `__iexact`     | Igual sin mayúsculas    | `ILIKE 'valor'`             |
+| `__contains`   | Contiene el texto       | `LIKE '%valor%'`            |
 | `__icontains`  | Contiene sin mayúsculas | `ILIKE '%valor%'`           |
-| `__startswith` | Empieza con           | `LIKE 'valor%'`             |
-| `__endswith`   | Termina con           | `LIKE '%valor'`             |
-| `__gt`         | Mayor que             | `> valor`                   |
-| `__gte`        | Mayor o igual         | `>= valor`                  |
-| `__lt`         | Menor que             | `< valor`                   |
-| `__lte`        | Menor o igual         | `<= valor`                  |
-| `__in`         | Está en la lista      | `IN (val1, val2, ...)`      |
-| `__range`      | Dentro del rango      | `BETWEEN val1 AND val2`     |
-| `__isnull`     | Es nulo o no          | `IS NULL` / `IS NOT NULL`   |
-| `__year`       | Año de una fecha      | `EXTRACT(YEAR FROM campo)`  |
-| `__month`      | Mes de una fecha      | `EXTRACT(MONTH FROM campo)` |
+| `__startswith` | Empieza con             | `LIKE 'valor%'`             |
+| `__endswith`   | Termina con             | `LIKE '%valor'`             |
+| `__gt`         | Mayor que               | `> valor`                   |
+| `__gte`        | Mayor o igual           | `>= valor`                  |
+| `__lt`         | Menor que               | `< valor`                   |
+| `__lte`        | Menor o igual           | `<= valor`                  |
+| `__in`         | Está en la lista        | `IN (val1, val2, ...)`      |
+| `__range`      | Dentro del rango        | `BETWEEN val1 AND val2`     |
+| `__isnull`     | Es nulo o no            | `IS NULL` / `IS NOT NULL`   |
+| `__year`       | Año de una fecha        | `EXTRACT(YEAR FROM campo)`  |
+| `__month`      | Mes de una fecha        | `EXTRACT(MONTH FROM campo)` |
 
 Se pueden encadenar a través de relaciones. Ejemplo: `categoria__nombre__icontains='electro'` busca por el nombre de la categoría relacionada con `icontains`.
 
