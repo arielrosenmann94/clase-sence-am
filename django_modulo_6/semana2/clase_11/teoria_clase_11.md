@@ -127,7 +127,7 @@ Estas URLs no las escribe el desarrollador. Django las construye a partir de los
 Django distingue tres tipos de usuario según sus atributos:
 
 ```
-           Usuario Normal                  Staff                   Superusuario
+           Usuario Normal                  Staff                Superusuario
                👤                           👮                          👑
                │                            │                            │
         is_staff = False            is_staff = True             is_staff = True
