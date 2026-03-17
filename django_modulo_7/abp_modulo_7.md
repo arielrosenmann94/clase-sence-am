@@ -22,7 +22,7 @@ La empresa fintech ficticia **Alke Financial** necesita una aplicación web para
 
 | #   | Entregable                                  | Formato                   |
 | --- | ------------------------------------------- | ------------------------- |
-| 1   | Proyecto Django completo                    | Carpeta comprimida `.zip` |
+| 1   | Proyecto Django completo                    | Carpeta comprimida  `.zip` o `.rar` |
 | 2   | Documento explicativo de tu modelo de datos | `.md` o `.pdf`            |
 | 3   | Capturas de pantalla de la app funcionando  | Dentro del documento      |
 
