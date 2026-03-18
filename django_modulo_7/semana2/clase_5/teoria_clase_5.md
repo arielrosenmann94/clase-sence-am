@@ -1,4 +1,5 @@
 # 🌌 Módulo 7 — Clase 5
+
 ## Relaciones Avanzadas y el Puente entre Requisitos y Código
 
 > **AE 7.3** — Implementar la capa de modelo de acceso a datos utilizando entidades con relaciones uno a uno, uno a muchos y muchos a muchos.
@@ -9,27 +10,27 @@
 
 ## 🗺️ Índice
 
-| # | Tema |
-|---|------|
+| #     | Tema                                         |
+| ----- | -------------------------------------------- |
 | **1** | Recap rápido: Lo que cubrimos en la Semana 1 |
-| **2** | ManyToManyField a Fondo |
-| 2.1 | ¿Qué ocurre en la base de datos? |
-| 2.2 | Operaciones: add, remove, set, clear |
-| 2.3 | Consultas y filtros con M2M |
-| **3** | Modelos Intermedios (`through`) |
-| 3.1 | ¿Cuándo la tabla automática no alcanza? |
-| 3.2 | Implementación paso a paso |
-| 3.3 | Consultas sobre el modelo intermedio |
-| **4** | `prefetch_related` vs `select_related` |
-| 4.1 | El problema: N+1 en relaciones ManyToMany |
-| 4.2 | select_related: JOIN en una sola consulta |
-| 4.3 | prefetch_related: dos consultas inteligentes |
-| 4.4 | Tabla de decisión |
-| **5** | De la Historia del Cliente al Código Django |
-| 5.1 | ¿Qué es una Historia de Usuario? |
-| 5.2 | El método de los 4 pasos |
-| 5.3 | Ejemplo completo: de la historia al QuerySet |
-| 5.4 | Herramientas para agilizar la traducción |
+| **2** | ManyToManyField a Fondo                      |
+| 2.1   | ¿Qué ocurre en la base de datos?             |
+| 2.2   | Operaciones: add, remove, set, clear         |
+| 2.3   | Consultas y filtros con M2M                  |
+| **3** | Modelos Intermedios (`through`)              |
+| 3.1   | ¿Cuándo la tabla automática no alcanza?      |
+| 3.2   | Implementación paso a paso                   |
+| 3.3   | Consultas sobre el modelo intermedio         |
+| **4** | `prefetch_related` vs `select_related`       |
+| 4.1   | El problema: N+1 en relaciones ManyToMany    |
+| 4.2   | select_related: JOIN en una sola consulta    |
+| 4.3   | prefetch_related: dos consultas inteligentes |
+| 4.4   | Tabla de decisión                            |
+| **5** | De la Historia del Cliente al Código Django  |
+| 5.1   | ¿Qué es una Historia de Usuario?             |
+| 5.2   | El método de los 4 pasos                     |
+| 5.3   | Ejemplo completo: de la historia al QuerySet |
+| 5.4   | Herramientas para agilizar la traducción     |
 
 ---
 
@@ -39,12 +40,12 @@
 
 Antes de avanzar, recordemos dónde estamos parados:
 
-| Clase | Tema Central | Lo Clave |
-|-------|-------------|----------|
-| **C1** | Fundamentos del ORM | Conexión, modelos, migraciones, consultas, lazy evaluation, Q Objects |
-| **C2** | Arquitectura de Modelos | `models/` como paquete, `__init__.py`, relaciones conceptuales, `Meta` |
-| **C3** | Optimización y Entornos Reales | `only`, `defer`, `iterator`, `bulk`, índices, `explain`, `atomic`, Figma |
-| **C4** | Relaciones a Fondo (Parte I) | `ForeignKey` (SQL real), 5 opciones de `on_delete`, `related_name`, `OneToOneField`, señales, herramientas de seguridad |
+| Clase  | Tema Central                   | Lo Clave                                                                                                                |
+| ------ | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| **C1** | Fundamentos del ORM            | Conexión, modelos, migraciones, consultas, lazy evaluation, Q Objects                                                   |
+| **C2** | Arquitectura de Modelos        | `models/` como paquete, `__init__.py`, relaciones conceptuales, `Meta`                                                  |
+| **C3** | Optimización y Entornos Reales | `only`, `defer`, `iterator`, `bulk`, índices, `explain`, `atomic`, Figma                                                |
+| **C4** | Relaciones a Fondo (Parte I)   | `ForeignKey` (SQL real), 5 opciones de `on_delete`, `related_name`, `OneToOneField`, señales, herramientas de seguridad |
 
 ### ¿Qué falta?
 
@@ -130,6 +131,7 @@ mouse     = Producto.objects.get(nombre='Mouse Inalámbrico')
 ```
 
 ### `.add()` — Agregar productos al pedido
+
 ```python
 pedido.productos.add(audifonos, teclado)
 # SQL: INSERT INTO tienda_pedido_productos (pedido_id, producto_id)
@@ -138,6 +140,7 @@ pedido.productos.add(audifonos, teclado)
 ```
 
 ### `.remove()` — Quitar un producto del pedido
+
 ```python
 pedido.productos.remove(teclado)
 # SQL: DELETE FROM tienda_pedido_productos
@@ -146,6 +149,7 @@ pedido.productos.remove(teclado)
 ```
 
 ### `.set()` — Reemplazar todos los productos de golpe
+
 ```python
 pedido.productos.set([audifonos, mouse])
 # Django hace un diff: quita lo que sobra, agrega lo que falta.
@@ -153,6 +157,7 @@ pedido.productos.set([audifonos, mouse])
 ```
 
 ### `.clear()` — Vaciar el pedido
+
 ```python
 pedido.productos.clear()
 # SQL: DELETE FROM tienda_pedido_productos WHERE pedido_id=1
@@ -321,15 +326,18 @@ Antes de ver herramientas, entendamos el problema con una analogía.
 Imagina que tienes una pizzería y necesitas entregar 50 pedidos. Cada pedido tiene un **cliente** (quién lo pidó) y **varios productos** (las pizzas que pidió).
 
 **Sin optimizar (Problema N+1):**
+
 ```
 Entregas el pedido 1 → vas a buscar el nombre del cliente 1 → vuelves
 Entregas el pedido 2 → vas a buscar el nombre del cliente 2 → vuelves
 Entregas el pedido 3 → vas a buscar el nombre del cliente 3 → vuelves
 ... (50 veces)
 ```
+
 Hiciste **51 viajes**: 1 para cargar los pedidos + 50 para buscar cada cliente. Eso es terriblemente ineficiente.
 
 **La misma ineficiencia en Django:**
+
 ```python
 pedidos = Pedido.objects.all()          # 1 viaje a la BD: trae los 50 pedidos
 for p in pedidos:
@@ -488,6 +496,7 @@ WHERE tienda_pedido_productos.pedido_id IN (1, 2, 3, 4, ..., 50)
 ```
 
 Después, **en Python** (no en SQL), Django arma un diccionario:
+
 ```python
 # Django hace esto internamente:
 {
@@ -506,13 +515,13 @@ Cuando accedes a `pedido.productos.all()`, Django busca en este diccionario en v
 
 La regla es muy simple:
 
-| Situación | ¿Qué usar? | ¿Por qué? |
-|:-|:-|:-|
-| Accedo al **cliente** de un pedido (FK) | `select_related` | Es una relación 1:1, un JOIN funciona perfecto |
-| Accedo al **perfil** de un usuario (OneToOne) | `select_related` | Lo mismo: siempre hay exactamente 1 perfil por usuario |
-| Accedo a los **productos** de un pedido (M2M) | `prefetch_related` | Son muchos productos, un JOIN duplicaría filas |
-| Accedo a los **pedidos** de un cliente (relación inversa) | `prefetch_related` | Un cliente tiene muchos pedidos |
-| **No sé cuál usar** | `prefetch_related` | Funciona con todo (FK, M2M, inversas). Solo es ligeramente menos eficiente que `select_related` para FK |
+| Situación                                                 | ¿Qué usar?         | ¿Por qué?                                                                                               |
+| :-------------------------------------------------------- | :----------------- | :------------------------------------------------------------------------------------------------------ |
+| Accedo al **cliente** de un pedido (FK)                   | `select_related`   | Es una relación 1:1, un JOIN funciona perfecto                                                          |
+| Accedo al **perfil** de un usuario (OneToOne)             | `select_related`   | Lo mismo: siempre hay exactamente 1 perfil por usuario                                                  |
+| Accedo a los **productos** de un pedido (M2M)             | `prefetch_related` | Son muchos productos, un JOIN duplicaría filas                                                          |
+| Accedo a los **pedidos** de un cliente (relación inversa) | `prefetch_related` | Un cliente tiene muchos pedidos                                                                         |
+| **No sé cuál usar**                                       | `prefetch_related` | Funciona con todo (FK, M2M, inversas). Solo es ligeramente menos eficiente que `select_related` para FK |
 
 ### ¿Se pueden combinar?
 
@@ -640,6 +649,7 @@ total = carrito.items.aggregate(
 ## 5.3 Ejemplo Completo: De la Historia al QuerySet
 
 Historia:
+
 > _"Como administrador del restaurante, quiero ver cuáles son los 5 platos más pedidos del mes, para decidir qué promocionar."_
 
 **Paso 1 — Sustantivos:** `Administrador` (ya existe: `User`), `Platos`, `Pedidos`, `Mes`.
@@ -647,6 +657,7 @@ Historia:
 **Paso 2 — Verbos:** `ver` → Vista Read (listado). `decidir qué promocionar` → Solo es el beneficio, no una acción técnica.
 
 **Paso 3 — Relaciones:**
+
 ```
 Pedido ──M2M through ItemPedido──► Plato
                   │
@@ -654,6 +665,7 @@ Pedido ──M2M through ItemPedido──► Plato
 ```
 
 **Paso 4 — QuerySet:**
+
 ```python
 from django.db.models import Sum
 from django.utils import timezone
@@ -683,11 +695,11 @@ Cuando recibes muchas historias de usuario a la vez, estas técnicas ayudan a or
 
 Antes de escribir código, llena esta tabla para cada historia:
 
-| Historia | Sustantivos (Modelos) | Verbos (Vistas) | Relaciones | QuerySet clave |
-|----------|----------------------|-----------------|------------|----------------|
-| "Agregar productos al carrito" | Carrito, Producto, ItemCarrito | Crear (add) | M2M through | `ItemCarrito.objects.create(...)` |
-| "Ver mis pedidos anteriores" | Pedido, Usuario | Listar (read) | FK | `Pedido.objects.filter(cliente=user)` |
-| "Buscar productos por nombre" | Producto | Filtrar (read) | Ninguna | `.filter(nombre__icontains=q)` |
+| Historia                       | Sustantivos (Modelos)          | Verbos (Vistas) | Relaciones  | QuerySet clave                        |
+| ------------------------------ | ------------------------------ | --------------- | ----------- | ------------------------------------- |
+| "Agregar productos al carrito" | Carrito, Producto, ItemCarrito | Crear (add)     | M2M through | `ItemCarrito.objects.create(...)`     |
+| "Ver mis pedidos anteriores"   | Pedido, Usuario                | Listar (read)   | FK          | `Pedido.objects.filter(cliente=user)` |
+| "Buscar productos por nombre"  | Producto                       | Filtrar (read)  | Ninguna     | `.filter(nombre__icontains=q)`        |
 
 ### 🎯 Criterios de Aceptación = Tests
 
@@ -696,6 +708,7 @@ Los criterios de aceptación de cada historia se convierten directamente en test
 ```
 Criterio: "El carrito no debe permitir cantidades negativas."
 ```
+
 ```python
 # tests.py
 def test_cantidad_negativa_no_permitida(self):
@@ -714,6 +727,7 @@ A veces el cliente no escribe historias formales. Escribe un email:
 > _"Necesito que los usuarios puedan guardar productos como favoritos y que después los puedan ver en una lista."_
 
 Aplica el método:
+
 1. **Sustantivos:** Usuarios, Productos, Favoritos → 3 modelos (Usuarios ya existe).
 2. **Verbos:** guardar como favoritos, ver en una lista → Create + Read.
 3. **Relación:** Usuario ──M2M──► Producto (a través de `Favorito`).
@@ -735,29 +749,29 @@ class Favorito(models.Model):
 
 # 🏁 Tabla Resumen de la Clase
 
-| Concepto | Código / Herramienta | Cuándo usarlo |
-|:---------|:--------------------|:-------------|
-| **Relación Muchos a Muchos** | `ManyToManyField('Modelo')` | Dos entidades se conectan sin límite |
-| **Tabla intermedia automática** | Django la crea solo | La relación no necesita datos propios |
-| **Tabla intermedia manual** | `through='ModeloIntermedio'` | La relación tiene cantidad, precio, fecha, etc. |
-| **Agregar a M2M** | `.add()` (sin through) o `Intermedio.objects.create()` | Conectar dos registros |
-| **Quitar de M2M** | `.remove()` o `.clear()` | Desconectar sin borrar los registros originales |
-| **Evitar N+1 en FK** | `select_related('campo')` | JOIN SQL — 1 consulta |
-| **Evitar N+1 en M2M** | `prefetch_related('campo')` | IN query — 2 consultas |
-| **Combinar ambos** | `.select_related().prefetch_related()` | Cuando la vista necesita datos de FK y M2M |
-| **Historia → Modelos** | Subrayar sustantivos | Encontrar las entidades del sistema |
-| **Historia → Vistas** | Identificar verbos | Saber qué operaciones CRUD implementar |
-| **Historia → Relaciones** | Dibujar flechas entre sustantivos | Definir FK, 1:1 o M2M |
-| **Historia → Queries** | Escribir el QuerySet primero | Pensar en datos antes de pensar en HTML |
+| Concepto                        | Código / Herramienta                                   | Cuándo usarlo                                   |
+| :------------------------------ | :----------------------------------------------------- | :---------------------------------------------- |
+| **Relación Muchos a Muchos**    | `ManyToManyField('Modelo')`                            | Dos entidades se conectan sin límite            |
+| **Tabla intermedia automática** | Django la crea solo                                    | La relación no necesita datos propios           |
+| **Tabla intermedia manual**     | `through='ModeloIntermedio'`                           | La relación tiene cantidad, precio, fecha, etc. |
+| **Agregar a M2M**               | `.add()` (sin through) o `Intermedio.objects.create()` | Conectar dos registros                          |
+| **Quitar de M2M**               | `.remove()` o `.clear()`                               | Desconectar sin borrar los registros originales |
+| **Evitar N+1 en FK**            | `select_related('campo')`                              | JOIN SQL — 1 consulta                           |
+| **Evitar N+1 en M2M**           | `prefetch_related('campo')`                            | IN query — 2 consultas                          |
+| **Combinar ambos**              | `.select_related().prefetch_related()`                 | Cuando la vista necesita datos de FK y M2M      |
+| **Historia → Modelos**          | Subrayar sustantivos                                   | Encontrar las entidades del sistema             |
+| **Historia → Vistas**           | Identificar verbos                                     | Saber qué operaciones CRUD implementar          |
+| **Historia → Relaciones**       | Dibujar flechas entre sustantivos                      | Definir FK, 1:1 o M2M                           |
+| **Historia → Queries**          | Escribir el QuerySet primero                           | Pensar en datos antes de pensar en HTML         |
 
 ---
 
 ## 📚 Bibliografía y Fuentes
 
-- *Django Software Foundation. (2024). Many-to-many relationships.* [https://docs.djangoproject.com/en/stable/topics/db/examples/many_to_many/](https://docs.djangoproject.com/en/stable/topics/db/examples/many_to_many/)
-- *Django Software Foundation. (2024). Extra fields on many-to-many relationships.* [https://docs.djangoproject.com/en/stable/topics/db/models/#extra-fields-on-many-to-many-relationships](https://docs.djangoproject.com/en/stable/topics/db/models/#extra-fields-on-many-to-many-relationships)
-- *Django Software Foundation. (2024). Database access optimization — prefetch_related.* [https://docs.djangoproject.com/en/stable/ref/models/querysets/#prefetch-related](https://docs.djangoproject.com/en/stable/ref/models/querysets/#prefetch-related)
-- *Mike Cohn. (2004). User Stories Applied: For Agile Software Development. Addison-Wesley.*
-- *OWASP. (2024). Top 10 Proactive Controls.* [https://owasp.org/www-project-proactive-controls/](https://owasp.org/www-project-proactive-controls/)
+- _Django Software Foundation. (2024). Many-to-many relationships._ [https://docs.djangoproject.com/en/stable/topics/db/examples/many_to_many/](https://docs.djangoproject.com/en/stable/topics/db/examples/many_to_many/)
+- _Django Software Foundation. (2024). Extra fields on many-to-many relationships._ [https://docs.djangoproject.com/en/stable/topics/db/models/#extra-fields-on-many-to-many-relationships](https://docs.djangoproject.com/en/stable/topics/db/models/#extra-fields-on-many-to-many-relationships)
+- _Django Software Foundation. (2024). Database access optimization — prefetch_related._ [https://docs.djangoproject.com/en/stable/ref/models/querysets/#prefetch-related](https://docs.djangoproject.com/en/stable/ref/models/querysets/#prefetch-related)
+- _Mike Cohn. (2004). User Stories Applied: For Agile Software Development. Addison-Wesley._
+- _OWASP. (2024). Top 10 Proactive Controls._ [https://owasp.org/www-project-proactive-controls/](https://owasp.org/www-project-proactive-controls/)
 
 ---
