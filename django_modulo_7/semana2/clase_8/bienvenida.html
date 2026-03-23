@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido a Mi Web</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===== Reset & Base ===== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ===== Animated Background Orbs ===== */
+        body::before,
+        body::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 8s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        body::before {
+            width: min(500px, 80vw);
+            height: min(500px, 80vw);
+            background: radial-gradient(circle, #6c63ff, transparent 70%);
+            top: -10%;
+            left: -10%;
+        }
+
+        body::after {
+            width: min(400px, 70vw);
+            height: min(400px, 70vw);
+            background: radial-gradient(circle, #f857a6, transparent 70%);
+            bottom: -10%;
+            right: -10%;
+            animation-delay: -4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25%      { transform: translate(30px, -40px) scale(1.05); }
+            50%      { transform: translate(-20px, 20px) scale(0.95); }
+            75%      { transform: translate(15px, 30px) scale(1.02); }
+        }
+
+        /* ===== Floating Particles ===== */
+        .particles {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: rise linear infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-duration: 12s; animation-delay: 0s; width: 3px; height: 3px; }
+        .particle:nth-child(2) { left: 25%; animation-duration: 10s; animation-delay: -2s; width: 5px; height: 5px; }
+        .particle:nth-child(3) { left: 40%; animation-duration: 14s; animation-delay: -4s; width: 2px; height: 2px; }
+        .particle:nth-child(4) { left: 55%; animation-duration: 11s; animation-delay: -1s; width: 4px; height: 4px; }
+        .particle:nth-child(5) { left: 70%; animation-duration: 13s; animation-delay: -3s; width: 3px; height: 3px; }
+        .particle:nth-child(6) { left: 85%; animation-duration: 9s;  animation-delay: -5s; width: 6px; height: 6px; }
+        .particle:nth-child(7) { left: 15%; animation-duration: 15s; animation-delay: -6s; width: 2px; height: 2px; }
+        .particle:nth-child(8) { left: 60%; animation-duration: 10s; animation-delay: -7s; width: 3px; height: 3px; }
+
+        @keyframes rise {
+            0%   { bottom: -10%; opacity: 0; }
+            10%  { opacity: 0.6; }
+            90%  { opacity: 0.6; }
+            100% { bottom: 110%; opacity: 0; }
+        }
+
+        /* ===== Hero Section ===== */
+        .hero {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            width: 90%;
+            max-width: 700px;
+        }
+
+        /* ===== Glassmorphism Card ===== */
+        .card {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            padding: clamp(2rem, 6vw, 4rem) clamp(1.5rem, 5vw, 3.5rem);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: cardAppear 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        @keyframes cardAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== Emoji Icon ===== */
+        .icon {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: wave 2.5s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            15%      { transform: rotate(14deg); }
+            30%      { transform: rotate(-8deg); }
+            45%      { transform: rotate(14deg); }
+            60%      { transform: rotate(-4deg); }
+            75%      { transform: rotate(10deg); }
+        }
+
+        /* ===== Badge ===== */
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(108, 99, 255, 0.3), rgba(248, 87, 166, 0.3));
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: clamp(0.65rem, 2vw, 0.8rem);
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 0.4em 1.2em;
+            border-radius: 100px;
+            margin-bottom: 1.5rem;
+            animation: cardAppear 1s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        /* ===== Heading ===== */
+        .title {
+            font-size: clamp(2rem, 7vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #c7c4ff 40%, #f8a4d0 70%, #ffffff 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation:
+                cardAppear 1s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+                shimmer 4s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50%      { background-position: 100% 50%; }
+        }
+
+        /* ===== Description ===== */
+        .description {
+            font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            animation: cardAppear 1s 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        /* ===== CTA Button ===== */
+        .cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #6c63ff, #f857a6);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            font-weight: 600;
+            text-decoration: none;
+            padding: 0.9em 2.2em;
+            border-radius: 100px;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: cardAppear 1s 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #f857a6, #6c63ff);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(108, 99, 255, 0.4);
+        }
+
+        .cta:hover::before {
+            opacity: 1;
+        }
+
+        .cta span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-arrow {
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .cta:hover .cta-arrow {
+            transform: translateX(4px);
+        }
+
+        /* ===== Footer Note ===== */
+        .footer-note {
+            margin-top: 2rem;
+            font-size: clamp(0.7rem, 1.8vw, 0.8rem);
+            color: rgba(255, 255, 255, 0.35);
+            animation: cardAppear 1s 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        /* ===== Responsive Fine-Tuning ===== */
+        @media (max-width: 480px) {
+            .hero {
+                width: 95%;
+                padding: 1.5rem 1rem;
+            }
+
+            .card {
+                border-radius: 18px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .card {
+                padding: 4.5rem 4rem;
+            }
+        }
+
+        @media (min-width: 1920px) {
+            .title {
+                font-size: 4rem;
+            }
+
+            .description {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Particles -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="card">
+            <div class="icon">👋</div>
+            <div class="badge">✨ Mi Primer Sitio Web</div>
+            <h1 class="title">Bienvenido a Mi Web</h1>
+            <p class="description">
+                Este es mi primer proyecto web. Aquí exploraremos juntos el increíble mundo del desarrollo con HTML y CSS.
+            </p>
+            <button class="cta" onclick="alert('¡Gracias por visitar! 🎉')">
+                <span>Explorar</span>
+                <svg class="cta-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </button>
+            <p class="footer-note">Hecho con 💜 — Módulo 7 · Clase 8</p>
+        </div>
+    </section>
+
+</body>
+</html>

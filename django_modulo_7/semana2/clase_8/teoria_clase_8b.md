@@ -1,236 +1,956 @@
-# 🚀 Módulo 7 — Clase 8b
+# 🏁 Módulo 7 — Clase 8b
 
-## Guía Completa Pre-Deploy: Todo lo que Hay que Verificar Antes de Poner Django en Producción
+## Tu Proyecto Terminado: Todo lo que Debe Tener Antes del Día de Deploy
 
-> **Transversal** — Esta guía aplica a cualquier proyecto Django que vayan a publicar. No importa si es un CV, una tienda, o una API — estos pasos son los mismos.
+> **Preparación** — La próxima clase haremos deploy real. Ese día NO es para arreglar cosas. Es para **publicar**. Todo lo que vamos a ver ahora es lo que tu proyecto debe traer **100% terminado** ese día.
 >
-> ⚠️ Esta clase es 100% teórica y conversacional. Es la guía que van a consultar **cada vez** que tengan que hacer deploy de un proyecto real.
+> ⚠️ Esta clase es 100% teórica y conversacional. Es tu checklist de preparación. Si el día de deploy falta algo de esta lista, no vas a poder publicar.
 
 ---
 
 ## 🗺️ Índice
 
-| #      | Tema                                                              |
-| ------ | ----------------------------------------------------------------- |
-| **1**  | ¿Qué es un Deploy? (Y Por Qué da Miedo)                         |
-| **2**  | La Analogía: Mudarse de Casa                                     |
-| **3**  | Fase 1 — Código Limpio y Funcional                               |
-| **4**  | Fase 2 — Configuración de Producción (`settings.py`)             |
-| **5**  | Fase 3 — Variables de Entorno y Secretos                         |
-| **6**  | Fase 4 — Base de Datos                                           |
-| **7**  | Fase 5 — Archivos Estáticos y Media                              |
-| **8**  | Fase 6 — Seguridad (OWASP y Django)                              |
-| **9**  | Fase 7 — Dependencias y `requirements.txt`                       |
-| **10** | Fase 8 — Git, `.gitignore` y Control de Versiones                |
-| **11** | Fase 9 — Testing: ¿Funciona Todo?                                |
-| **12** | Fase 10 — El Servidor: ¿Dónde Vive tu App?                      |
-| **13** | Fase 11 — DNS y Dominio                                          |
-| **14** | Fase 12 — HTTPS y Certificados SSL                               |
-| **15** | Fase 13 — Monitoreo y Logs Post-Deploy                           |
-| **16** | El Mega-Checklist: Todo en Una Página                             |
-| **17** | Los 10 Errores de Deploy Más Comunes (y Cómo Evitarlos)          |
-| **18** | Diagrama: El Flujo Completo de Deploy                             |
+| #      | Tema                                                                   |
+| ------ | ---------------------------------------------------------------------- |
+| **1**  | La Mentalidad: ¿Qué Significa "Proyecto Terminado"?                    |
+| **2**  | Estructura del Proyecto: Orden y Convenciones                          |
+| **3**  | Modelos y Base de Datos: Todo Migrado y Funcional                      |
+| **4**  | Vistas y URLs: Todo Conectado y Protegido                              |
+| **5**  | Templates y Frontend: Completo, Responsive, Profesional                |
+| **6**  | Formularios: Validados y Seguros                                       |
+| **7**  | Autenticación y Permisos: ¿Quién Puede Hacer Qué?                     |
+| **8**  | Archivos Estáticos y Media: CSS, JS, Imágenes                         |
+| **9**  | Settings: Preparado para Dos Mundos                                    |
+| **10** | Variables de Entorno: El `.env` Listo                                  |
+| **11** | Git y `.gitignore`: Repositorio Limpio                                 |
+| **12** | Dependencias: `requirements.txt` Actualizado                           |
+| **13** | Datos Iniciales: ¿Qué Hay en la Base al Arrancar?                     |
+| **14** | Testing: ¿Funciona Todo lo que Crees que Funciona?                     |
+| **15** | Calidad de Código: Los Detalles Profesionales                          |
+| **16** | README: El Manual de Tu Proyecto                                       |
+| **17** | El Mega-Checklist: Todo en Una Página                                  |
+| **18** | Los 10 Problemas que Siempre Aparecen el Día de Deploy                 |
 
 ---
 
 ---
 
-> _"Todos tienen un plan hasta que hacen deploy por primera vez a producción."_
->
-> — Adaptación libre de Mike Tyson, aplicada a software
+> _"No sube a producción el proyecto perfecto. Sube el proyecto que está **terminado** y **verificado**. Perfecto no existe. Completo sí."_
 
 ---
 
 ---
 
-# 😰 1. ¿Qué es un Deploy? (Y Por Qué da Miedo)
+# 🧠 1. La Mentalidad: ¿Qué Significa "Proyecto Terminado"?
 
 ---
 
-**Deploy** = poner tu aplicación en un servidor accesible desde internet para que cualquier persona pueda usarla.
+Hay una diferencia enorme entre "funciona en mi computador" y "está listo para publicar". La mayoría de los problemas el día de deploy no son técnicos — son cosas que **quedaron a medias**.
 
-Mientras desarrollas, tu app vive en `localhost:8000`. Solo tú la ves. Cuando haces deploy, tu app vive en `www.miapp.com`. **Todo el mundo** la ve.
-
-### ¿Por qué da miedo?
-
-Porque en desarrollo puedes romper todo y nadie se entera. En producción, si algo falla:
-
-| En desarrollo                      | En producción                                      |
-| :--------------------------------- | :------------------------------------------------- |
-| Solo tú ves los errores            | Tus usuarios ven los errores                       |
-| `DEBUG = True` te ayuda            | `DEBUG = True` expone tu código al mundo            |
-| La base de datos tiene datos falsos | La base de datos tiene datos **reales** de personas |
-| Si se cae, refrescas y listo       | Si se cae, pierdes usuarios y dinero               |
-| Sin tráfico                        | Potencialmente miles de requests por minuto         |
-
-> 💡 **La buena noticia:** el deploy no es magia negra. Es un proceso con pasos. Si los sigues en orden, funciona. Esta guía es esa receta.
-
----
-
----
-
-# 🏠 2. La Analogía: Mudarse de Casa
-
----
-
-Hacer deploy es como **mudarse de departamento**. Desarrollar es vivir en tu depto actual (cómodo, desordenado, nadie te ve). Deploy es mudarte a un departamento nuevo donde van a venir visitas.
+### ¿Qué NO es un proyecto terminado?
 
 ```
-DESARROLLO (tu depto actual)              PRODUCCIÓN (depto nuevo, con visitas)
-─────────────────────────                  ─────────────────────────────────────
-✅ Puedes dejar ropa en el sillón          ❌ Tiene que estar ordenado
-✅ La puerta puede estar sin llave         ❌ Necesitas cerraduras (seguridad)
-✅ Si se corta la luz, prendes una vela    ❌ Necesitas generador (uptime)
-✅ Solo tú sabes dónde está todo           ❌ Otros tienen que entender la estructura
-✅ Si se rompe algo, lo arreglas mañana    ❌ Si se rompe algo, es AHORA
+❌ "Funciona pero el login a veces falla"
+❌ "El formulario funciona pero no valida nada"
+❌ "El CSS está casi listo, faltan unos detalles"
+❌ "Los links del navbar van a páginas que no existen todavía"
+❌ "Tengo el SECRET_KEY en el código pero después lo cambio"
+❌ "Los templates tienen Lorem Ipsum en algunas partes"
 ```
 
-### Las fases de la mudanza
+### ¿Qué SÍ es un proyecto terminado?
 
 ```
-📦 Fase 1: Empacar bien         →  Código limpio, sin prints de debug
-🔑 Fase 2: Cambiar cerraduras   →  Configuración de seguridad
-📋 Fase 3: Hacer inventario     →  requirements.txt, dependencias
-🚚 Fase 4: Contratar la mudanza →  Elegir servidor (hosting)
-🏗️ Fase 5: Instalar servicios   →  Base de datos, archivos estáticos
-🔐 Fase 6: Sistema de alarma    →  HTTPS, headers de seguridad
-📬 Fase 7: Cambiar dirección    →  DNS, dominio
-✅ Fase 8: Verificar que todo llegó → Testing en producción
+✅ Todas las páginas cargan sin errores
+✅ Todos los links funcionan y llevan a donde deben
+✅ Todos los formularios validan, guardan y responden correctamente
+✅ El diseño se ve bien en celular Y en escritorio
+✅ Los datos sensibles están en variables de entorno
+✅ No hay código "de prueba" ni prints de debugging
+✅ Otra persona puede clonar el repo y hacerlo andar siguiendo el README
 ```
 
-> Vamos a recorrer **cada fase** con todo lo que hay que verificar.
+### La Analogía del Restaurante
+
+```
+ABRIR UN RESTAURANTE                    HACER DEPLOY DE TU PROYECTO
+────────────────────                     ─────────────────────────────
+La comida debe estar lista               Las funcionalidades deben funcionar
+El menú no puede tener platos            Las páginas no pueden tener links
+  que no existen                           que no existen
+Los baños deben funcionar                Los formularios deben funcionar
+La cocina debe cumplir normas            El código debe cumplir seguridad
+El personal debe saber su rol           Cada view debe saber qué hace
+Si no está listo, no abres              Si no está listo, no haces deploy
+```
+
+> 💡 **Nadie abre un restaurante "casi listo".** No hagas deploy de un proyecto "casi listo".
 
 ---
 
 ---
 
-# 🧹 3. Fase 1 — Código Limpio y Funcional
+# 📁 2. Estructura del Proyecto: Orden y Convenciones
 
 ---
 
-Antes de siquiera pensar en servidores, tu código tiene que estar **limpio**. No perfecto — limpio.
+Tu proyecto debe tener una estructura **predecible y organizada**. Si alguien abre tu repositorio, debe entender en 30 segundos dónde está cada cosa.
 
-## Checklist de código
+## Estructura esperada
 
 ```
-[ ] No hay prints de debugging en el código
-    → Buscar: grep -rn "print(" en todo el proyecto
-    → Los print() en producción pueden imprimir datos sensibles en los logs
-
-[ ] No hay código comentado "por si acaso"
-    → Si está comentado, bórralo. Git lo recuerda por ti.
-
-[ ] No hay import de módulos que no se usan
-    → Cada import innecesario es peso muerto
-
-[ ] No hay contraseñas hardcodeadas en el código
-    → Buscar: grep -rn "password" y grep -rn "SECRET"
-    → TODO dato sensible va en variables de entorno
-
-[ ] Las vistas que requieren login tienen @login_required o LoginRequiredMixin
-    → Una vista sin protección es una puerta abierta
-
-[ ] Los formularios validan los datos en el servidor (no solo en JS)
-    → La validación de JavaScript se puede saltar con DevTools
-
-[ ] No hay TODO o FIXME críticos sin resolver
-    → grep -rn "TODO\|FIXME" para encontrarlos todos
+mi_proyecto/
+├── config/                    ← Configuración del proyecto Django
+│   ├── __init__.py
+│   ├── settings.py            ← O carpeta settings/ con base.py, dev.py, prod.py
+│   ├── urls.py                ← URLs principales
+│   ├── wsgi.py
+│   └── asgi.py
+│
+├── mi_app/                    ← Cada app en su propia carpeta
+│   ├── __init__.py
+│   ├── admin.py               ← Modelos registrados en el admin
+│   ├── apps.py
+│   ├── forms.py               ← Formularios (si usas)
+│   ├── models.py              ← Modelos de datos
+│   ├── urls.py                ← URLs de la app
+│   ├── views.py               ← Vistas
+│   ├── tests.py               ← Tests
+│   ├── templates/             ← Templates HTML
+│   │   └── mi_app/
+│   │       ├── base.html
+│   │       ├── lista.html
+│   │       └── detalle.html
+│   └── static/                ← Archivos estáticos de la app
+│       └── mi_app/
+│           ├── css/
+│           ├── js/
+│           └── img/
+│
+├── static/                    ← Archivos estáticos globales (opcional)
+├── templates/                 ← Templates globales (base.html compartido)
+├── media/                     ← Archivos subidos por usuarios
+│
+├── .env                       ← Variables de entorno (NO en git)
+├── .env.example               ← Plantilla de variables (SÍ en git)
+├── .gitignore                 ← Archivos ignorados por git
+├── requirements.txt           ← Dependencias del proyecto
+├── manage.py
+└── README.md                  ← Instrucciones del proyecto
 ```
 
-### La analogía
+## Checklist de estructura
 
-> 🏠 **Mudanza:** No te llevas la basura a la casa nueva. Antes de empacar, tiras lo que no necesitas.
+```
+[ ] La carpeta del proyecto tiene nombre descriptivo (no "proyecto1" ni "test")
+[ ] La carpeta de configuración se llama config/ (o el nombre que elegiste)
+[ ] Cada app tiene su propia carpeta con todos sus archivos
+[ ] Los templates siguen la convención app/templates/app/archivo.html
+[ ] Los archivos estáticos siguen la convención app/static/app/
+[ ] No hay archivos sueltos en la raíz que no deberían estar
+[ ] No hay carpetas vacías sin propósito
+[ ] No hay archivos __pycache__ en el repositorio
+```
 
-### Herramienta útil: `python manage.py check`
+> ⚠️ **El día de deploy:** si tu estructura es un desorden, cada problema tarda el doble en arreglarse porque nadie encuentra nada.
+
+---
+
+---
+
+# 🗄️ 3. Modelos y Base de Datos: Todo Migrado y Funcional
+
+---
+
+Los modelos son el **cimiento** de tu proyecto. Si los modelos están mal o incompletos, todo lo que depende de ellos (vistas, formularios, templates) va a fallar.
+
+## ¿Qué debe estar listo?
+
+### Todos los modelos definidos
+
+```python
+# Cada modelo debe tener:
+class MiModelo(models.Model):
+    # 1. Todos los campos que necesita con tipos correctos
+    nombre = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    # 2. Relaciones correctas (FK, M2M, OneToOne)
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+
+    # 3. __str__ definido (para que el admin sea legible)
+    def __str__(self):
+        return self.nombre
+
+    # 4. class Meta si es necesario (ordering, verbose_name, etc.)
+    class Meta:
+        ordering = ['-fecha_creacion']
+        verbose_name = 'Mi Modelo'
+        verbose_name_plural = 'Mis Modelos'
+```
+
+### Migraciones al día
 
 ```bash
-$ python manage.py check --deploy
-System check identified some issues:
+# PASO 1: Verificar que no hay cambios sin migrar
+python manage.py makemigrations --check
+# Si dice "No changes detected" → ✅ OK
+# Si crea algo → tienes cambios sin migrar ❌
 
-WARNINGS:
-? (security.W004) You have not set a value for the SECURE_HSTS_SECONDS setting.
-? (security.W008) Your SECURE_SSL_REDIRECT setting is not set to True.
-? (security.W012) SESSION_COOKIE_SECURE is not set to True.
-...
+# PASO 2: Verificar que todas las migraciones están aplicadas
+python manage.py showmigrations
+# Todas deben tener [X]:
+# [X] 0001_initial
+# [X] 0002_add_email_field
+# Si alguna tiene [ ] → está pendiente ❌
+
+# PASO 3: Aplicar las que falten
+python manage.py migrate
 ```
 
-> Este comando es tu **mejor amigo** antes de deploy. Revísalo, entiéndelo, arregla cada warning.
-
----
-
----
-
-# ⚙️ 4. Fase 2 — Configuración de Producción (`settings.py`)
-
----
-
-El `settings.py` de desarrollo y el de producción son **mundos diferentes**. Lo que te ayuda en desarrollo, te destruye en producción.
-
-## Las 7 configuraciones críticas
-
-### 1. `DEBUG = False` → **OBLIGATORIO**
+### Admin registrado
 
 ```python
-# ❌ EN PRODUCCIÓN ESTO ES UNA CATÁSTROFE:
-DEBUG = True
-# Cualquier error muestra: código fuente, variables, rutas, configuraciones
+# admin.py — TODOS los modelos registrados
+from django.contrib import admin
+from .models import Cliente, Producto, Pedido
 
-# ✅ EN PRODUCCIÓN SIEMPRE:
-DEBUG = False
+admin.site.register(Cliente)
+admin.site.register(Producto)
+admin.site.register(Pedido)
+# O mejor aún, con ModelAdmin para personalizar la vista del admin
 ```
 
-| `DEBUG = True`                                    | `DEBUG = False`                            |
-| :------------------------------------------------ | :----------------------------------------- |
-| Muestra traceback completo al usuario             | Muestra página de error genérica           |
-| Expone variables de entorno en la página de error | No expone nada                             |
-| Guarda TODAS las queries SQL en memoria           | No acumula queries → menos uso de RAM      |
-| Sirve archivos estáticos automáticamente          | NO sirve estáticos → necesitas Nginx/CDN   |
+## Checklist de modelos y BD
 
-> ⚠️ **Dato real:** En 2024, un investigador encontró **más de 2.000 sitios Django** con `DEBUG = True` en producción usando una simple búsqueda. Todos exponían su código fuente. _(Shodan.io, 2024)_
+```
+[ ] Todos los modelos están definidos con todos sus campos
+[ ] Cada modelo tiene __str__ definido
+[ ] Las relaciones (FK, M2M) son correctas y tienen on_delete
+[ ] python manage.py makemigrations --check dice "No changes detected"
+[ ] python manage.py showmigrations muestra todo con [X]
+[ ] Todos los modelos están registrados en admin.py
+[ ] Puedo crear, editar y borrar registros desde el admin sin errores
+[ ] Los datos que necesito para el sitio existen en la base de datos
+```
+
+### La Analogía
+
+> 🏠 Si los modelos son los cimientos de una casa, no puedes poner el techo (templates) si los cimientos están incompletos. Verifica los cimientos **primero**.
 
 ---
 
-### 2. `SECRET_KEY` → Fuera del código
+---
+
+# 🔗 4. Vistas y URLs: Todo Conectado y Protegido
+
+---
+
+Cada URL de tu proyecto debe llevar a una vista que funciona. No puede haber links rotos, páginas a medio hacer, ni URLs que devuelven errores.
+
+## ¿Qué debe estar listo?
+
+### Todas las URLs definidas y conectadas
 
 ```python
-# ❌ NUNCA:
-SECRET_KEY = 'django-insecure-abc123-esta-clave-es-visible-en-github'
+# config/urls.py — URLs principales
+from django.contrib import admin
+from django.urls import path, include
 
-# ✅ SIEMPRE:
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('mi_app.urls')),  # ← Cada app incluida
+]
+
+# mi_app/urls.py — URLs de la app
+from django.urls import path
+from . import views
+
+app_name = 'mi_app'  # ← Namespace definido
+
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('lista/', views.lista, name='lista'),
+    path('detalle/<int:pk>/', views.detalle, name='detalle'),
+    path('crear/', views.crear, name='crear'),
+    # ... cada funcionalidad tiene su URL con name
+]
+```
+
+### Todas las vistas funcionan
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  PARA CADA VISTA DE TU PROYECTO, VERIFICA:                      │
+│                                                                 │
+│  [ ] ¿Responde sin error 500?                                   │
+│  [ ] ¿Muestra los datos correctos?                              │
+│  [ ] ¿El template existe y carga?                               │
+│  [ ] ¿Los links dentro de la página funcionan?                  │
+│  [ ] ¿Los formularios (si tiene) envían y procesan datos?       │
+│  [ ] Si requiere login, ¿está protegida?                        │
+│  [ ] Si recibe datos por POST, ¿tiene csrf_token?               │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Vistas protegidas
+
+```python
+# Toda vista que NO debe ser pública debe estar protegida:
+
+# Para function-based views:
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def mi_vista_privada(request):
+    ...
+
+# Para class-based views:
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+class MiVistaPrivada(LoginRequiredMixin, ListView):
+    ...
+```
+
+## La prueba definitiva
+
+Abre tu proyecto en el navegador y haz clic en **absolutamente todo**:
+
+```
+1. Abre la página principal               → ¿Carga?
+2. Haz clic en cada link del navbar        → ¿Todos llevan a donde deben?
+3. Haz clic en cada botón                  → ¿Todos hacen lo que deben?
+4. Navega por cada sección                 → ¿Todas cargan sin error?
+5. Intenta acceder a URLs que no existen   → ¿Muestra 404 decente o error feo?
+6. Intenta acceder a vistas privadas       → ¿Te redirige al login?
+   sin estar logueado
+```
+
+## Checklist de vistas y URLs
+
+```
+[ ] Cada funcionalidad tiene su URL con name definido
+[ ] Cada URL lleva a una vista que funciona
+[ ] Las URLs usan namespaces (app_name)
+[ ] No hay links rotos en ninguna página
+[ ] Las vistas que requieren login están protegidas
+[ ] Los POST tienen {% csrf_token %}
+[ ] Las páginas de error (404, 500) se ven decentes
+```
+
+---
+
+---
+
+# 🎨 5. Templates y Frontend: Completo, Responsive, Profesional
+
+---
+
+Esto es lo que el usuario **ve**. Puede que tu backend sea perfecto, pero si el frontend se ve roto, incompleto o feo, da la impresión de que nada funciona.
+
+## ¿Qué debe estar listo?
+
+### Template base funcional
+
+```html
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mi Sitio{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Bootstrap, Tailwind, o tu CSS -->
+</head>
+<body>
+    <!-- Navbar -->
+    {% include 'components/navbar.html' %}
+
+    <!-- Contenido principal -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    {% include 'components/footer.html' %}
+
+    <!-- Scripts -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>
+```
+
+### Los 5 puntos que NO pueden fallar en el frontend
+
+| #   | Punto                    | ¿Qué verificar?                                                                     |
+| :-- | :----------------------- | :----------------------------------------------------------------------------------- |
+| 1   | **Responsive**           | ¿Se ve bien en celular (360px)? ¿Y en tablet? ¿Y en escritorio? ¿Y en TV?           |
+| 2   | **Contenido real**       | ¿Hay Lorem Ipsum en algún lado? ¿Hay imágenes placeholder? Todo debe ser contenido real |
+| 3   | **Links funcionales**    | ¿TODOS los links del navbar, footer y botones llevan a algún lado?                   |
+| 4   | **Diseño consistente**   | ¿Todas las páginas tienen el mismo estilo? ¿Mismos colores, tipografía, espaciado?   |
+| 5   | **Sin errores visuales** | ¿Hay textos cortados? ¿Imágenes que no cargan? ¿Elementos encimados?                |
+
+### Responsive: la prueba obligatoria
+
+```
+PRUEBA EN ESTOS ANCHOS:
+─────────────────────────────────
+📱 360px   → Celular pequeño (Galaxy, iPhone SE)
+📱 390px   → Celular estándar (iPhone 14)
+📱 414px   → Celular grande
+📲 768px   → Tablet vertical
+💻 1024px  → Tablet horizontal / laptop pequeña
+🖥️ 1440px  → Escritorio estándar
+📺 1920px  → Pantalla grande / TV
+
+¿CÓMO PROBAR?
+→ Chrome DevTools (F12) → Toggle Device Toolbar (Ctrl+Shift+M)
+→ Seleccionar diferentes dispositivos
+→ O arrastrar el borde de la ventana del navegador
+```
+
+### Lo que SIEMPRE se rompe en responsive
+
+| Problema                          | Solución                                                         |
+| :-------------------------------- | :--------------------------------------------------------------- |
+| Navbar no es hamburguesa en móvil | Usar componente responsive (Bootstrap Navbar, CSS media queries) |
+| Tablas se salen de la pantalla    | `overflow-x: auto` en el contenedor de la tabla                  |
+| Texto demasiado grande en móvil   | Usar unidades relativas (`rem`, `%`, `vw`) no `px` fijos         |
+| Imágenes se salen del ancho       | `img { max-width: 100%; height: auto; }`                         |
+| Formularios muy anchos en móvil   | `input { width: 100%; box-sizing: border-box; }`                |
+| Columnas lado a lado en móvil     | Usar flexbox/grid con `flex-wrap` o media queries                |
+
+## Checklist de templates y frontend
+
+```
+[ ] Template base con DOCTYPE, meta viewport, bloque title, content, scripts
+[ ] Navbar presente en todas las páginas con links funcionales
+[ ] Footer presente (información de contacto, copyright, links)
+[ ] TODAS las páginas extienden del template base
+[ ] Responsive verificado en celular, tablet y escritorio
+[ ] Sin Lorem Ipsum ni contenido placeholder
+[ ] Sin imágenes rotas (el src apunta a archivos que existen)
+[ ] Tipografía y colores consistentes en todo el sitio
+[ ] Mensajes de éxito/error se muestran al usuario (django messages)
+[ ] El título de la pestaña cambia en cada página ({% block title %})
+```
+
+---
+
+---
+
+# 📝 6. Formularios: Validados y Seguros
+
+---
+
+Si tu proyecto tiene formularios (y probablemente tiene), cada uno debe estar **completo**: funcional, validado y seguro.
+
+## Lo que cada formulario debe tener
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  CADA FORMULARIO DEBE CUMPLIR:                                  │
+│                                                                 │
+│  [ ] Tiene {% csrf_token %}                                     │
+│  [ ] Valida los datos en el servidor (no solo en JS)            │
+│  [ ] Muestra errores al usuario cuando los datos son inválidos  │
+│  [ ] Redirige correctamente después de enviar                   │
+│  [ ] No permite enviar datos vacíos en campos obligatorios      │
+│  [ ] No permite datos maliciosos (XSS, SQL injection)           │
+│  [ ] Muestra un mensaje de éxito después de guardar             │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Formulario bien implementado
+
+```python
+# forms.py
+from django import forms
+from .models import Cliente
+
+class ClienteForm(forms.ModelForm):
+    class Meta:
+        model = Cliente
+        fields = ['nombre', 'email', 'telefono']
+        widgets = {
+            'nombre': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Nombre completo'
+            }),
+        }
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if Cliente.objects.filter(email=email).exists():
+            raise forms.ValidationError('Este email ya está registrado.')
+        return email
+```
+
+```python
+# views.py
+from django.contrib import messages
+
+def crear_cliente(request):
+    if request.method == 'POST':
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '¡Cliente creado exitosamente!')
+            return redirect('mi_app:lista')
+        # Si no es válido, el form se re-renderiza con errores
+    else:
+        form = ClienteForm()
+    return render(request, 'mi_app/crear.html', {'form': form})
+```
+
+```html
+<!-- En el template -->
+<form method="POST">
+    {% csrf_token %}
+
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        Por favor corrige los errores indicados.
+    </div>
+    {% endif %}
+
+    {{ form.as_p }}
+
+    <button type="submit">Guardar</button>
+</form>
+
+<!-- Mostrar mensajes de éxito -->
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">
+    {{ message }}
+</div>
+{% endfor %}
+```
+
+### La prueba de cada formulario
+
+| Prueba                               | Qué debe pasar                                |
+| :----------------------------------- | :--------------------------------------------- |
+| Enviar con todos los campos llenos   | Guarda y muestra mensaje de éxito              |
+| Enviar con campos vacíos             | Muestra error, NO guarda                       |
+| Enviar con datos inválidos (email malo) | Muestra error específico                    |
+| Enviar el mismo formulario 2 veces   | No crea duplicados (o maneja el caso)          |
+| Enviar con caracteres especiales     | No rompe la página (protección contra XSS)     |
+
+## Checklist de formularios
+
+```
+[ ] Cada formulario tiene {% csrf_token %}
+[ ] La validación ocurre en el servidor (forms.py), no solo en HTML/JS
+[ ] Los errores se muestran al usuario de forma clara
+[ ] Después de enviar exitosamente, redirige (patrón POST-redirect-GET)
+[ ] Los mensajes de éxito se muestran (django.contrib.messages)
+[ ] Probé cada formulario con datos buenos, malos y vacíos
+```
+
+---
+
+---
+
+# 🔐 7. Autenticación y Permisos: ¿Quién Puede Hacer Qué?
+
+---
+
+Si tu proyecto tiene usuarios (login, registro, perfiles), esta sección es **crítica**.
+
+## ¿Qué debe funcionar?
+
+```
+FLUJO COMPLETO DE USUARIO:
+──────────────────────────
+[ ] Registro de nuevo usuario         → ¿Se crea la cuenta?
+[ ] Login                             → ¿Entra correctamente?
+[ ] Logout                            → ¿Sale y no puede acceder a páginas privadas?
+[ ] Cambio de contraseña (si aplica)  → ¿Funciona?
+[ ] Páginas privadas sin login        → ¿Redirige al login?
+[ ] Páginas del admin                 → ¿Solo accede quien debe?
+```
+
+### Prueba de seguridad básica
+
+```
+PRUEBA MANUAL OBLIGATORIA:
+──────────────────────────
+1. Cierra sesión
+2. Intenta acceder directamente a una URL privada
+   (ej: /clientes/crear/, /admin/, /perfil/)
+3. ¿Te redirige al login? → ✅
+4. ¿Te muestra la página? → ❌ ERROR GRAVE — falta protección
+```
+
+## Checklist de autenticación
+
+```
+[ ] Login funciona correctamente
+[ ] Logout funciona y redirige apropiadamente
+[ ] Las páginas privadas redirigen al login si no estás autenticado
+[ ] El usuario administrador puede acceder al admin
+[ ] El panel de admin (/admin/) funciona y muestra los modelos
+[ ] Si hay registro de usuarios, funciona sin errores
+[ ] Las contraseñas cumplen las reglas de validación de Django
+```
+
+---
+
+---
+
+# 📁 8. Archivos Estáticos y Media: CSS, JS, Imágenes
+
+---
+
+Uno de los problemas más comunes el día de deploy: **el sitio carga sin estilos**. Todo el CSS, JavaScript e imágenes desaparecen. Esto pasa porque en producción Django NO sirve archivos estáticos automáticamente.
+
+## ¿Qué debes tener listo?
+
+### Archivos estáticos bien organizados
+
+```
+mi_app/
+└── static/
+    └── mi_app/              ← Siempre dentro de una subcarpeta con el nombre de la app
+        ├── css/
+        │   └── styles.css
+        ├── js/
+        │   └── main.js
+        └── img/
+            ├── logo.png
+            └── hero.jpg
+```
+
+### En los templates, siempre usar `{% static %}`
+
+```html
+<!-- ✅ CORRECTO: usa {% static %} -->
+{% load static %}
+<link rel="stylesheet" href="{% static 'mi_app/css/styles.css' %}">
+<img src="{% static 'mi_app/img/logo.png' %}" alt="Logo">
+<script src="{% static 'mi_app/js/main.js' %}"></script>
+
+<!-- ❌ INCORRECTO: ruta hardcodeada -->
+<link rel="stylesheet" href="/static/mi_app/css/styles.css">
+<!-- Esto puede romper si cambia la configuración de STATIC_URL -->
+```
+
+### Settings configurados
+
+```python
+# settings.py
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'   # Para collectstatic en producción
+
+# Si tienes archivos estáticos globales fuera de las apps:
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+# Media (archivos subidos por usuarios):
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+```
+
+### Verificar que collectstatic funciona
+
+```bash
+# Este comando recopila TODOS los estáticos en una sola carpeta
+# Es necesario para producción
+python manage.py collectstatic
+
+# Si da errores → hay archivos estáticos mal configurados
+# Si funciona → ✅ listo para producción
+```
+
+## Checklist de archivos estáticos y media
+
+```
+[ ] Los archivos estáticos están en app/static/app/
+[ ] Los templates usan {% load static %} y {% static 'ruta' %}
+[ ] No hay rutas de archivos hardcodeadas en los templates
+[ ] STATIC_ROOT está configurado en settings.py
+[ ] python manage.py collectstatic funciona sin errores
+[ ] MEDIA_ROOT está configurado si hay uploads de usuarios
+[ ] Las imágenes del sitio cargan correctamente
+[ ] El CSS se aplica correctamente en todas las páginas
+[ ] El JavaScript funciona en todas las páginas donde se usa
+```
+
+---
+
+---
+
+# ⚙️ 9. Settings: Preparado para Dos Mundos
+
+---
+
+Tu settings.py tiene que estar **preparado** para funcionar en desarrollo y en producción. El día de deploy no es para reconfigurar — es para cambiar variables de entorno.
+
+El problema es que desarrollo y producción necesitan configuraciones **opuestas**:
+
+| Setting                   | En desarrollo                | En producción                        |
+| :------------------------ | :--------------------------- | :----------------------------------- |
+| `DEBUG`                   | `True`                       | `False`                              |
+| `SECRET_KEY`              | Cualquier string             | Clave única generada aleatoriamente  |
+| `ALLOWED_HOSTS`           | `['localhost', '127.0.0.1']` | `['midominio.com']`                  |
+| `DATABASES`               | SQLite                       | PostgreSQL                           |
+| `SESSION_COOKIE_SECURE`   | `False`                      | `True`                               |
+| `CSRF_COOKIE_SECURE`      | `False`                      | `True`                               |
+| `SECURE_SSL_REDIRECT`     | `False`                      | `True`                               |
+| Archivos estáticos        | Django los sirve             | Nginx o WhiteNoise los sirve         |
+
+> ⚠️ **El problema:** si tienes todo en un solo `settings.py`, tendrías que estar cambiando valores cada vez que pasas de desarrollo a producción. Eso es un error esperando a pasar.
+
+---
+
+## Solución: Dividir settings en una carpeta
+
+En vez de tener **un solo archivo** `settings.py`, lo convertimos en una **carpeta** con archivos separados:
+
+```
+ANTES (un solo archivo):              DESPUÉS (carpeta con archivos):
+─────────────────────────              ─────────────────────────────────
+config/                                config/
+├── settings.py    ← todo junto       ├── settings/
+├── urls.py                           │   ├── __init__.py  ← elige cuál cargar
+├── wsgi.py                           │   ├── base.py      ← lo COMÚN a ambos
+└── asgi.py                           │   ├── development.py ← solo desarrollo
+                                      │   └── production.py  ← solo producción
+                                      ├── urls.py
+                                      ├── wsgi.py
+                                      └── asgi.py
+```
+
+### ¿Qué va en cada archivo?
+
+```
+base.py          →  TODO lo que es igual en desarrollo y producción:
+                    INSTALLED_APPS, MIDDLEWARE, TEMPLATES, AUTH_PASSWORD_VALIDATORS,
+                    LANGUAGE_CODE, TIME_ZONE, STATIC_URL, etc.
+
+development.py   →  Lo que SOLO necesitas en desarrollo:
+                    DEBUG = True, SQLite, herramientas de debug
+
+production.py    →  Lo que SOLO necesitas en producción:
+                    DEBUG = False, PostgreSQL, seguridad, HTTPS
+```
+
+### La Analogía
+
+> 🏠 Piensa en un uniforme escolar: todos tienen la **misma base** (pantalón, camisa). Pero en **invierno** le agregas la chaqueta y la bufanda, y en **verano** usas manga corta. No compras un uniforme completamente distinto para cada estación — cambias solo lo que necesita cambiar.
+
+---
+
+## Paso a Paso: Cómo Construirlo
+
+---
+
+### Paso 1: Crear la carpeta `settings/`
+
+Dentro de tu carpeta `config/` (o como se llame tu carpeta de configuración), crea una carpeta llamada `settings`:
+
+```bash
+# Desde la raíz de tu proyecto:
+mkdir config/settings
+```
+
+---
+
+### Paso 2: Mover `settings.py` a `base.py`
+
+Renombra (o copia) tu `settings.py` actual como `base.py` dentro de la nueva carpeta:
+
+```bash
+mv config/settings.py config/settings/base.py
+```
+
+---
+
+### Paso 3: Crear `__init__.py`
+
+Este archivo le dice a Python qué archivo de settings cargar. Crea `config/settings/__init__.py`:
+
+```python
+# config/settings/__init__.py
+
 import os
+
+# Lee la variable de entorno DJANGO_SETTINGS_MODULE
+# Si no existe, usa development por defecto
+environment = os.environ.get('DJANGO_ENV', 'development')
+
+if environment == 'production':
+    from .production import *
+else:
+    from .development import *
+```
+
+> 💡 **¿Qué hace esto?** Si la variable de entorno `DJANGO_ENV` vale `"production"`, carga `production.py`. Si no existe o vale cualquier otra cosa, carga `development.py`. Así **por defecto siempre estás en desarrollo** — y solo en el servidor configuras producción.
+
+---
+
+### Paso 4: Limpiar `base.py`
+
+En `base.py` deja **solo lo que es común** a ambos entornos. Saca todo lo que es específico de desarrollo o producción:
+
+```python
+# config/settings/base.py
+# ═══════════════════════════════════════════════════════════════
+# CONFIGURACIÓN BASE — Común a desarrollo y producción
+# ═══════════════════════════════════════════════════════════════
+
+from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+# Cargar variables de entorno desde .env
+load_dotenv()
+
+# ──────────────────────────────────────────────
+# Ruta base del proyecto
+# ──────────────────────────────────────────────
+# IMPORTANTE: como ahora settings está dentro de una subcarpeta,
+# necesitamos subir UN nivel más (.parent extra)
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+#                                         │       │      │
+#                                         │       │      └── raíz del proyecto
+#                                         │       └── config/
+#                                         └── settings/
+
+# ──────────────────────────────────────────────
+# Clave secreta — SIEMPRE desde variable de entorno
+# ──────────────────────────────────────────────
 SECRET_KEY = os.environ.get('SECRET_KEY')
-# o con django-environ:
-SECRET_KEY = env('SECRET_KEY')
+
+# ──────────────────────────────────────────────
+# Aplicaciones instaladas
+# ──────────────────────────────────────────────
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    # --- Apps propias ---
+    'mi_app',
+    # 'otra_app',
+]
+
+# ──────────────────────────────────────────────
+# Middleware
+# ──────────────────────────────────────────────
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+# ──────────────────────────────────────────────
+# URLs y WSGI
+# ──────────────────────────────────────────────
+ROOT_URLCONF = 'config.urls'
+WSGI_APPLICATION = 'config.wsgi.application'
+
+# ──────────────────────────────────────────────
+# Templates
+# ──────────────────────────────────────────────
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+# ──────────────────────────────────────────────
+# Validación de contraseñas
+# ──────────────────────────────────────────────
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+]
+
+# ──────────────────────────────────────────────
+# Internacionalización
+# ──────────────────────────────────────────────
+LANGUAGE_CODE = 'es-cl'
+TIME_ZONE = 'America/Santiago'
+USE_I18N = True
+USE_TZ = True
+
+# ──────────────────────────────────────────────
+# Archivos estáticos y media
+# ──────────────────────────────────────────────
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# ──────────────────────────────────────────────
+# Primary key por defecto
+# ──────────────────────────────────────────────
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ```
 
-**¿Qué pasa si alguien obtiene tu `SECRET_KEY`?**
+> ⚠️ **MUY IMPORTANTE — `BASE_DIR`:** Fíjate que `BASE_DIR` ahora tiene **un `.parent` extra**. Antes, `settings.py` estaba en `config/settings.py` (2 niveles). Ahora, `base.py` está en `config/settings/base.py` (3 niveles). Si no agregas el `.parent` extra, todas las rutas del proyecto estarán mal.
 
-| Consecuencia                                   | Gravedad |
-| :--------------------------------------------- | :------- |
-| Puede falsificar cookies de sesión             | 🔴 Alta  |
-| Puede hacerse pasar por cualquier usuario      | 🔴 Alta  |
-| Puede firmar tokens de reset de contraseña     | 🔴 Alta  |
-| Puede generar tokens CSRF válidos              | 🔴 Alta  |
-| Tiene que regenerarse y TODOS los usuarios pierden su sesión | 🟡 Media |
+```python
+# ANTES (settings.py en config/):
+BASE_DIR = Path(__file__).resolve().parent.parent
+#          base.py → config/ → raíz
+
+# AHORA (base.py en config/settings/):
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+#          base.py → settings/ → config/ → raíz
+```
 
 ---
 
-### 3. `ALLOWED_HOSTS` → Solo tu dominio
+### Paso 5: Crear `development.py`
 
 ```python
-# ❌ EN PRODUCCIÓN NUNCA:
-ALLOWED_HOSTS = ['*']  # acepta requests de CUALQUIER dominio
+# config/settings/development.py
+# ═══════════════════════════════════════════════════════════════
+# CONFIGURACIÓN DE DESARROLLO — Solo para tu máquina local
+# ═══════════════════════════════════════════════════════════════
 
-# ✅ EN PRODUCCIÓN:
-ALLOWED_HOSTS = ['miapp.com', 'www.miapp.com']
-```
+from .base import *     # ← Importa TODO lo de base.py primero
 
----
+# ──────────────────────────────────────────────
+# Modo debug activado
+# ──────────────────────────────────────────────
+DEBUG = True
 
-### 4. `DATABASES` → Base de datos de producción
+# ──────────────────────────────────────────────
+# Hosts permitidos en desarrollo
+# ──────────────────────────────────────────────
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-```python
-# ❌ SQLite en producción (no está diseñado para concurrencia):
+# ──────────────────────────────────────────────
+# Base de datos: SQLite (simple, local, sin instalar nada)
+# ──────────────────────────────────────────────
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -238,57 +958,85 @@ DATABASES = {
     }
 }
 
-# ✅ PostgreSQL en producción:
+# ──────────────────────────────────────────────
+# Seguridad relajada para desarrollo
+# (NO necesitamos HTTPS en localhost)
+# ──────────────────────────────────────────────
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+SECURE_SSL_REDIRECT = False
+
+# ──────────────────────────────────────────────
+# Apps adicionales de desarrollo (opcional)
+# ──────────────────────────────────────────────
+# Si usas django-debug-toolbar:
+# INSTALLED_APPS += ['debug_toolbar']
+# MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+# INTERNAL_IPS = ['127.0.0.1']
+```
+
+> 💡 **Fíjate en la primera línea:** `from .base import *` importa **todo** lo que está en `base.py`. Después, solo **sobreescribes** lo que necesita ser diferente. No tienes que repetir `INSTALLED_APPS`, `MIDDLEWARE`, ni nada — ya están cargados desde `base`.
+
+---
+
+### Paso 6: Crear `production.py`
+
+```python
+# config/settings/production.py
+# ═══════════════════════════════════════════════════════════════
+# CONFIGURACIÓN DE PRODUCCIÓN — Para el servidor real
+# ═══════════════════════════════════════════════════════════════
+
+from .base import *     # ← Importa TODO lo de base.py primero
+import os
+
+# ──────────────────────────────────────────────
+# Modo debug DESACTIVADO — OBLIGATORIO en producción
+# ──────────────────────────────────────────────
+DEBUG = False
+
+# ──────────────────────────────────────────────
+# Solo acepta requests de tu dominio real
+# ──────────────────────────────────────────────
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+# En el .env del servidor: ALLOWED_HOSTS=miapp.com,www.miapp.com
+
+# ──────────────────────────────────────────────
+# Base de datos: PostgreSQL (diseñada para producción)
+# ──────────────────────────────────────────────
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('DB_NAME'),
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
         'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
-```
 
-| SQLite                              | PostgreSQL                                 |
-| :---------------------------------- | :----------------------------------------- |
-| Un solo archivo                     | Servidor dedicado                          |
-| No maneja bien múltiples usuarios   | Diseñado para concurrencia                 |
-| Perfecto para desarrollo            | Estándar de la industria en producción     |
-| No necesita instalación             | Necesita instalación y configuración       |
+# ──────────────────────────────────────────────
+# Seguridad — TODO activado en producción
+# ──────────────────────────────────────────────
+SESSION_COOKIE_SECURE = True        # Cookie de sesión solo por HTTPS
+CSRF_COOKIE_SECURE = True           # Cookie CSRF solo por HTTPS
+SECURE_SSL_REDIRECT = True          # Redirige HTTP → HTTPS
+SECURE_HSTS_SECONDS = 31536000      # Fuerza HTTPS por 1 año
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
 
----
+# ──────────────────────────────────────────────
+# Archivos estáticos con WhiteNoise
+# ──────────────────────────────────────────────
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-### 5. Cookies seguras
-
-```python
-# En producción con HTTPS:
-SESSION_COOKIE_SECURE = True      # Cookie de sesión solo viaja por HTTPS
-CSRF_COOKIE_SECURE = True         # Cookie CSRF solo viaja por HTTPS
-SESSION_COOKIE_HTTPONLY = True     # JavaScript no puede leer la cookie de sesión
-CSRF_COOKIE_HTTPONLY = True        # JavaScript no puede leer la cookie CSRF
-```
-
----
-
-### 6. Headers de seguridad
-
-```python
-SECURE_BROWSER_XSS_FILTER = True            # Activa filtro XSS del navegador
-SECURE_CONTENT_TYPE_NOSNIFF = True           # Evita que el navegador adivine el tipo MIME
-X_FRAME_OPTIONS = 'DENY'                    # Impide que tu sitio se meta en un iframe
-SECURE_HSTS_SECONDS = 31536000              # Fuerza HTTPS por 1 año
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True       # Incluye subdominios en HSTS
-SECURE_HSTS_PRELOAD = True                  # Permite entrar en la lista de HSTS preload
-SECURE_SSL_REDIRECT = True                  # Redirige HTTP → HTTPS automáticamente
-```
-
----
-
-### 7. Logging en producción
-
-```python
+# ──────────────────────────────────────────────
+# Logging — registrar errores en archivo
+# ──────────────────────────────────────────────
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -296,7 +1044,7 @@ LOGGING = {
         'file': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/django/app.log',
+            'filename': BASE_DIR / 'logs' / 'django.log',
         },
     },
     'loggers': {
@@ -309,349 +1057,267 @@ LOGGING = {
 }
 ```
 
-> 💡 **Sin logs, no sabes qué pasa en producción.** Es como manejar de noche sin luces.
-
 ---
 
-### Patrón recomendado: separar settings
+### Paso 7: Actualizar `wsgi.py` y `asgi.py`
 
-```
-config/
-├── settings/
-│   ├── __init__.py      # importa el settings correcto
-│   ├── base.py          # todo lo común (INSTALLED_APPS, etc.)
-│   ├── development.py   # DEBUG=True, SQLite, sin HTTPS
-│   └── production.py    # DEBUG=False, PostgreSQL, seguridad
-```
+Estos archivos ya tienen la línea que dice qué settings usar. **No necesitan cambiar** porque el `__init__.py` se encarga de cargar el archivo correcto:
 
 ```python
-# config/settings/production.py
-from .base import *
-
-DEBUG = False
-ALLOWED_HOSTS = [os.environ.get('DOMAIN')]
-# ... todas las configs de seguridad
+# config/wsgi.py — generalmente ya dice esto:
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+# 'config.settings' ahora es la carpeta, y __init__.py decide qué cargar
 ```
 
 ---
 
----
+### Paso 8: Configurar el `.env` del servidor
 
-# 🔐 5. Fase 3 — Variables de Entorno y Secretos
-
----
-
-> Esta fase conecta directamente con lo que vimos en la **clase 6b** sobre `.env` files.
-
-## ¿Qué NUNCA debe estar en el código?
-
-```
-❌ SECRET_KEY
-❌ Contraseñas de base de datos
-❌ API keys de terceros (Stripe, AWS, SendGrid...)
-❌ Tokens de acceso
-❌ Credenciales de email
-❌ Cualquier dato que, si alguien lo ve, pueda causar daño
-```
-
-## ¿Dónde van?
-
-```
-✅ En un archivo .env (NUNCA en git)
-✅ En variables de entorno del servidor
-✅ En un servicio de secretos (AWS Secrets Manager, Vault)
-```
-
-## El patrón `.env` + `.env.example`
+En el servidor de producción, necesitas agregar una variable extra:
 
 ```bash
-# .env (NUNCA SE SUBE A GIT — está en .gitignore)
-SECRET_KEY=una-clave-ultra-secreta-generada-aleatoriamente
-DB_NAME=mi_base_datos
-DB_USER=mi_usuario
-DB_PASSWORD=contraseña-super-segura
-DEBUG=False
+# .env en el SERVIDOR (producción):
+DJANGO_ENV=production
+SECRET_KEY=clave-ultra-segura-generada-aleatoriamente
 ALLOWED_HOSTS=miapp.com,www.miapp.com
+DB_NAME=mi_base_datos_prod
+DB_USER=mi_usuario_prod
+DB_PASSWORD=contraseña-super-segura
 ```
 
 ```bash
-# .env.example (SÍ SE SUBE A GIT — es la plantilla)
-SECRET_KEY=cambiar-esta-clave
-DB_NAME=nombre_de_tu_base_de_datos
-DB_USER=tu_usuario
-DB_PASSWORD=tu_contraseña
+# .env en TU MÁQUINA (desarrollo):
+# No necesitas DJANGO_ENV — si no existe, __init__.py carga development.py
+SECRET_KEY=django-insecure-clave-de-desarrollo
+```
+
+---
+
+## Resultado final: la estructura completa
+
+```
+mi_proyecto/
+├── config/
+│   ├── __init__.py
+│   ├── settings/                    ← Carpeta de settings
+│   │   ├── __init__.py              ← Decide cuál cargar (dev o prod)
+│   │   ├── base.py                  ← Todo lo COMÚN
+│   │   ├── development.py           ← Solo para desarrollo
+│   │   └── production.py            ← Solo para producción
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── asgi.py
+├── mi_app/
+├── .env                             ← Valores locales
+├── .env.example                     ← Plantilla
+├── requirements.txt
+└── manage.py
+```
+
+---
+
+## ¿Cómo funciona en la práctica?
+
+```
+EN TU COMPUTADOR (desarrollo):
+──────────────────────────────
+1. No tienes DJANGO_ENV en tu .env (o dice "development")
+2. __init__.py carga development.py
+3. development.py importa base.py + agrega DEBUG=True, SQLite, etc.
+4. Resultado: desarrollo cómodo con toda la ayuda de Django
+
+EN EL SERVIDOR (producción):
+──────────────────────────────
+1. DJANGO_ENV=production en el .env del servidor
+2. __init__.py carga production.py
+3. production.py importa base.py + agrega DEBUG=False, PostgreSQL, seguridad
+4. Resultado: producción segura y optimizada
+
+EL CÓDIGO ES EL MISMO EN AMBOS → solo cambia el .env
+```
+
+---
+
+## Diagrama visual
+
+```
+                    ┌─────────────────────┐
+                    │     __init__.py     │
+                    │  Lee DJANGO_ENV     │
+                    └──────────┬──────────┘
+                               │
+              ┌────────────────┴────────────────┐
+              │                                  │
+    DJANGO_ENV != production           DJANGO_ENV = production
+              │                                  │
+              ▼                                  ▼
+    ┌─────────────────┐                ┌─────────────────┐
+    │ development.py  │                │  production.py  │
+    │                 │                │                 │
+    │ from .base      │                │ from .base      │
+    │   import *      │                │   import *      │
+    │                 │                │                 │
+    │ DEBUG = True    │                │ DEBUG = False   │
+    │ SQLite          │                │ PostgreSQL      │
+    │ Sin HTTPS       │                │ HTTPS forzado   │
+    │ Sin seguridad   │                │ Seguridad total │
+    │   extra         │                │                 │
+    └────────┬────────┘                └────────┬────────┘
+             │                                  │
+             └──────────────┬───────────────────┘
+                            │
+                  ┌─────────▼─────────┐
+                  │     base.py       │
+                  │                   │
+                  │ INSTALLED_APPS    │
+                  │ MIDDLEWARE        │
+                  │ TEMPLATES         │
+                  │ AUTH_VALIDATORS   │
+                  │ LANGUAGE_CODE     │
+                  │ STATIC_URL       │
+                  │ etc.              │
+                  └───────────────────┘
+```
+
+---
+
+## La alternativa simple: un solo `settings.py` con `if`
+
+Si la carpeta te parece demasiado para tu proyecto actual, hay una alternativa más simple que también funciona. Un solo `settings.py` que lee todo de variables de entorno:
+
+```python
+# config/settings.py — versión con un solo archivo
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+SECRET_KEY = os.environ.get('SECRET_KEY', 'clave-de-desarrollo-insegura')
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+
+# Base de datos: cambia según DEBUG
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DB_NAME'),
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASSWORD'),
+            'HOST': os.environ.get('DB_HOST', 'localhost'),
+            'PORT': os.environ.get('DB_PORT', '5432'),
+        }
+    }
+
+# Seguridad: solo en producción (cuando DEBUG es False)
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
+```
+
+> 💡 **¿Cuál elegir?** Para proyectos pequeños, un solo `settings.py` con `if DEBUG` es suficiente. Para proyectos profesionales o con equipo, la carpeta `settings/` es el estándar de la industria.
+
+| Enfoque                        | Cuándo usarlo                          |
+| :----------------------------- | :------------------------------------- |
+| Un solo `settings.py` con `if` | Proyectos personales, práctica, MVPs   |
+| Carpeta `settings/`            | Proyectos profesionales, trabajo en equipo |
+
+---
+
+## Checklist de settings
+
+```
+[ ] SECRET_KEY se lee de variable de entorno (no está hardcodeada)
+[ ] DEBUG se lee de variable de entorno o está en el archivo correcto
+[ ] ALLOWED_HOSTS se configura correctamente para cada entorno
+[ ] La base de datos puede cambiar entre SQLite (dev) y PostgreSQL (prod)
+[ ] BASE_DIR tiene la cantidad correcta de .parent
+[ ] python manage.py check funciona sin errores
+[ ] python manage.py check --deploy muestra los warnings y los entiendo
+[ ] Probé que el proyecto arranca correctamente con la nueva estructura
+```
+
+---
+
+---
+
+# 🔑 10. Variables de Entorno: El `.env` Listo
+
+---
+
+> Esto lo vimos en la **clase 6b**. Aquí verificamos que está **hecho**, no que lo sepan.
+
+## Archivos que deben existir
+
+```
+tu_proyecto/
+├── .env              ← Con valores REALES de desarrollo (NO en git)
+├── .env.example      ← Con valores de EJEMPLO (SÍ en git)
+└── .gitignore        ← Con .env incluido
+```
+
+### `.env` de desarrollo
+
+```bash
+SECRET_KEY=django-insecure-clave-local-de-desarrollo
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1
+DB_NAME=mi_base_datos
+DB_USER=mi_usuario
+DB_PASSWORD=mi_password
 ```
 
-## Checklist de secretos
-
-```
-[ ] El archivo .env existe y tiene todos los valores reales
-[ ] El archivo .env está en .gitignore
-[ ] El archivo .env.example existe con valores de ejemplo
-[ ] SECRET_KEY es única y fue generada aleatoriamente
-[ ] Las credenciales de la base de datos están en .env
-[ ] Ningún secreto aparece en el código fuente
-[ ] Verificar con: grep -rn "SECRET_KEY\|PASSWORD\|API_KEY" (excluyendo .env)
-```
-
-> ⚠️ **El caso real:** En 2023, un developer subió sus credenciales de AWS a GitHub. Bots automáticos las detectaron en **menos de 5 minutos** y generaron más de **$50,000 USD** en cargos de minería de criptomonedas antes de que el developer se diera cuenta. _(Fuente: TheRegister, 2023)_
-
----
-
----
-
-# 🗄️ 6. Fase 4 — Base de Datos
-
----
-
-## Checklist de base de datos
-
-```
-[ ] Las migraciones están al día
-    → python manage.py makemigrations --check
-    → Si dice "No changes detected" → OK
-    → Si crea migraciones nuevas → hay cambios sin migrar
-
-[ ] Todas las migraciones se aplicaron
-    → python manage.py showmigrations
-    → Todas deben tener [X], ninguna sin aplicar [ ]
-
-[ ] La base de datos de producción es PostgreSQL (no SQLite)
-    → SQLite no soporta escrituras concurrentes
-
-[ ] Hay un plan de backups
-    → ¿Cada cuánto se hace backup? ¿Dónde se guardan?
-    → Sin backup, un error puede borrar AÑOS de datos
-
-[ ] Los datos sensibles están cifrados o hasheados
-    → Contraseñas: Django las hashea automáticamente ✅
-    → Datos personales: considerar cifrado adicional
-
-[ ] No hay datos de prueba en la base de producción
-    → Usuarios "test@test.com", productos "asdf", etc.
-```
-
-### El comando más importante antes de deploy
+### `.env.example` (plantilla para el equipo)
 
 ```bash
-# Verifica que no hay migraciones pendientes
-python manage.py migrate --check
-# Si dice "Unapplied migration(s)" → hay que migrar primero
+SECRET_KEY=cambiar-esta-clave-por-una-segura
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+DB_NAME=nombre_base_datos
+DB_USER=usuario
+DB_PASSWORD=contraseña
 ```
 
-### La analogía
-
-> 🏠 **Mudanza:** La base de datos es tu mueblería. No te llevas los muebles rotos a la casa nueva. Y pones seguro en el bodegaje.
-
----
-
----
-
-# 📁 7. Fase 5 — Archivos Estáticos y Media
-
----
-
-En desarrollo, Django sirve los archivos estáticos automáticamente (CSS, JS, imágenes). **En producción, Django NO los sirve.** Necesitas que otro servicio lo haga (Nginx, WhiteNoise, CDN).
-
-## ¿Qué son los archivos estáticos?
+## Checklist de variables de entorno
 
 ```
-ESTÁTICOS (static/)                     MEDIA (media/)
-─────────────────                       ──────────────
-CSS, JavaScript, imágenes del diseño    Archivos que suben los usuarios
-NO cambian con el uso                   Cambian constantemente
-Se recopilan con collectstatic          Se guardan donde configures
-Ejemplo: logo.png, styles.css          Ejemplo: foto_perfil.jpg, cv.pdf
-```
-
-## Configuración para producción
-
-```python
-# settings/production.py
-
-# Archivos estáticos
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # aquí collectstatic los recopila
-
-# Archivos media (subidos por usuarios)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-```
-
-## El comando `collectstatic`
-
-```bash
-# Recopila TODOS los archivos estáticos de todas las apps
-# en una sola carpeta (STATIC_ROOT) para que Nginx los sirva
-python manage.py collectstatic
-
-# Te va a pedir confirmación:
-# "This will overwrite existing files! Are you sure? (yes/no)"
-# → yes
-```
-
-## Opción simple: WhiteNoise
-
-Si no quieres configurar Nginx solo para estáticos, **WhiteNoise** permite que Django los sirva eficientemente:
-
-```bash
-pip install whitenoise
-```
-
-```python
-# settings.py
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # ← justo después de SecurityMiddleware
-    # ... resto de middlewares
-]
-
-# Compresión y cache automáticos
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-```
-
-## Checklist de archivos
-
-```
-[ ] STATIC_ROOT está configurado
-[ ] python manage.py collectstatic funciona sin errores
-[ ] Los archivos estáticos se sirven correctamente en producción
-[ ] MEDIA_ROOT está configurado si hay uploads de usuarios
-[ ] Los archivos media tienen permisos de escritura en el servidor
-[ ] Las imágenes de usuarios no se sirven desde una ruta ejecutable
+[ ] .env existe con valores reales
+[ ] .env.example existe con valores de ejemplo
+[ ] .env está en .gitignore
+[ ] settings.py lee las variables con os.environ.get() o django-environ
+[ ] python-dotenv o django-environ está en requirements.txt
+[ ] Puedo borrar el .env, copiar el .env.example, poner mis datos,
+    y el proyecto arranca (así es como funcionará el día de deploy)
 ```
 
 ---
 
 ---
 
-# 🛡️ 8. Fase 6 — Seguridad (OWASP y Django)
+# 📂 11. Git y `.gitignore`: Repositorio Limpio
 
 ---
 
-> Esta fase conecta directamente con la **clase 8b del módulo 6** sobre OWASP Top 10.
+Tu repositorio de Git debe estar **limpio y profesional**. El día de deploy, posiblemente clones el repo en el servidor. Si tiene archivos basura, pesa más, es confuso, y puede ser inseguro.
 
-## Checklist rápido de seguridad
-
-```
-[ ] DEBUG = False
-[ ] SECRET_KEY única y en variable de entorno
-[ ] ALLOWED_HOSTS especifica solo tu dominio
-[ ] CSRF protección activa ({% csrf_token %} en todos los forms POST)
-[ ] SESSION_COOKIE_SECURE = True
-[ ] CSRF_COOKIE_SECURE = True
-[ ] SECURE_SSL_REDIRECT = True
-[ ] SECURE_HSTS_SECONDS configurado
-[ ] X_FRAME_OPTIONS = 'DENY'
-[ ] python manage.py check --deploy no muestra errores críticos
-[ ] No hay vistas sensibles sin @login_required
-[ ] No hay datos sensibles en campos ocultos de formularios
-[ ] No se usa cursor.execute() con strings concatenados del usuario
-[ ] Las contraseñas se hashean (Django lo hace automáticamente)
-[ ] AUTH_PASSWORD_VALIDATORS está configurado
-```
-
-### El test definitivo
-
-```bash
-$ python manage.py check --deploy
-
-# Si no da WARNINGS ni ERRORS → tu configuración de seguridad es correcta
-# Si da WARNINGS → léelos uno por uno y arregla cada uno
-```
-
-> 💡 **Regla de oro:** Si `python manage.py check --deploy` da 0 warnings, tu configuración básica de seguridad está bien. No es garantía total, pero cubre el 80% de los errores comunes.
-
----
-
----
-
-# 📦 9. Fase 7 — Dependencias y `requirements.txt`
-
----
-
-## ¿Por qué importa?
-
-Tu proyecto funciona en tu máquina porque tiene todas las librerías instaladas. El servidor no tiene nada. Necesitas decirle **exactamente** qué instalar y en qué versión.
-
-## Generar el requirements.txt
-
-```bash
-# Forma básica:
-pip freeze > requirements.txt
-
-# El archivo se ve así:
-Django==5.1.5
-Pillow==10.2.0
-python-dotenv==1.0.1
-psycopg2-binary==2.9.9
-whitenoise==6.6.0
-```
-
-## Checklist de dependencias
-
-```
-[ ] requirements.txt existe y está actualizado
-[ ] Las versiones están fijadas (== no >=)
-    → Django==5.1.5 ✅
-    → Django>=5.0 ❌ (puede instalar una versión incompatible)
-
-[ ] No hay librerías de desarrollo en requirements.txt
-    → Separar: requirements.txt (producción) y requirements-dev.txt (desarrollo)
-    → Ejemplo: django-debug-toolbar va en dev, NO en producción
-
-[ ] pip-audit no reporta vulnerabilidades
-    → pip install pip-audit && pip-audit
-    → Revisa si alguna librería tiene CVEs conocidos
-
-[ ] El entorno virtual está limpio
-    → No tiene librerías de otros proyectos
-```
-
-### Patrón de archivos de requirements
-
-```
-requirements/
-├── base.txt          # Lo que necesitan TODOS los entornos
-├── development.txt   # Solo desarrollo (debug-toolbar, etc.)
-└── production.txt    # Solo producción (gunicorn, psycopg2, etc.)
-```
-
-```
-# requirements/development.txt
--r base.txt
-django-debug-toolbar==4.2.0
-```
-
-```
-# requirements/production.txt
--r base.txt
-gunicorn==21.2.0
-psycopg2-binary==2.9.9
-whitenoise==6.6.0
-```
-
----
-
----
-
-# 📂 10. Fase 8 — Git, `.gitignore` y Control de Versiones
-
----
-
-## ¿Qué NUNCA debe subirse a Git?
+## `.gitignore` mínimo para Django
 
 ```gitignore
-# .gitignore — MÍNIMO para un proyecto Django
-
 # Entorno virtual
 venv/
 .venv/
 env/
 
-# Variables de entorno con secretos
+# Variables de entorno (SECRETOS)
 .env
 
 # Base de datos local
@@ -663,17 +1329,16 @@ __pycache__/
 *.py[cod]
 *.pyc
 
-# Archivos de media subidos por usuarios
+# Archivos de media (subidos por usuarios)
 media/
 
 # Archivos estáticos recopilados
 staticfiles/
 
-# IDE y editor
+# Editor / IDE
 .vscode/
 .idea/
 *.swp
-*.swo
 
 # Sistema operativo
 .DS_Store
@@ -686,470 +1351,432 @@ Thumbs.db
 ## Checklist de Git
 
 ```
-[ ] .gitignore existe y cubre todo lo de arriba
-[ ] El archivo .env NO está en el historial de git
-    → Verificar: git log --all --full-history -- .env
-    → Si aparece: hay que limpiar el historial (git filter-branch)
-
-[ ] No hay archivos grandes innecesarios en el repo
-    → Imágenes pesadas, videos, backups de BD
-
-[ ] El proyecto tiene un README.md con instrucciones de setup
-    → Cómo instalar, cómo correr, cómo hacer deploy
-
+[ ] .gitignore existe con todo lo de arriba
+[ ] git status está limpio (todo comiteado)
+[ ] .env NO está en el historial de git
+    → Verificar: git log --all -- .env
+    → Si aparece algo, el secreto está comprometido
+[ ] __pycache__/ NO está en el repo
+[ ] db.sqlite3 NO está en el repo (o si lo necesitas, es consciente)
+[ ] venv/ NO está en el repo
 [ ] Los commits tienen mensajes descriptivos
-    → "fix bug" ❌ → "Fix: validación de email duplicado en formulario de registro" ✅
+    → "fix" ❌ → "Corregir validación de email en formulario de registro" ✅
+[ ] El repo está subido a GitHub/GitLab y accesible
 ```
 
-> ⚠️ **Dato importante:** Una vez que un archivo se sube a Git, **queda en el historial para siempre**, incluso si lo borras después. Si subiste un `.env` con un `SECRET_KEY`, esa clave está comprometida aunque la borres. Hay que regenerarla.
+> ⚠️ **Recordatorio:** Lo que sube a Git **queda para siempre** en el historial. Si subiste el `.env` con un `SECRET_KEY` aunque sea una vez, esa clave está comprometida. Regenerala.
 
 ---
 
 ---
 
-# 🧪 11. Fase 9 — Testing: ¿Funciona Todo?
+# 📦 12. Dependencias: `requirements.txt` Actualizado
 
 ---
 
-## Niveles de testing antes de deploy
+El servidor donde hagas deploy no tiene nada instalado. El `requirements.txt` le dice **exactamente** qué instalar.
 
-```
-NIVEL 1: ¿La app arranca?
-──────────────────────────
-python manage.py check              → ¿Hay errores de configuración?
-python manage.py migrate --check    → ¿Hay migraciones pendientes?
-python manage.py collectstatic      → ¿Los estáticos se recopilan bien?
-
-NIVEL 2: ¿Los tests pasan?
-──────────────────────────
-python manage.py test               → ¿Todos los tests unitarios pasan?
-
-NIVEL 3: ¿Funciona como usuario?
-──────────────────────────────────
-Abrir cada página principal          → ¿Carga correctamente?
-Enviar cada formulario               → ¿Procesa sin error?
-Probar login / logout                → ¿Funciona?
-Probar con datos extremos            → Vacíos, muy largos, caracteres especiales
-
-NIVEL 4: ¿Funciona en el servidor?
-──────────────────────────────────
-Después de deploy, repetir nivel 3   → En la URL real, no en localhost
-```
-
-## Checklist de testing
-
-```
-[ ] python manage.py check no da errores
-[ ] python manage.py check --deploy no da warnings críticos
-[ ] python manage.py test pasa al 100%
-[ ] Probé manualmente las funcionalidades principales
-[ ] Probé con un navegador diferente
-[ ] Probé en modo incógnito (sin caché)
-[ ] Probé la versión móvil (responsive)
-```
-
----
-
----
-
-# 🖥️ 12. Fase 10 — El Servidor: ¿Dónde Vive tu App?
-
----
-
-## Opciones de hosting para Django
-
-| Plataforma         | Dificultad   | Costo          | Ideal para                          |
-| :----------------- | :----------- | :------------- | :---------------------------------- |
-| **Railway**        | ⭐ Fácil     | Gratis/Pago    | Proyectos pequeños, demos           |
-| **Render**         | ⭐ Fácil     | Gratis/Pago    | Apps con base de datos              |
-| **DigitalOcean**   | ⭐⭐ Medio   | Desde $5/mes   | Proyectos medianos                  |
-| **AWS EC2**        | ⭐⭐⭐ Difícil | Variable       | Producción empresarial              |
-| **Heroku**         | ⭐ Fácil     | Desde $5/mes   | Prototipado rápido                  |
-| **VPS propio**     | ⭐⭐⭐ Difícil | Desde $3/mes   | Control total                       |
-
-## ¿Qué necesita el servidor?
-
-```
-MÍNIMO PARA DJANGO EN PRODUCCIÓN:
-─────────────────────────────────
-✅ Python 3.10+
-✅ pip (gestor de paquetes)
-✅ Entorno virtual (venv)
-✅ Base de datos (PostgreSQL)
-✅ Servidor WSGI (Gunicorn)
-✅ Servidor web reverso (Nginx) — opcional con algunos hosts
-✅ Certificado SSL (Let's Encrypt — gratis)
-```
-
-## La arquitectura de producción
-
-```
-                    INTERNET
-                       │
-                       ▼
-              ┌─────────────────┐
-              │     NGINX       │  ← Sirve archivos estáticos
-              │  (puerto 80/443)│  ← Maneja HTTPS
-              │                 │  ← Redirige requests a Gunicorn
-              └────────┬────────┘
-                       │
-                       ▼
-              ┌─────────────────┐
-              │    GUNICORN     │  ← Servidor WSGI
-              │  (puerto 8000)  │  ← Ejecuta tu código Django
-              │                 │  ← Maneja múltiples workers
-              └────────┬────────┘
-                       │
-                       ▼
-              ┌─────────────────┐
-              │     DJANGO      │  ← Tu aplicación
-              │   (tu código)   │  ← Procesa la lógica de negocio
-              └────────┬────────┘
-                       │
-                       ▼
-              ┌─────────────────┐
-              │   POSTGRESQL    │  ← Base de datos
-              │  (puerto 5432)  │  ← Almacena los datos
-              └─────────────────┘
-```
-
-### ¿Por qué NO `python manage.py runserver` en producción?
-
-| `runserver`                                | Gunicorn                                   |
-| :----------------------------------------- | :----------------------------------------- |
-| Un solo proceso, un solo hilo              | Múltiples workers en paralelo              |
-| Se cae con carga media                     | Diseñado para manejar cientos de requests  |
-| No tiene seguridad                         | Puede configurarse con timeouts y límites  |
-| Es para **desarrollo**                     | Es para **producción**                     |
-
-> ⚠️ **La documentación de Django lo dice explícitamente:** _"DO NOT USE THIS SERVER IN A PRODUCTION SETTING. It has not gone through security audits or performance tests."_ No es opinión — es una advertencia oficial.
-
----
-
----
-
-# 🌐 13. Fase 11 — DNS y Dominio
-
----
-
-## ¿Qué es un dominio?
-
-Es la dirección legible: `www.miapp.com` en vez de `143.198.45.123`.
-
-## Configuración básica de DNS
-
-```
-TIPO     NOMBRE           VALOR                    PARA QUÉ
-─────    ──────           ─────                    ─────────
-A        miapp.com        143.198.45.123           Apunta el dominio a la IP del servidor
-CNAME    www.miapp.com    miapp.com                www redirige al dominio principal
-```
-
-## Checklist de dominio
-
-```
-[ ] El dominio está registrado y activo
-[ ] Los registros DNS apuntan al servidor correcto
-[ ] ALLOWED_HOSTS en Django incluye el dominio
-[ ] La propagación DNS completó (puede tardar hasta 48h)
-[ ] Tanto miapp.com como www.miapp.com funcionan
-```
-
----
-
----
-
-# 🔒 14. Fase 12 — HTTPS y Certificados SSL
-
----
-
-## ¿Por qué HTTPS es obligatorio?
-
-Sin HTTPS, **todo** lo que viaja entre el usuario y tu servidor va en texto plano. Contraseñas, datos personales, cookies — todo visible para cualquier persona en la misma red.
-
-```
-HTTP  (sin candado 🔓)              HTTPS (con candado 🔐)
-─────────────────────                ──────────────────────
-usuario: juan                        ◆◇▲●□◆◇▲●□◆◇▲●□
-password: micontraseña123            ◆◇▲●□◆◇▲●□◆◇▲●□
-
-↑ Cualquiera en la red WiFi          ↑ Cifrado. Nadie puede leerlo.
-  puede leer esto.
-```
-
-## Certificado SSL gratuito con Let's Encrypt
+## Generar el archivo
 
 ```bash
-# En un servidor con Nginx (Ubuntu/Debian):
-sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d miapp.com -d www.miapp.com
-
-# Certbot:
-# 1. Obtiene el certificado automáticamente
-# 2. Configura Nginx para HTTPS
-# 3. Se renueva automáticamente cada 90 días
+pip freeze > requirements.txt
 ```
 
-## Checklist de HTTPS
+## ¿Cómo se ve un requirements.txt correcto?
 
 ```
-[ ] Certificado SSL instalado y válido
-[ ] HTTP redirige automáticamente a HTTPS
-[ ] SECURE_SSL_REDIRECT = True en Django
-[ ] SESSION_COOKIE_SECURE = True
-[ ] CSRF_COOKIE_SECURE = True
-[ ] Verificar en el navegador: candado verde en la barra de direcciones
+Django==5.1.5
+Pillow==10.2.0
+python-dotenv==1.0.1
+psycopg2-binary==2.9.9
+whitenoise==6.6.0
+gunicorn==21.2.0
 ```
 
----
+### Puntos clave
 
----
+| Regla                              | ¿Por qué?                                                           |
+| :--------------------------------- | :------------------------------------------------------------------- |
+| Versiones fijadas con `==`         | Para que en el servidor se instale **exactamente** lo mismo          |
+| Sin librerías de desarrollo        | `django-debug-toolbar` NO debe estar en producción                   |
+| `python-dotenv` incluido           | Si usas `.env`, la librería que lo lee debe estar                    |
+| `gunicorn` incluido                | Es el servidor WSGI de producción (reemplaza `runserver`)            |
+| `psycopg2-binary` incluido         | Si usarás PostgreSQL                                                 |
 
-# 📊 15. Fase 13 — Monitoreo y Logs Post-Deploy
-
----
-
-Deploy no es el final. Es el **principio** de la operación.
-
-## ¿Qué monitorear?
-
-```
-ERRORES          → ¿Hay errores 500 en los logs?
-RENDIMIENTO      → ¿Las páginas cargan en menos de 3 segundos?
-DISPONIBILIDAD   → ¿El sitio está arriba 24/7?
-SEGURIDAD        → ¿Hay intentos de acceso sospechosos?
-BASE DE DATOS    → ¿Las queries son eficientes? ¿Hay conexiones colgadas?
-DISCO            → ¿Hay espacio suficiente? (logs y media crecen)
-```
-
-## Herramientas de monitoreo
-
-| Herramienta          | ¿Qué hace?                                      | Costo           |
-| :------------------- | :----------------------------------------------- | :-------------- |
-| **Sentry**           | Captura errores automáticamente con contexto      | Gratis hasta 5k eventos/mes |
-| **UptimeRobot**      | Te avisa si tu sitio se cae                      | Gratis          |
-| **New Relic**        | Rendimiento detallado de la app                  | Gratis tier     |
-| **Logs del servidor** | `tail -f /var/log/django/app.log`                | Gratis          |
-
-## Checklist post-deploy
+## Checklist de dependencias
 
 ```
-[ ] El sitio carga correctamente en la URL de producción
-[ ] Los formularios funcionan (enviar uno de prueba)
-[ ] Login y logout funcionan
-[ ] Los archivos estáticos cargan (CSS, JS, imágenes)
-[ ] Los uploads de usuarios funcionan (si aplica)
-[ ] Los logs registran actividad correctamente
-[ ] Hay un plan de backup activo para la base de datos
-[ ] Alguien sabe cómo restaurar si algo falla
+[ ] requirements.txt existe
+[ ] Las versiones están fijadas con == (no >= ni sin versión)
+[ ] pip freeze > requirements.txt lo generé recientemente
+[ ] Puedo crear un venv nuevo, instalar con pip install -r requirements.txt,
+    y el proyecto arranca sin errores
+[ ] No hay librerías de desarrollo innecesarias en el archivo
 ```
 
 ---
 
 ---
 
-# ✅ 16. El Mega-Checklist: Todo en Una Página
+# 🌱 13. Datos Iniciales: ¿Qué Hay en la Base al Arrancar?
+
+---
+
+Cuando hagas deploy, la base de datos del servidor estará **vacía**. Solo tendrá las tablas (por las migraciones). ¿Tu proyecto necesita datos para funcionar?
+
+## Pregúntate
+
+```
+¿Mi sitio necesita datos predefinidos para funcionar?
+──────────────────────────────────────────────────────
+→ ¿Categorías fijas? (ej: "Electrónica", "Ropa", "Alimentos")
+→ ¿Roles de usuario? (ej: "Admin", "Editor", "Vendedor")
+→ ¿Datos de demostración para que no se vea vacío?
+→ ¿Un usuario administrador para acceder al panel de admin?
+```
+
+### Si necesitas datos iniciales, tienes 2 opciones
+
+```
+OPCIÓN 1: Cargarlos a mano desde el admin después de deploy
+          → Funciona para pocos datos (categorías, roles, etc.)
+          → Tedioso si son muchos registros
+
+OPCIÓN 2: Management command personalizado
+          → Un script que crea los datos automáticamente
+          → python manage.py seed o python manage.py cargar_datos
+          → Ideal para datos que siempre son los mismos
+```
+
+| Opción              | Cuándo usarla                                   |
+| :------------------ | :---------------------------------------------- |
+| Admin manual        | Pocos datos, datos que cambian según el proyecto |
+| Management command  | Muchos datos, o datos que siempre son iguales    |
+
+## Checklist de datos
+
+```
+[ ] Identifiqué qué datos necesita mi proyecto para funcionar al arrancar
+[ ] Tengo un plan para cargar esos datos en producción
+   (admin manual o management command)
+[ ] Si uso management command, lo probé y funciona sin errores
+[ ] Sé cómo crear un usuario administrador en el servidor
+```
+
+---
+
+---
+
+# 🧪 14. Testing: ¿Funciona Todo lo que Crees que Funciona?
+
+---
+
+No necesitas tests automatizados perfectos para deploy. Pero necesitas **verificar manualmente** que todo funciona.
+
+## La prueba completa pre-deploy
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│            🧪 PRUEBA MANUAL COMPLETA                             │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  VERIFICACIONES AUTOMÁTICAS (terminal)                           │
+│  [ ] python manage.py check                    → Sin errores     │
+│  [ ] python manage.py check --deploy           → Revisé warnings │
+│  [ ] python manage.py makemigrations --check   → No changes      │
+│  [ ] python manage.py collectstatic            → Funciona        │
+│  [ ] python manage.py test (si tienes tests)   → Todos pasan     │
+│                                                                  │
+│  VERIFICACIONES MANUALES (navegador)                             │
+│  [ ] Página principal carga correctamente                        │
+│  [ ] TODOS los links del navbar funcionan                        │
+│  [ ] TODOS los formularios envían y procesan datos               │
+│  [ ] Login funciona                                              │
+│  [ ] Logout funciona                                             │
+│  [ ] Las páginas protegidas redirigen al login                   │
+│  [ ] El admin de Django funciona (/admin/)                       │
+│  [ ] Las imágenes cargan                                         │
+│  [ ] El CSS se aplica correctamente                              │
+│  [ ] Probé en celular (responsive)                               │
+│  [ ] Probé en modo incógnito (sin caché)                         │
+│  [ ] Las acciones CRUD funcionan (crear, ver, editar, borrar)    │
+│                                                                  │
+│  VERIFICACIONES DE DATOS                                         │
+│  [ ] Los datos que necesita el sitio están cargados              │
+│  [ ] No hay datos de prueba irrelevantes ("test", "asdf")        │
+│  [ ] Los textos no tienen errores de ortografía graves           │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+> 💡 **La prueba más importante:** Abre tu proyecto en modo incógnito en el celular. Si se ve bien y funciona todo, estás listo.
+
+---
+
+---
+
+# ✨ 15. Calidad de Código: Los Detalles Profesionales
+
+---
+
+Estos detalles no rompen tu proyecto, pero marcan la diferencia entre un proyecto de estudiante y uno profesional.
+
+## Lo que debes limpiar
+
+```
+[ ] No hay print() en el código (salvo en management commands)
+    → Buscar: grep -rn "print(" --include="*.py"
+
+[ ] No hay código comentado "por si acaso"
+    → Si está comentado, bórralo. Git lo recuerda.
+
+[ ] No hay imports sin usar
+    → VS Code los marca en gris, elimínalos
+
+[ ] No hay variables sin usar
+
+[ ] No hay contraseñas, tokens o claves en el código
+    → Buscar: grep -rn "password\|secret\|token\|api_key" --include="*.py"
+
+[ ] Los nombres de variables y funciones son descriptivos
+    → x = queryset.get() ❌
+    → cliente = Cliente.objects.get(pk=pk) ✅
+
+[ ] No hay try/except vacíos que esconden errores
+    → except: pass ← NUNCA en producción
+
+[ ] Los archivos tienen un estilo consistente (indentación, espacios)
+```
+
+---
+
+---
+
+# 📖 16. README: El Manual de Tu Proyecto
+
+---
+
+Tu proyecto necesita un `README.md` que explique cómo instalarlo y correrlo. El día de deploy, posiblemente otra persona (o tú mismo desde otro computador) necesite entender cómo funciona.
+
+## Estructura mínima del README
+
+```markdown
+# Nombre del Proyecto
+
+Descripción breve de qué hace el proyecto.
+
+## Requisitos
+
+- Python 3.10+
+- pip
+
+## Instalación
+
+1. Clonar el repositorio
+   git clone https://github.com/usuario/proyecto.git
+   cd proyecto
+
+2. Crear y activar entorno virtual
+   python -m venv venv
+   source venv/bin/activate  (Linux/Mac)
+   venv\Scripts\activate     (Windows)
+
+3. Instalar dependencias
+   pip install -r requirements.txt
+
+4. Configurar variables de entorno
+   cp .env.example .env
+   (editar .env con tus valores)
+
+5. Aplicar migraciones
+   python manage.py migrate
+
+6. Correr el servidor
+   python manage.py runserver
+
+## Uso
+
+Abrir http://localhost:8000 en el navegador.
+```
+
+## Checklist del README
+
+```
+[ ] README.md existe en la raíz del proyecto
+[ ] Describe qué hace el proyecto
+[ ] Tiene instrucciones de instalación paso a paso
+[ ] Menciona el .env.example
+[ ] Si alguien sigue los pasos, el proyecto arranca sin errores
+```
+
+---
+
+---
+
+# ✅ 17. El Mega-Checklist: Todo en Una Página
 
 ---
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                  🚀 MEGA-CHECKLIST PRE-DEPLOY DJANGO                        │
+│           🏁 MEGA-CHECKLIST: ¿ESTÁ TU PROYECTO LISTO PARA DEPLOY?           │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  📝 CÓDIGO                                                                   │
-│  [ ] Sin prints de debugging                                                 │
-│  [ ] Sin código comentado innecesario                                        │
-│  [ ] Sin contraseñas hardcodeadas                                            │
-│  [ ] Vistas protegidas con @login_required donde corresponda                │
-│  [ ] Formularios con validación server-side                                  │
+│  📁 ESTRUCTURA                                                               │
+│  [ ] Proyecto organizado con convenciones Django                             │
+│  [ ] Cada app con sus archivos completos                                     │
+│  [ ] Templates en app/templates/app/                                         │
+│  [ ] Estáticos en app/static/app/                                            │
 │                                                                              │
-│  ⚙️ SETTINGS                                                                 │
-│  [ ] DEBUG = False                                                           │
-│  [ ] SECRET_KEY en variable de entorno                                       │
-│  [ ] ALLOWED_HOSTS con dominio específico                                    │
-│  [ ] Base de datos PostgreSQL configurada                                    │
-│  [ ] Cookies seguras (SESSION_COOKIE_SECURE, CSRF_COOKIE_SECURE)            │
-│  [ ] Headers de seguridad configurados                                       │
-│  [ ] LOGGING configurado                                                     │
+│  🗄️ MODELOS Y BASE DE DATOS                                                  │
+│  [ ] Todos los modelos completos con __str__                                 │
+│  [ ] Migraciones al día (makemigrations --check → "No changes")              │
+│  [ ] Todas las migraciones aplicadas (showmigrations → todo [X])             │
+│  [ ] Modelos registrados en admin.py                                         │
+│  [ ] Datos necesarios para funcionar están cargados o hay plan               │
 │                                                                              │
-│  🔐 SECRETOS                                                                 │
-│  [ ] Archivo .env con valores reales                                         │
-│  [ ] .env en .gitignore                                                      │
-│  [ ] .env.example con valores de ejemplo en git                              │
-│  [ ] Ningún secreto en el código fuente                                      │
+│  🔗 VISTAS Y URLS                                                            │
+│  [ ] Cada URL tiene name y namespace                                         │
+│  [ ] Cada vista funciona sin error 500                                       │
+│  [ ] Vistas privadas protegidas con @login_required                          │
+│  [ ] Todos los POSTs tienen {% csrf_token %}                                 │
+│  [ ] No hay links rotos                                                      │
 │                                                                              │
-│  🗄️ BASE DE DATOS                                                            │
-│  [ ] Migraciones al día (makemigrations --check)                             │
-│  [ ] Todas las migraciones aplicadas (showmigrations)                        │
-│  [ ] Plan de backups definido                                                │
-│  [ ] Sin datos de prueba                                                     │
+│  🎨 TEMPLATES Y FRONTEND                                                     │
+│  [ ] Template base funcional (DOCTYPE, viewport, static)                     │
+│  [ ] Responsive: probado en celular, tablet y escritorio                     │
+│  [ ] Sin Lorem Ipsum ni contenido placeholder                                │
+│  [ ] Diseño consistente en todas las páginas                                 │
+│  [ ] Navbar y footer en todas las páginas                                    │
+│  [ ] Sin imágenes rotas                                                      │
 │                                                                              │
-│  📁 ARCHIVOS                                                                 │
+│  📝 FORMULARIOS                                                              │
+│  [ ] Cada formulario tiene csrf_token y valida en el servidor                │
+│  [ ] Errores se muestran al usuario                                          │
+│  [ ] Redirect después de POST exitoso                                        │
+│  [ ] Probados con datos buenos, malos y vacíos                               │
+│                                                                              │
+│  🔐 AUTENTICACIÓN                                                            │
+│  [ ] Login y logout funcionan                                                │
+│  [ ] Páginas privadas redirigen al login                                     │
+│  [ ] Usuario administrador creado, admin funcional                           │
+│                                                                              │
+│  📁 ARCHIVOS ESTÁTICOS                                                       │
+│  [ ] Templates usan {% static %} (no rutas hardcodeadas)                     │
 │  [ ] STATIC_ROOT configurado                                                 │
 │  [ ] collectstatic funciona sin errores                                      │
-│  [ ] MEDIA_ROOT configurado (si hay uploads)                                 │
-│  [ ] WhiteNoise o Nginx sirviendo estáticos                                  │
 │                                                                              │
-│  🛡️ SEGURIDAD                                                                │
-│  [ ] python manage.py check --deploy → 0 warnings                           │
-│  [ ] CSRF activo en todos los formularios POST                               │
-│  [ ] No hay SQL concatenado con input del usuario                            │
-│  [ ] AUTH_PASSWORD_VALIDATORS configurado                                    │
+│  ⚙️ SETTINGS                                                                  │
+│  [ ] SECRET_KEY lee de variable de entorno                                   │
+│  [ ] DEBUG lee de variable de entorno                                        │
+│  [ ] ALLOWED_HOSTS lee de variable de entorno                                │
+│  [ ] python manage.py check → sin errores                                    │
+│                                                                              │
+│  🔑 VARIABLES DE ENTORNO                                                     │
+│  [ ] .env existe y funciona                                                  │
+│  [ ] .env.example existe en el repo                                          │
+│  [ ] .env está en .gitignore                                                 │
+│                                                                              │
+│  📂 GIT                                                                      │
+│  [ ] .gitignore completo (venv, .env, __pycache__, db.sqlite3)               │
+│  [ ] Repo limpio, todo comiteado                                             │
+│  [ ] .env nunca en el historial                                              │
+│  [ ] Subido a GitHub/GitLab                                                  │
 │                                                                              │
 │  📦 DEPENDENCIAS                                                             │
 │  [ ] requirements.txt actualizado con versiones fijadas                      │
-│  [ ] pip-audit sin vulnerabilidades                                          │
-│  [ ] Sin librerías de desarrollo en producción                               │
+│  [ ] Instalando desde requirements.txt, el proyecto arranca                  │
 │                                                                              │
-│  📂 GIT                                                                      │
-│  [ ] .gitignore completo                                                     │
-│  [ ] .env nunca en el historial de git                                       │
-│  [ ] README.md con instrucciones de setup                                    │
+│  📖 DOCUMENTACIÓN                                                            │
+│  [ ] README.md con instrucciones de instalación                              │
 │                                                                              │
 │  🧪 TESTING                                                                  │
-│  [ ] python manage.py check → sin errores                                    │
-│  [ ] python manage.py test → 100% pasan                                      │
-│  [ ] Prueba manual de funcionalidades principales                            │
-│  [ ] Prueba en móvil                                                         │
+│  [ ] Todas las páginas cargan sin errores                                    │
+│  [ ] Todos los formularios funcionan                                         │
+│  [ ] Responsive verificado en celular                                        │
+│  [ ] Probado en modo incógnito                                               │
 │                                                                              │
-│  🖥️ SERVIDOR                                                                 │
-│  [ ] Gunicorn como servidor WSGI (no runserver)                              │
-│  [ ] Nginx como reverse proxy                                                │
-│  [ ] Certificado SSL instalado (Let's Encrypt)                               │
-│  [ ] HTTP redirige a HTTPS                                                   │
-│                                                                              │
-│  🌐 DOMINIO                                                                  │
-│  [ ] DNS configurado correctamente                                           │
-│  [ ] ALLOWED_HOSTS incluye el dominio                                        │
-│  [ ] www y sin-www funcionan                                                  │
-│                                                                              │
-│  📊 POST-DEPLOY                                                              │
-│  [ ] Sitio carga en la URL de producción                                     │
-│  [ ] Formularios funcionan                                                   │
-│  [ ] Archivos estáticos cargan                                               │
-│  [ ] Logs registran correctamente                                            │
-│  [ ] Backup automático activo                                                │
+│  ✨ CÓDIGO LIMPIO                                                             │
+│  [ ] Sin prints de debugging                                                 │
+│  [ ] Sin código comentado innecesario                                        │
+│  [ ] Sin contraseñas en el código                                            │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
----
-
----
-
-# ❌ 17. Los 10 Errores de Deploy Más Comunes (y Cómo Evitarlos)
-
----
-
-### Error 1: "Subí con `DEBUG = True`"
-
-**Consecuencia:** Todo el mundo ve tu código fuente cuando hay un error.
-**Solución:** `DEBUG = False` + `python manage.py check --deploy`.
-
----
-
-### Error 2: "Mi `SECRET_KEY` está en GitHub"
-
-**Consecuencia:** Cualquiera puede falsificar sesiones y hacerse pasar por admin.
-**Solución:** Variable de entorno + `.gitignore` + regenerar la clave.
-
----
-
-### Error 3: "Usé `runserver` en producción"
-
-**Consecuencia:** Se cae con más de 5 usuarios simultáneos.
-**Solución:** Gunicorn + Nginx.
-
----
-
-### Error 4: "No hice `collectstatic`"
-
-**Consecuencia:** El sitio carga sin CSS, sin JavaScript, sin imágenes. Todo roto visualmente.
-**Solución:** `python manage.py collectstatic` + configurar WhiteNoise o Nginx.
-
----
-
-### Error 5: "SQLite en producción"
-
-**Consecuencia:** La base de datos se corrompe con escrituras simultáneas.
-**Solución:** PostgreSQL.
-
----
-
-### Error 6: "No tenía backups y se borró la base de datos"
-
-**Consecuencia:** Pérdida total de datos. Irrecuperable.
-**Solución:** Backup automático diario + guardar backups en otro servidor.
-
----
-
-### Error 7: "No configuré HTTPS"
-
-**Consecuencia:** Las contraseñas viajan en texto plano.
-**Solución:** Let's Encrypt (gratis) + `SECURE_SSL_REDIRECT = True`.
-
----
-
-### Error 8: "Las migraciones no estaban al día"
-
-**Consecuencia:** Error 500 porque la base de datos no tiene las tablas/columnas que el código espera.
-**Solución:** `python manage.py migrate` en el servidor antes de reiniciar la app.
-
----
-
-### Error 9: "No puse `ALLOWED_HOSTS`"
-
-**Consecuencia:** Django rechaza TODOS los requests con error 400.
-**Solución:** `ALLOWED_HOSTS = ['midominio.com']`.
-
----
-
-### Error 10: "No revisé los logs después de deploy"
-
-**Consecuencia:** Errores silenciosos que afectan a usuarios durante días.
-**Solución:** Revisar logs las primeras horas. Configurar alertas con Sentry.
+> 💡 **El día de deploy:** si todo esto tiene ✅, deploy va a ser rápido y sin drama. Si hay ❌, cada uno es un problema que **vas a tener que resolver bajo presión**.
 
 ---
 
 ---
 
-# 🗺️ 18. Diagrama: El Flujo Completo de Deploy
+# ❌ 18. Los 10 Problemas que Siempre Aparecen el Día de Deploy
 
 ---
 
-```
-           ┌─────────────────────────────────────────────────────────────┐
-           │                    FLUJO DE DEPLOY                          │
-           └─────────────────────────────────────────────────────────────┘
+Estos son los problemas que aparecen **cada vez**. Si los resuelves antes, el día de deploy es tranquilo.
 
-    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
-    │  CÓDIGO  │───▷│  CONFIG  │───▷│   GIT    │───▷│ SERVIDOR │
-    │  LIMPIO  │    │ SEGURA   │    │  PUSH    │    │  SETUP   │
-    └──────────┘    └──────────┘    └──────────┘    └──────────┘
-         │               │               │               │
-    ┌─────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
-    │ Sin      │    │ DEBUG=   │    │ .gitignore│   │ Python   │
-    │ prints   │    │ False    │    │ correcto │    │ Gunicorn │
-    │ Sin      │    │ SECRET   │    │ .env NO  │    │ Nginx    │
-    │ hardcode │    │ en .env  │    │ en git   │    │ PostgreSQL│
-    └─────────┘    └──────────┘    └──────────┘    └──────────┘
-                                                        │
-                                                        ▼
-    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
-    │MONITOREO │◁───│  HTTPS   │◁───│   DNS    │◁───│  DEPLOY  │
-    │  Y LOGS  │    │   SSL    │    │ DOMINIO  │    │ MIGRATE  │
-    └──────────┘    └──────────┘    └──────────┘    │COLLECTST.│
-         │                                          └──────────┘
-    ┌─────────┐
-    │ Sentry  │
-    │ Logs    │
-    │ Backups │
-    │ Alertas │
-    └─────────┘
+### 1. "El sitio carga sin CSS"
 
-    ✅ Si todo está verde → ¡TU APP ESTÁ EN PRODUCCIÓN!
-```
+**Causa:** No hiciste `collectstatic`, o los templates tienen rutas hardcodeadas en vez de `{% static %}`.
+
+---
+
+### 2. "Me da error 500 pero no sé por qué"
+
+**Causa:** `DEBUG = False` y no configuraste logging. Sin logs, no hay información.
+
+---
+
+### 3. "Las migraciones fallan en el servidor"
+
+**Causa:** Tienes migraciones que dependen de datos que no existen, o las migraciones no están al día.
+
+---
+
+### 4. "No puedo entrar al admin"
+
+**Causa:** No creaste un usuario con permisos de administrador en el servidor.
+
+---
+
+### 5. "Los formularios dan error 403 Forbidden"
+
+**Causa:** Falta `{% csrf_token %}` en los formularios POST.
+
+---
+
+### 6. "Los links me llevan a páginas que no existen"
+
+**Causa:** URLs con nombres incorrectos o vistas que no están implementadas.
+
+---
+
+### 7. "En mi computador funciona pero en el servidor no"
+
+**Causa:** Faltan dependencias en `requirements.txt`, o las variables de entorno no están configuradas.
+
+---
+
+### 8. "La base de datos está vacía"
+
+**Causa:** Las migraciones crean las tablas, no los datos. Necesitas un plan para cargar datos iniciales.
+
+---
+
+### 9. "Se ve terrible en el celular"
+
+**Causa:** No se verificó responsive. El meta viewport falta o el CSS no tiene media queries.
+
+---
+
+### 10. "Todo tarda mucho en cargar"
+
+**Causa:** Imágenes sin optimizar (5MB cada una), o muchas queries innecesarias a la base de datos.
+
+---
+
+> 💡 **Los 10 problemas de arriba son 100% evitables.** Cada uno tiene una entrada en el mega-checklist. Si los verificaste antes, no aparecen el día de deploy.
 
 ---
 
@@ -1161,25 +1788,27 @@ DISCO            → ¿Hay espacio suficiente? (logs y media crecen)
 
 ## ✅ Lo que cubrimos hoy
 
-| Fase                     | La idea clave                                                             |
-| :----------------------- | :------------------------------------------------------------------------ |
-| **Código limpio**        | Sin prints, sin hardcodes, sin código muerto                             |
-| **Settings producción**  | `DEBUG=False`, `SECRET_KEY` en .env, cookies seguras                     |
-| **Secretos**             | `.env` + `.env.example` + `.gitignore`                                   |
-| **Base de datos**        | PostgreSQL, migraciones al día, backups                                  |
-| **Archivos estáticos**   | `collectstatic` + WhiteNoise o Nginx                                     |
-| **Seguridad**            | `check --deploy`, CSRF, headers, validación server-side                  |
-| **Dependencias**         | `requirements.txt` con versiones fijadas                                 |
-| **Git**                  | `.gitignore` completo, `.env` nunca en historial                         |
-| **Testing**              | `check`, `test`, prueba manual, prueba móvil                             |
-| **Servidor**             | Gunicorn + Nginx, NUNCA `runserver`                                      |
-| **DNS y Dominio**        | Registros A/CNAME, `ALLOWED_HOSTS`                                       |
-| **HTTPS**                | Let's Encrypt, certificado SSL, cookies seguras                          |
-| **Monitoreo**            | Logs, Sentry, backups, alertas                                           |
+| Área                     | La pregunta clave                                         |
+| :----------------------- | :-------------------------------------------------------- |
+| **Estructura**           | ¿Mi proyecto está organizado de forma predecible?         |
+| **Modelos / BD**         | ¿Las migraciones están al día? ¿Los datos existen?       |
+| **Vistas / URLs**        | ¿Todo está conectado y protegido?                         |
+| **Templates / Frontend** | ¿Se ve completo, responsive y profesional?                |
+| **Formularios**          | ¿Validan, guardan, y muestran errores?                    |
+| **Autenticación**        | ¿Login/logout funciona? ¿Las vistas privadas están protegidas? |
+| **Archivos estáticos**   | ¿Usan {% static %}? ¿collectstatic funciona?              |
+| **Settings**             | ¿Lee de variables de entorno? ¿check --deploy da OK?      |
+| **Variables de entorno** | ¿.env existe, funciona, y está en .gitignore?             |
+| **Git**                  | ¿Repo limpio, .gitignore completo, subido a GitHub?       |
+| **Dependencias**         | ¿requirements.txt actualizado con versiones fijadas?      |
+| **Datos iniciales**      | ¿Hay plan para cargar datos en producción?                |
+| **Testing**              | ¿Probé todo manualmente, incluyendo responsive?           |
+| **Código limpio**        | ¿Sin prints, sin hardcodes, sin código muerto?            |
+| **README**               | ¿Alguien puede clonar e instalar siguiendo el README?     |
 
 ---
 
-> _"El deploy no es el final del proyecto. Es el momento en que el proyecto empieza a vivir de verdad. Prepáralo bien para que sobreviva."_
+> _"El día de deploy no es para terminar tu proyecto. Es para **publicarlo**. Llega con todo listo y ese día es una fiesta. Llega con cosas a medias y ese día es una pesadilla."_
 
 ---
 
@@ -1187,16 +1816,10 @@ DISCO            → ¿Hay espacio suficiente? (logs y media crecen)
 
 Django Software Foundation. (2025). _Deployment checklist_. https://docs.djangoproject.com/en/stable/howto/deployment/checklist/
 
-Django Software Foundation. (2025). _How to deploy Django_. https://docs.djangoproject.com/en/stable/howto/deployment/
+Django Software Foundation. (2025). _Managing static files_. https://docs.djangoproject.com/en/stable/howto/static-files/
 
 Django Software Foundation. (2025). _Settings reference_. https://docs.djangoproject.com/en/stable/ref/settings/
 
-OWASP Foundation. (2025). _OWASP Top Ten_. https://owasp.org/www-project-top-ten/
-
-Let's Encrypt. (2025). _Getting Started_. https://letsencrypt.org/getting-started/
-
-Greenfeld, D. R., & Greenfeld, A. R. (2024). _Two Scoops of Django 5.x: Best Practices for the Django Web Framework_. Two Scoops Press. [Capítulo sobre Deployment]
-
-IBM Security. (2024). _Cost of a Data Breach Report 2024_. https://www.ibm.com/reports/data-breach
+Django Software Foundation. (2025). _How to deploy Django_. https://docs.djangoproject.com/en/stable/howto/deployment/
 
 ---
