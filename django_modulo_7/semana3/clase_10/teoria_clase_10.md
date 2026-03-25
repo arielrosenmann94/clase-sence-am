@@ -1,4 +1,4 @@
-# 🛠️ Django — Módulo 6 · Clase 10
+# 🛠️ Django — Módulo 7 · Clase 10
 
 ## El Sitio Administrativo de Django
 
