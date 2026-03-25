@@ -33,7 +33,7 @@ Este proyecto integra los contenidos de dos módulos:
 - **Módulo 8:** Desarrollo de Portafolio de un Producto Digital
 - **Módulo 9:** Desarrollo de Empleabilidad en la Industria Digital
 
-> 📊 **Dato:** Según un estudio de Jobvite (2023), el 87% de los reclutadores del sector tecnológico revisan el perfil de LinkedIn de los candidatos antes de agendar una entrevista. Tener un perfil optimizado no es opcional: es un requisito.
+> 📊 **Dato:** Según un estudio de Jobvite (2023), el 87% de los reclutadores del sector tecnológico revisan el perfil de LinkedIn de los candidatos antes de agendar una entrevista. Contar con un perfil profesional bien trabajado marca una diferencia significativa.
 >
 > **Fuente:** Jobvite, *Recruiter Nation Survey 2023*
 
@@ -74,7 +74,10 @@ Antes de agendar la entrevista, el equipo de selección de **NexaBridge Solution
 
 - ✅ **Currículum Vitae (CV)** actualizado y adaptado a la posición.
 - ✅ **Portafolio de proyectos** con tus trabajos más representativos.
-- ✅ **Perfil de LinkedIn** optimizado con información relevante para el sector IT.
+- ✅ **Perfil profesional digital** (tipo LinkedIn) con información relevante para el sector IT.
+
+> [!NOTE]
+> **Sobre LinkedIn:** En esta parte del proyecto vas a **preparar y redactar** el contenido que llevaría un perfil profesional tipo LinkedIn. **No es obligatorio que lo publiques** en la plataforma si no lo deseas. Puedes presentar todo el contenido en un documento. Si ya tienes LinkedIn y quieres aprovecharlo, ¡excelente! Pero lo que se evalúa es **la calidad del contenido que preparas**, no que lo subas a la plataforma.
 
 > 📊 **Dato:** El 63% de los responsables de contratación en tecnología descarta candidatos cuyo CV no está alineado con la descripción del puesto al que postulan.
 >
@@ -153,26 +156,29 @@ Dentro de tu portafolio, crea una **sección diferenciada y con nombre propio** 
 
 ## PARTE 2 — Empleabilidad Digital (Módulo 9)
 
-**🎯 Objetivo:** Fortalecer tu perfil profesional digital, optimizando tu presencia en redes laborales y preparando una presentación personal clara, breve y atractiva.
+**🎯 Objetivo:** Fortalecer tu perfil profesional digital, preparando el contenido necesario para una presencia efectiva en redes laborales y una presentación personal clara, breve y atractiva.
+
+> [!IMPORTANT]
+> **Aclaración:** Los siguientes requerimientos te piden **preparar contenido profesional** de calidad. Puedes elegir aplicarlo directamente en LinkedIn o presentarlo en un documento dentro de tu entrega. **No se te obliga a publicar en ninguna red social.** Lo importante es que demuestres que sabes construir un perfil profesional sólido.
 
 ---
 
-### Requerimiento 2.1 — Título de LinkedIn
+### Requerimiento 2.1 — Título Profesional
 
-Tu perfil de LinkedIn debe tener un **título claro y coherente** con tu perfil profesional actual. Utiliza **palabras clave** relacionadas a tu especialidad para obtener mayor visibilidad en búsquedas de reclutadores.
+Redacta un **título profesional claro y coherente** con tu perfil actual, como el que usarías en LinkedIn u otra plataforma laboral. Utiliza **palabras clave** relacionadas a tu especialidad para maximizar la visibilidad ante reclutadores.
 
 > 💡 **¿Por qué importa el título?** El título de LinkedIn es lo primero que ven los reclutadores en los resultados de búsqueda. Un título genérico como "Estudiante" tiene mucha menos visibilidad que uno como "Desarrollador Junior | Python · Django · SQL | En búsqueda activa". Las palabras clave hacen que aparezcas en más búsquedas.
 
 **Lo que se va a revisar:**
 
-- Que el título sea descriptivo, con palabras clave del sector.
+- Que el título propuesto sea descriptivo, con palabras clave del sector.
 - Que refleje tu perfil actual y tus aspiraciones.
 
 ---
 
-### Requerimiento 2.2 — Sección "Acerca de" en LinkedIn
+### Requerimiento 2.2 — Extracto Profesional ("Acerca de")
 
-Escribe un **extracto profesional** en la sección "Acerca de" de tu perfil. Debe estar organizado en **4 a 6 párrafos breves** que cubran los siguientes aspectos:
+Redacta un **extracto profesional** como el que se usa en la sección "Acerca de" de LinkedIn. Debe estar organizado en **4 a 6 párrafos breves** que cubran los siguientes aspectos:
 
 | #   | Aspecto                    | ¿Qué incluir?                                                                         |
 | --- | -------------------------- | -------------------------------------------------------------------------------------- |
@@ -187,15 +193,15 @@ Escribe un **extracto profesional** en la sección "Acerca de" de tu perfil. Deb
 
 **Lo que se va a revisar:**
 
-- Que la sección "Acerca de" exista y esté completa.
+- Que el extracto profesional exista y esté completo (ya sea en LinkedIn o en el documento de entrega).
 - Que cubra los 6 aspectos de la tabla.
 - Que el tono sea profesional y auténtico.
 
 ---
 
-### Requerimiento 2.3 — Experiencia Formativa y Proyectos en LinkedIn
+### Requerimiento 2.3 — Experiencia Formativa y Proyectos
 
-Agrega en tu perfil de LinkedIn la información de tu **experiencia formativa/técnica** y los **proyectos relevantes** que hayas desarrollado durante el curso.
+Prepara la información de tu **experiencia formativa/técnica** y los **proyectos relevantes** que hayas desarrollado durante el curso, lista para ser incluida en tu perfil profesional o en el documento de entrega.
 
 **Lo que se va a revisar:**
 
@@ -204,12 +210,14 @@ Agrega en tu perfil de LinkedIn la información de tu **experiencia formativa/t�
 
 ---
 
-### Requerimiento 2.4 — Imagen de Perfil y Banner
+### Requerimiento 2.4 — Imagen de Perfil y Banner (Recomendado)
 
-Tu perfil de LinkedIn debe tener:
+Si decides optimizar tu perfil en LinkedIn u otra plataforma profesional, se recomienda contar con:
 
 - **Foto de perfil profesional:** Fondo neutro, bien iluminada, donde se vea tu rostro con claridad.
 - **Imagen de banner:** Una imagen que represente tu perfil profesional. No necesitas diseñarla desde cero; puedes usar recursos gratuitos como Unsplash, Pexels, Canva o LinkedIn Backgrounds que reflejen tecnología, trabajo remoto, innovación, etc.
+
+> 💡 Si no deseas subir fotos a redes sociales, puedes incluir en tu documento de entrega una propuesta de qué tipo de imagen usarías y por qué.
 
 > 📊 **Dato:** Los perfiles de LinkedIn con foto reciben hasta 21 veces más visualizaciones y 36 veces más mensajes que los perfiles sin foto.
 >
@@ -217,8 +225,8 @@ Tu perfil de LinkedIn debe tener:
 
 **Lo que se va a revisar:**
 
-- Que la foto de perfil sea profesional y clara.
-- Que el banner esté presente y sea coherente con el perfil técnico.
+- Que se evidencie la selección de una imagen de perfil profesional (ya sea en la plataforma o como propuesta en el documento).
+- Que el banner propuesto o utilizado sea coherente con el perfil técnico.
 
 ---
 
@@ -234,7 +242,7 @@ Un **documento en PDF, Google Doc o Google Slide** que incluya:
 | --- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | 1   | Portada                                  | Nombre del proyecto, etapa, y tu nombre completo.                                                            |
 | 2   | Enlace al portafolio                     | Link a la herramienta donde alojaste tu portafolio, con el caso de estudio visible y desarrollado.           |
-| 3   | Link de LinkedIn + captura del perfil    | Comparte tu URL de LinkedIn, una captura de pantalla de tu perfil y un breve texto describiendo los cambios que aplicaste y por qué. |
+| 3   | Perfil profesional + evidencia           | Comparte el contenido de tu perfil profesional (link de LinkedIn con captura, o documento con el contenido preparado) y un breve texto describiendo qué elementos trabajaste y por qué. |
 
 ---
 
@@ -280,7 +288,7 @@ Con este trabajo práctico integrador se valida tu capacidad para **combinar com
 
 ## 💼 Sobre el Portafolio
 
-Lo que realices para este trabajo práctico es esencial para comenzar tu búsqueda laboral. Añade tu CV a tus espacios de portafolio y al perfil de LinkedIn para que esté al alcance de las personas interesadas en tu perfil. **No olvides hacer actualizaciones periódicas de estos recursos.**
+Lo que realices para este trabajo práctico es esencial para comenzar tu búsqueda laboral. Añade tu CV a tus espacios de portafolio para que esté al alcance de las personas interesadas en tu perfil. Si tienes LinkedIn, también puedes agregarlo allí. **No olvides hacer actualizaciones periódicas de estos recursos.**
 
 > 📊 **Dato:** El 76% de los profesionales de recursos humanos considera que un portafolio actualizado demuestra mayor compromiso profesional que uno estático con proyectos desactualizados.
 >
