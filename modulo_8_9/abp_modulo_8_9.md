@@ -154,7 +154,7 @@ Dentro de tu portafolio, crea una **sección diferenciada y con nombre propio** 
 
 ---
 
-## PARTE 2 — Empleabilidad Digital (Módulo 9)
+## PARTE 2 — Empleabilidad Digital (Módulo 9) (puedes arreglar tu perfil de linkedin y mandar el link y eso cumple todo lo de esta parte / si no quieres abrir o arreglar linkedin crealo en un pdf)
 
 **🎯 Objetivo:** Fortalecer tu perfil profesional digital, preparando el contenido necesario para una presencia efectiva en redes laborales y una presentación personal clara, breve y atractiva.
 
@@ -163,7 +163,7 @@ Dentro de tu portafolio, crea una **sección diferenciada y con nombre propio** 
 
 ---
 
-### Requerimiento 2.1 — Título Profesional
+### Requerimiento 2.1 — Título Profesional (no es una certificación - Gramaticalmente es un título)
 
 Redacta un **título profesional claro y coherente** con tu perfil actual, como el que usarías en LinkedIn u otra plataforma laboral. Utiliza **palabras clave** relacionadas a tu especialidad para maximizar la visibilidad ante reclutadores.
 
@@ -293,6 +293,29 @@ Lo que realices para este trabajo práctico es esencial para comenzar tu búsque
 > 📊 **Dato:** El 76% de los profesionales de recursos humanos considera que un portafolio actualizado demuestra mayor compromiso profesional que uno estático con proyectos desactualizados.
 >
 > **Fuente:** Stack Overflow, *Developer Survey 2023*
+
+---
+
+## 📦 Entregable Concreto — Lo que Debes Subir
+
+> [!IMPORTANT]
+> **Cada estudiante debe entregar los siguientes 4 archivos o enlaces. Sin excepción, todos deben estar presentes en la entrega para que esta se considere completa.**
+
+| #   | Archivo / Entregable                          | Formato               | Detalle                                                                                                 |
+| --- | --------------------------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------- |
+| 1   | **Currículum Vitae**                          | PDF                   | CV actualizado y adaptado a la vacante de **NexaBridge Solutions**. Debe reflejar tu perfil real.        |
+| 2   | **Portafolio de Proyectos**                   | PDF                   | Documento con **mínimo 3 proyectos** desarrollados durante el curso, cada uno con descripción clara.     |
+| 3   | **Caso de Estudio**                           | PDF                   | Desarrollo completo del caso de estudio seleccionado, cubriendo los 8 puntos del Requerimiento 1.3.     |
+| 4   | **Perfil Profesional o enlace de LinkedIn**   | PDF o Link            | Si tienes LinkedIn actualizado, comparte el **enlace directo**. Si no, entrega un PDF con todo el contenido profesional preparado (título, extracto, experiencia, imagen). |
+
+> [!TIP]
+> 📋 **Checklist rápido antes de entregar:**
+>
+> - [ ] ¿Mi CV está en formato PDF y adaptado a la vacante?
+> - [ ] ¿Mi portafolio incluye al menos 3 proyectos con descripciones?
+> - [ ] ¿Mi caso de estudio cubre los 8 puntos de la tabla?
+> - [ ] ¿Incluí mi perfil profesional (PDF o link de LinkedIn)?
+> - [ ] ¿Subí el trabajo **tanto en ABP 8 como en ABP 9**?
 
 ---
 
