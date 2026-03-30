@@ -12,7 +12,6 @@
 
 ---
 
-> [!CAUTION]
 > 🔴 **NOTA MUY IMPORTANTE — LEER ANTES DE CONTINUAR**
 >
 > **Este mismo trabajo integrador debe ser subido TANTO en el ABP 8 como en el ABP 9.**
@@ -21,12 +20,39 @@
 
 ---
 
+## 📦 Entregable — Lo que Debes Subir
+
+> ⚠️ **Cada estudiante debe entregar los siguientes 4 elementos. Sin excepción, todos deben estar presentes para que la entrega se considere completa.**
+
+| #   | Entregable                                | Formato         | Detalle                                                                                                 |
+| --- | ----------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------- |
+| 1   | **Currículum Vitae**                      | PDF             | CV actualizado y adaptado a la vacante de **NexaBridge Solutions**. Debe reflejar tu perfil real.        |
+| 2   | **Portafolio de Proyectos**               | PDF o Link      | Documento con **mínimo 3 proyectos** desarrollados durante el curso, cada uno con descripción clara.     |
+| 3   | **Caso de Estudio**                       | PDF o Link      | Desarrollo completo del caso de estudio seleccionado, cubriendo los 8 puntos del Requerimiento 1.3.     |
+| 4   | **Perfil Profesional o enlace de LinkedIn** | PDF o Link    | Si tienes LinkedIn actualizado, comparte el **enlace directo**. Si no, entrega un PDF con todo el contenido profesional preparado (título, extracto, experiencia, imagen). |
+
+> 🚨 **Sobre los enlaces:**
+>
+> - Puedes entregar todo en **un solo PDF** que contenga los 4 elementos, o archivos separados.
+> - Si entregas un **enlace al portafolio**, este debe abrir **directamente** la vista del portafolio listo para ser revisado por un reclutador.
+> - Si entregas un **enlace al caso de estudio**, debe abrir **directamente** el caso de estudio desarrollado.
+> - **No se aceptan enlaces a repositorios de GitHub** ni a carpetas con código fuente. El portafolio debe estar **listo para que lo vea un reclutador de Recursos Humanos**, no una persona experta en código.
+> - Todo enlace entregado debe ir incluido dentro del PDF de entrega.
+
+> 📋 **Checklist rápido antes de entregar:**
+>
+> - [ ] ¿Mi CV está en formato PDF y adaptado a la vacante?
+> - [ ] ¿Mi portafolio incluye al menos 3 proyectos con descripciones?
+> - [ ] ¿Mi caso de estudio cubre los 8 puntos de la tabla?
+> - [ ] ¿Incluí mi perfil profesional (PDF o link de LinkedIn)?
+> - [ ] ¿Los enlaces que incluí abren directamente el contenido listo para ver?
+> - [ ] ¿Subí el trabajo **tanto en ABP 8 como en ABP 9**?
+
+---
+
 ## 🎯 ¿De qué se trata este proyecto?
 
-Una empresa ficticia del ecosistema tecnológico, **NexaBridge Solutions**, se ha interesado en tu perfil y desea avanzar con un proceso de selección. Para conocerte mejor como profesional en formación, te solicitan **dos entregables clave**:
-
-1. **Un fragmento de tu portafolio técnico** — donde muestres tu mejor trabajo.
-2. **Una presentación profesional optimizada** — donde proyectes quién eres y qué puedes aportar.
+Una empresa ficticia del ecosistema tecnológico, **NexaBridge Solutions**, se ha interesado en tu perfil y desea avanzar con un proceso de selección. Para conocerte mejor como profesional en formación, te solicitan tu documentación profesional completa.
 
 Este proyecto integra los contenidos de dos módulos:
 
@@ -76,8 +102,7 @@ Antes de agendar la entrevista, el equipo de selección de **NexaBridge Solution
 - ✅ **Portafolio de proyectos** con tus trabajos más representativos.
 - ✅ **Perfil profesional digital** (tipo LinkedIn) con información relevante para el sector IT.
 
-> [!NOTE]
-> **Sobre LinkedIn:** En esta parte del proyecto vas a **preparar y redactar** el contenido que llevaría un perfil profesional tipo LinkedIn. **No es obligatorio que lo publiques** en la plataforma si no lo deseas. Puedes presentar todo el contenido en un documento. Si ya tienes LinkedIn y quieres aprovecharlo, ¡excelente! Pero lo que se evalúa es **la calidad del contenido que preparas**, no que lo subas a la plataforma.
+> 💡 **Sobre LinkedIn:** En esta parte del proyecto vas a **preparar y redactar** el contenido que llevaría un perfil profesional tipo LinkedIn. **No es obligatorio que lo publiques** en la plataforma si no lo deseas. Puedes presentar todo el contenido en un documento. Si ya tienes LinkedIn y quieres aprovecharlo, ¡excelente! Pero lo que se evalúa es **la calidad del contenido que preparas**, no que lo subas a la plataforma.
 
 > 📊 **Dato:** El 63% de los responsables de contratación en tecnología descarta candidatos cuyo CV no está alineado con la descripción del puesto al que postulan.
 >
@@ -158,8 +183,7 @@ Dentro de tu portafolio, crea una **sección diferenciada y con nombre propio** 
 
 **🎯 Objetivo:** Fortalecer tu perfil profesional digital, preparando el contenido necesario para una presencia efectiva en redes laborales y una presentación personal clara, breve y atractiva.
 
-> [!IMPORTANT]
-> **Aclaración:** Los siguientes requerimientos te piden **preparar contenido profesional** de calidad. Puedes elegir aplicarlo directamente en LinkedIn o presentarlo en un documento dentro de tu entrega. **No se te obliga a publicar en ninguna red social.** Lo importante es que demuestres que sabes construir un perfil profesional sólido.
+> ⚠️ **Aclaración:** Los siguientes requerimientos te piden **preparar contenido profesional** de calidad. Puedes elegir aplicarlo directamente en LinkedIn o presentarlo en un documento dentro de tu entrega. **No se te obliga a publicar en ninguna red social.** Lo importante es que demuestres que sabes construir un perfil profesional sólido.
 
 ---
 
@@ -232,20 +256,6 @@ Si decides optimizar tu perfil en LinkedIn u otra plataforma profesional, se rec
 
 ---
 
-# ✅ Entregables Finales
-
-## ¿Qué debes entregar?
-
-Un **documento en PDF, Google Doc o Google Slide** que incluya:
-
-| #   | Entregable                               | Detalle                                                                                                      |
-| --- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| 1   | Portada                                  | Nombre del proyecto, etapa, y tu nombre completo.                                                            |
-| 2   | Enlace al portafolio                     | Link a la herramienta donde alojaste tu portafolio, con el caso de estudio visible y desarrollado.           |
-| 3   | Perfil profesional + evidencia           | Comparte el contenido de tu perfil profesional (link de LinkedIn con captura, o documento con el contenido preparado) y un breve texto describiendo qué elementos trabajaste y por qué. |
-
----
-
 ## 🔍 ¿Qué se va a validar?
 
 Con este trabajo práctico integrador se valida tu capacidad para **combinar competencias técnicas con herramientas de empleabilidad**. Específicamente:
@@ -296,30 +306,6 @@ Lo que realices para este trabajo práctico es esencial para comenzar tu búsque
 
 ---
 
-## 📦 Entregable Concreto — Lo que Debes Subir
-
-> [!IMPORTANT]
-> **Cada estudiante debe entregar los siguientes 4 archivos o enlaces. Sin excepción, todos deben estar presentes en la entrega para que esta se considere completa.**
-
-| #   | Archivo / Entregable                          | Formato               | Detalle                                                                                                 |
-| --- | --------------------------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------- |
-| 1   | **Currículum Vitae**                          | PDF                   | CV actualizado y adaptado a la vacante de **NexaBridge Solutions**. Debe reflejar tu perfil real.        |
-| 2   | **Portafolio de Proyectos**                   | PDF                   | Documento con **mínimo 3 proyectos** desarrollados durante el curso, cada uno con descripción clara.     |
-| 3   | **Caso de Estudio**                           | PDF                   | Desarrollo completo del caso de estudio seleccionado, cubriendo los 8 puntos del Requerimiento 1.3.     |
-| 4   | **Perfil Profesional o enlace de LinkedIn**   | PDF o Link            | Si tienes LinkedIn actualizado, comparte el **enlace directo**. Si no, entrega un PDF con todo el contenido profesional preparado (título, extracto, experiencia, imagen). |
-
-> [!TIP]
-> 📋 **Checklist rápido antes de entregar:**
->
-> - [ ] ¿Mi CV está en formato PDF y adaptado a la vacante?
-> - [ ] ¿Mi portafolio incluye al menos 3 proyectos con descripciones?
-> - [ ] ¿Mi caso de estudio cubre los 8 puntos de la tabla?
-> - [ ] ¿Incluí mi perfil profesional (PDF o link de LinkedIn)?
-> - [ ] ¿Subí el trabajo **tanto en ABP 8 como en ABP 9**?
-
----
-
-> [!CAUTION]
 > 🔴 **RECORDATORIO FINAL**
 >
 > **Este mismo trabajo integrador debe ser subido TANTO en el ABP 8 como en el ABP 9.**
@@ -335,4 +321,3 @@ Lo que realices para este trabajo práctico es esencial para comenzar tu búsque
 > `https://drive.google.com/file/d/1yv3YUDMR4eWiYxuQx43wCZ3dFX2O3is3/view`
 
 ---
-
