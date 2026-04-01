@@ -8,9 +8,10 @@ A lo largo de este documento investigativo, enfrentarán **3 casos de estudio fi
 
 > [!IMPORTANT]
 > **Aviso Pedagógico e Instrucciones Generales:**
-> *   Ninguna de las empresas o proyectos mencionados aquí existe en la realidad; toda similitud es puramente coincidente. **No uses entidades reales para prácticas ofensivas.**
-> *   Sus respuestas **no deben ser código suelto**, sino reportes técnicos profesionales: diagnósticos de causa raíz, memorandos ejecutivos y tablas de hallazgos.
-> *   **Requisito Obligatorio:** Toda afirmación debe sustentarse con fuentes oficiales tangibles (ej: [OWASP Top 10](https://owasp.org/www-project-top-ten/), [NVD/NIST](https://nvd.nist.gov/), [MITRE ATT&CK](https://attack.mitre.org/), o [Documentación oficial de Django](https://docs.djangoproject.com/en/stable/topics/security/)).
+>
+> - Ninguna de las empresas o proyectos mencionados aquí existe en la realidad; toda similitud es puramente coincidente. **No uses entidades reales para prácticas ofensivas.**
+> - Sus respuestas **no deben ser código suelto**, sino reportes técnicos profesionales: diagnósticos de causa raíz, memorandos ejecutivos y tablas de hallazgos.
+> - **Requisito Obligatorio:** Toda afirmación debe sustentarse con fuentes oficiales tangibles (ej: [OWASP Top 10](https://owasp.org/www-project-top-ten/), [NVD/NIST](https://nvd.nist.gov/), [MITRE ATT&CK](https://attack.mitre.org/), o [Documentación oficial de Django](https://docs.djangoproject.com/en/stable/topics/security/)).
 
 ---
 
@@ -20,7 +21,7 @@ A lo largo de este documento investigativo, enfrentarán **3 casos de estudio fi
 
 Es madrugada en el centro de operaciones de **"Comercio Oceánico SpA"**, un prominente retail electrónico nacional. El sistema de monitoreo de infraestructura (APM) dispara múltiples alertas críticas: el uso de CPU de los servidores web se satura repentinamente y decenas de usuarios legítimos reportan que sus cuentas han sido bloqueadas preventivamente.
 
-El equipo de Respuesta a Incidentes (CSIRT) te hace entrega íntegra del archivo de *Access Logs* del balanceador de carga (Nginx) y la aplicación Django para que realices una **autopsia forense** y determines el origen y alcance del ataque.
+El equipo de Respuesta a Incidentes (CSIRT) te hace entrega íntegra del archivo de _Access Logs_ del balanceador de carga (Nginx) y la aplicación Django para que realices una **autopsia forense** y determines el origen y alcance del ataque.
 
 <details>
 <summary><strong>📋 Haz clic aquí para expandir los Logs Extraídos — Evidencia Forense Oficial</strong></summary>
@@ -354,9 +355,9 @@ Responde de manera profesional y fundamentada en su totalidad:
 
 **Contexto del Proyecto:**
 
-Una institución descentralizada ficticia, la **"Agencia de Innovación Social de Chile"**, está próxima a relanzar un portal interno de gestión ciudadana llamado *"Sistema de Consultas Públicas (SiConP)"*, cuyo código ha estado congelado y sin mantenimiento técnico por más de tres años.
+Una institución descentralizada ficticia, la **"Agencia de Innovación Social de Chile"**, está próxima a relanzar un portal interno de gestión ciudadana llamado _"Sistema de Consultas Públicas (SiConP)"_, cuyo código ha estado congelado y sin mantenimiento técnico por más de tres años.
 
-Previo al pase a producción en la nube gubernamental, la Contraloría de TI les exige a ustedes —en el rol de Ingenieros SecOps Auditores Externos— realizar un **Software Composition Analysis (SCA)** exhaustivo del archivo `requirements.txt`. El objetivo es identificar vulnerabilidades conocidas (CVE) en librerías obsoletas y detectar posibles amenazas a la cadena de suministro de software (*Supply Chain Attacks / Typosquatting*), antes de firmar el certificado de aptitud para producción.
+Previo al pase a producción en la nube gubernamental, la Contraloría de TI les exige a ustedes —en el rol de Ingenieros SecOps Auditores Externos— realizar un **Software Composition Analysis (SCA)** exhaustivo del archivo `requirements.txt`. El objetivo es identificar vulnerabilidades conocidas (CVE) en librerías obsoletas y detectar posibles amenazas a la cadena de suministro de software (_Supply Chain Attacks / Typosquatting_), antes de firmar el certificado de aptitud para producción.
 
 A continuación, el manifiesto íntegro de librerías del proyecto legado:
 
@@ -402,6 +403,7 @@ requests-chile==2.28.1
 
 > [!NOTE]
 > **Fuentes de referencia obligatorias para este caso:**
+>
 > - Base de datos CVE del NIST: https://nvd.nist.gov/
 > - CVE Mitre: https://cve.mitre.org/
 > - OWASP Software Component Verification Standard (SCVS): https://owasp.org/www-project-software-component-verification-standard/
@@ -410,11 +412,11 @@ requests-chile==2.28.1
 
 Realiza una labor de cacería de amenazas y redacta tu reporte estructurado para la Contraloría:
 
-1.  **Auditoría de Vulnerabilidades Críticas (CVE):** Investiga en bases de datos como el **NIST NVD** o **CVE Mitre** las alertas de seguridad documentadas para estas tres versiones exactas presentes en el proyecto: `Django==3.0.1`, `Pillow==8.1.0` y `PyJWT==1.7.1`. Para cada una presenta: el **Código CVE** asociado, la **descripción del vector de explotación en español** (¿Inyección SQL? ¿Ejecución Remota de Código? ¿Evasión de Autenticación?), el **nivel CVSS** (crítico, alto, medio) y la **versión mínima segura** recomendada para parchear hoy. *(Hint: busca `Django 3.0.1 CVE`, `Pillow 8.1.0 CVE RCE`, `PyJWT 1.7.1 algorithm confusion`).*
+1.  **Auditoría de Vulnerabilidades Críticas (CVE):** Investiga en bases de datos como el **NIST NVD** o **CVE Mitre** las alertas de seguridad documentadas para estas tres versiones exactas presentes en el proyecto: `Django==3.0.1`, `Pillow==8.1.0` y `PyJWT==1.7.1`. Para cada una presenta: el **Código CVE** asociado, la **descripción del vector de explotación en español** (¿Inyección SQL? ¿Ejecución Remota de Código? ¿Evasión de Autenticación?), el **nivel CVSS** (crítico, alto, medio) y la **versión mínima segura** recomendada para parchear hoy. _(Hint: busca `Django 3.0.1 CVE`, `Pillow 8.1.0 CVE RCE`, `PyJWT 1.7.1 algorithm confusion`)._
 
-2.  **Amenazas a la Cadena de Suministro (Typosquatting):** Al final de la lista de requerimientos, identifica al menos **tres paquetes cuyo nombre genera alerta extrema** por imitar librerías legítimas populares o contener nombres de dominio geográfico inusual. Basándote en investigaciones publicadas sobre ataques de *Supply Chain* en PyPI (ej. las alertas de *Sonatype Nexus Intelligence* o los reportes de *Socket.dev*), explica: (a) qué ejecuta silenciosamente el bloque `setup.py` o `install_requires` de estas librerías maliciosas durante un `pip install`, y (b) qué nivel de acceso al sistema operativo del contenedor Docker o servidor obtiene ese código.
+2.  **Amenazas a la Cadena de Suministro (Typosquatting):** Al final de la lista de requerimientos, identifica al menos **tres paquetes cuyo nombre genera alerta extrema** por imitar librerías legítimas populares o contener nombres de dominio geográfico inusual. Basándote en investigaciones publicadas sobre ataques de _Supply Chain_ en PyPI (ej. las alertas de _Sonatype Nexus Intelligence_ o los reportes de _Socket.dev_), explica: (a) qué ejecuta silenciosamente el bloque `setup.py` o `install_requires` de estas librerías maliciosas durante un `pip install`, y (b) qué nivel de acceso al sistema operativo del contenedor Docker o servidor obtiene ese código.
 
-3.  **Integración Continua DevSecOps (Automatización SCA):** Para que esta auditoría no dependa de la memoria o disponibilidad de un analista humano, ¿qué herramientas automatizadas gratuitas (ej. *GitHub Dependabot*, *pip-audit*, *Safety CLI*, *Trivy* o *OWASP Dependency-Check*) integrarías en el flujo CI/CD de GitHub Actions o GitLab CI? Explica brevemente cómo funcionan a nivel de *Pipeline*: ¿en qué etapa del ciclo se ejecutan?, ¿cómo hacen fallar el despliegue ante un `CRITICAL` CVE encontrado?, ¿qué artefacto de reporte generan?
+3.  **Integración Continua DevSecOps (Automatización SCA):** Para que esta auditoría no dependa de la memoria o disponibilidad de un analista humano, ¿qué herramientas automatizadas gratuitas (ej. _GitHub Dependabot_, _pip-audit_, _Safety CLI_, _Trivy_ o _OWASP Dependency-Check_) integrarías en el flujo CI/CD de GitHub Actions o GitLab CI? Explica brevemente cómo funcionan a nivel de _Pipeline_: ¿en qué etapa del ciclo se ejecutan?, ¿cómo hacen fallar el despliegue ante un `CRITICAL` CVE encontrado?, ¿qué artefacto de reporte generan?
 
 ---
 
@@ -426,33 +428,33 @@ Ustedes son el equipo de consultores técnicos élite para **"Cordillera Paytech
 
 Durante un exhaustivo comité de riesgos convocado por el Directorio, el Oficial de Seguridad de la Información (CISO) levanta alertas inminentes sobre fallas fundacionales en la arquitectura:
 
-- Los clientes operarán habitualmente desde **redes Wi-Fi públicas** en cafeterías o estaciones de metro de Santiago, quedando expuestos a interceptaciones *Man-in-the-Middle* (MITM) y secuestros de sesión (*Session Hijacking*).
+- Los clientes operarán habitualmente desde **redes Wi-Fi públicas** en cafeterías o estaciones de metro de Santiago, quedando expuestos a interceptaciones _Man-in-the-Middle_ (MITM) y secuestros de sesión (_Session Hijacking_).
 - La **Base de Datos PostgreSQL transaccional** —que almacena todos los registros financieros y RUTs de clientes— está instalada en la **misma subred pública** de internet que los servidores web Nginx, sin ninguna capa de aislamiento.
 - El **100% de los desarrolladores** (seis personas) utilizan cuentas `is_superuser=True` todos los días directamente sobre el entorno de **Producción**, sin cuentas separadas ni roles granulares.
 
-El Desarrollador Jefe descarta al CISO con desdén: *"Es excesivamente alarmista. Pagamos un Certificado SSL de primera línea; el navegador muestra el 'Candado' y las claves viajan cifradas. Además, somos seis desarrolladores nomás, es absurdamente impráctico usar cuentas limitadas en la admin de Django. El candado y el Superadmin bastan."*
+El Desarrollador Jefe descarta al CISO con desdén: _"Es excesivamente alarmista. Pagamos un Certificado SSL de primera línea; el navegador muestra el 'Candado' y las claves viajan cifradas. Además, somos seis desarrolladores nomás, es absurdamente impráctico usar cuentas limitadas en la admin de Django. El candado y el Superadmin bastan."_
 
 > [!IMPORTANT]
 > Este caso requiere aplicar el **Modelo de Madurez Zero Trust** (CISA Zero Trust Maturity Model). Fuente obligatoria: https://www.cisa.gov/sites/default/files/2023-04/zero_trust_maturity_model_v2_508.pdf
 
 ### Preguntas de Investigación (Caso 3)
 
-Tomando postura como Consultor Senior de Seguridad, redacta el memorándum técnico completo a la Junta Directiva demoliendo la arrogancia del *Lead Developer*:
+Tomando postura como Consultor Senior de Seguridad, redacta el memorándum técnico completo a la Junta Directiva demoliendo la arrogancia del _Lead Developer_:
 
-1.  **El Mito del "Candado Mágico" — SSL Stripping y HSTS:** Demuestra al Directorio por qué "tener el candado de HTTPS" es insuficiente cuando un usuario tipea `cordillerapaytech.cl` a mano (sin `https://`) desde una red pública comprometida. Explica técnicamente qué es un ataque **SSL Stripping** (tipificado dentro de MITM, aprox. 2009, técnica de Moxie Marlinspike) y cómo opera en el primer viaje HTTP no seguro antes del redireccionamiento. Luego, explica cómo la variable `SECURE_HSTS_SECONDS` de *Django Security Middleware*, combinada con `SECURE_HSTS_PRELOAD = True` y la inclusión en el *HSTS Preload List* de Chrome/Firefox, anula definitivamente este vector obligando al navegador a conectarse **siempre** en HTTPS.
+1.  **El Mito del "Candado Mágico" — SSL Stripping y HSTS:** Demuestra al Directorio por qué "tener el candado de HTTPS" es insuficiente cuando un usuario tipea `cordillerapaytech.cl` a mano (sin `https://`) desde una red pública comprometida. Explica técnicamente qué es un ataque **SSL Stripping** (tipificado dentro de MITM, aprox. 2009, técnica de Moxie Marlinspike) y cómo opera en el primer viaje HTTP no seguro antes del redireccionamiento. Luego, explica cómo la variable `SECURE_HSTS_SECONDS` de _Django Security Middleware_, combinada con `SECURE_HSTS_PRELOAD = True` y la inclusión en el _HSTS Preload List_ de Chrome/Firefox, anula definitivamente este vector obligando al navegador a conectarse **siempre** en HTTPS.
 
 2.  **Blindaje de Cookies de Autorización — Session & CSRF Hardening:** El robo de identificadores de sesión en redes aeroportuarias o cafeterías es frecuente si las cookies no están correctamente blindadas. Para cada una de las siguientes tres variables de `settings.py`, explica el impacto técnico individual que tiene activarlas y qué vector de ataque concreto neutralizan:
     - `SESSION_COOKIE_SECURE = True` → ¿Qué impide exactamente a nivel de transmisión HTTP/HTTPS?
     - `SESSION_COOKIE_HTTPONLY = True` → ¿Qué ataque de capa de aplicación (Layer 7) bloquea?
     - `CSRF_COOKIE_SAMESITE = "Strict"` → ¿Cómo previene las peticiones forjadas desde dominios externos?
 
-3.  **Arquitectura de Red Cloud Segura — VPC y Segmentación (Three-Tier Architecture):** Argumentando el axioma central de Zero Trust *"Nunca confíes, siempre verifica — y asume que ya fuiste comprometido"*, critica técnica y contundentemente la decisión de instalar la base de datos transaccional financiera en la misma **Public Subnet** expuesta a internet que los servidores Nginx. Describe el diseño de red recomendado usando tres capas lógicas suficientemente aisladas:
+3.  **Arquitectura de Red Cloud Segura — VPC y Segmentación (Three-Tier Architecture):** Argumentando el axioma central de Zero Trust _"Nunca confíes, siempre verifica — y asume que ya fuiste comprometido"_, critica técnica y contundentemente la decisión de instalar la base de datos transaccional financiera en la misma **Public Subnet** expuesta a internet que los servidores Nginx. Describe el diseño de red recomendado usando tres capas lógicas suficientemente aisladas:
     - **Capa 1 (DMZ):** Load Balancer público / Nginx como Edge.
     - **Capa 2 (Private App Subnet):** Instancias de la API Django/Gunicorn, sin IP pública directa.
     - **Capa 3 (Isolated DB Subnet):** Motor PostgreSQL exclusivamente en red privada, accesible solo desde la Capa 2 vía Security Groups / Network ACLs.
-    Explica qué es un *NAT Gateway* y su rol en este modelo, y menciona qué normativa financiera chilena o internacional podría exigir legalmente esta segmentación (pista: PCI-DSS, CMF).
+      Explica qué es un _NAT Gateway_ y su rol en este modelo, y menciona qué normativa financiera chilena o internacional podría exigir legalmente esta segmentación (pista: PCI-DSS, CMF).
 
-4.  **Minimización de Superficie Operativa — Principio de Mínimo Privilegio (PoLP):** Destruye el argumento del *Lead Developer* sobre "la velocidad del Superusuario". Primero, explica el riesgo real de una **amenaza interna** (*Insider Threat*) y qué ocurre con los 6 accesos de Producción si uno de los desarrolladores es víctima de un ataque de phishing y su credencial es comprometida. Luego, propón un esquema de roles usando el sistema nativo de **Grupos y Permisos granulares del *Django Admin Site*** con al menos dos grupos diferenciados:
+4.  **Minimización de Superficie Operativa — Principio de Mínimo Privilegio (PoLP):** Destruye el argumento del _Lead Developer_ sobre "la velocidad del Superusuario". Primero, explica el riesgo real de una **amenaza interna** (_Insider Threat_) y qué ocurre con los 6 accesos de Producción si uno de los desarrolladores es víctima de un ataque de phishing y su credencial es comprometida. Luego, propón un esquema de roles usando el sistema nativo de **Grupos y Permisos granulares del _Django Admin Site_** con al menos dos grupos diferenciados:
     - Grupo `Soporte_Niv_01`: Solo lectura sobre modelos no financieros (ej: tickets, usuarios).
     - Grupo `Finanzas_Auditoria`: Lectura sobre modelos transaccionales, sin capacidad de eliminar ni exportar.
-    Indica qué permisos Django (`add`, `change`, `delete`, `view`) asignarías individualmente a cada grupo y por qué.
+      Indica qué permisos Django (`add`, `change`, `delete`, `view`) asignarías individualmente a cada grupo y por qué.
