@@ -23,8 +23,8 @@ Es madrugada en el centro de operaciones de **"Comercio Oceánico SpA"**, un pro
 
 El equipo de Respuesta a Incidentes (CSIRT) te hace entrega íntegra del archivo de _Access Logs_ del balanceador de carga (Nginx) y la aplicación Django para que realices una **autopsia forense** y determines el origen y alcance del ataque.
 
-<details>
-<summary><strong>📋 Haz clic aquí para expandir los Logs Extraídos — Evidencia Forense Oficial</strong></summary>
+#### 📋 Logs Extraídos — Evidencia Forense Oficial
+
 
 ```text
 [14/Oct/2026:03:01:10 -0300] 198.51.100.22 - POST /api/v1/auth/login/ HTTP/1.1 401 45 "python-requests/2.25.1" "-"
@@ -332,7 +332,6 @@ El equipo de Respuesta a Incidentes (CSIRT) te hace entrega íntegra del archivo
 [14/Oct/2026:03:07:05 -0300] 203.0.113.45 - POST /api/v1/user/exportar_base_datos/ HTTP/1.1 200 4505600 "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" "-"
 ```
 
-</details>
 
 > [!NOTE]
 > **Fuente de referencia obligatoria para este caso:** MITRE ATT&CK Enterprise Matrix — Tactic: Credential Access — Technique T1110 (Brute Force). Disponible en: https://attack.mitre.org/techniques/T1110/
