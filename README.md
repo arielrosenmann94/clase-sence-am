@@ -1,75 +1,73 @@
-# clasesam — Material de clases (HTML, CSS, Bootstrap, JavaScript, jQuery + Git)
+# Clases SENCE — Python con Django (material de apoyo y demos)
 
 > _"Repositorio actualizado https://github.com/arielrosenmann94/curso-django"_
 
-## Introducción ejecutiva
-Este repositorio reúne material práctico para clases orientadas a **desarrollo web front-end** y fundamentos de flujo de trabajo con **Git**. El enfoque es 100% “aprender haciendo”: cada archivo HTML es una **demo ejecutable** (sin build, sin instalaciones) para explicar conceptos clave y luego modificarlos en clase.
+## Resumen ejecutivo
 
-Incluye además notas de arquitectura (nivel senior) para un **carrito de compra** en Django SSR, útil como puente hacia desarrollo web backend y e-commerce.
+Este repositorio reúne **archivos de práctica y material de clases** usados en múltiples sesiones del programa SENCE orientado a formación Full-Stack con foco en **fundamentos web y herramientas base** que luego se conectan con el trabajo en **Python/Django** (entorno, estructura de proyecto, navegación, assets, flujo de trabajo con Git, y componentes UI).
+
+El contenido está organizado como un conjunto de **demos autocontenidas** (principalmente HTML/CSS/JS/Bootstrap/jQuery) que se pueden abrir en el navegador para explicar conceptos y realizar ejercicios guiados.
+
+---
+## Qué incluye el proyecto (visión general)
+
+- **Fundamentos HTML**: estructura, secciones, páginas y plantillas simples.
+- **CSS básico**: estilos mínimos, layout y presentación.
+- **Bootstrap**: ejemplos de maquetación rápida con componentes.
+- **JavaScript (intro)**: manipulación básica y eventos.
+- **jQuery (eventos y utilidades)**: eventos comunes, scroll, formularios, efectos, demos de AJAX.
+- **Git (flujo de trabajo)**: material y práctica para control de versiones y repositorios remotos.
+- **Páginas de ejemplo**: páginas simples tipo “sitio público” (contacto, términos, etc.).
+- **Assets reutilizables**: carpetas de CSS/JS/IMG para usar en ejercicios.
 
 ---
 
-## Bajada técnica (cómo está construido)
-- **Ejecución directa en navegador**: la mayoría de los ejemplos son **HTML estático** con CSS/JS embebido o referenciado.
-- **Dependencias por CDN** (cuando aplica):
-  - **Bootstrap 4** para estilos rápidos de UI.
-  - **jQuery 3.5.1** para eventos y animaciones.
-- **Assets compartidos** en `assets/`:
-  - CSS base (estilos generales y responsive).
-  - JS base para páginas tipo “public_site”.
-  - Imagen de ejemplo para prácticas.
-- **Módulo jQuery** con demos separadas por tema (show/hide, fade, eventos, etc.) + README dedicado.
-- **Notas** (`notas.md`) con una guía de arquitectura y checklist para terminar un carrito/checkout (enfoque Django SSR).
+## Estructura del repositorio (alto nivel)
+
+- `assets/`
+  - Recursos compartidos para demos.
+  - Subcarpetas típicas: `css/`, `js/`, `img/`.
+
+- `jquery/`
+  - Conjunto de demos enfocadas a jQuery:
+    - Eventos comunes (click, hover, scroll, teclado, submit, etc.).
+    - Formularios.
+    - Efectos (ej.: fade).
+    - AJAX (ejemplos de consumo/flujo).
+
+- `components/`
+  - Componentes HTML reutilizables para ejercicios (p. ej. tarjetas, botones).
+
+- `paginas/`
+  - Páginas de ejemplo tipo “sitio público” (p. ej. contacto, términos).
+
+- Archivos HTML en la raíz (demos por tema)
+  - `clase_html.html`, `estructura_html.html`: estructura base y prácticas HTML.
+  - `clase_css.html`: introducción práctica a CSS.
+  - `clase_js_uno.html`, `clase2_js.html`: fundamentos de JavaScript.
+  - `clase_boostrap.html`, `ejemplo-boostrap.html`: maquetación con Bootstrap.
+  - `evento_scroll.html`, `velocidad_reaccion.html`: ejercicios interactivos (eventos/UX).
+  - `funciones.html`: práctica de funciones y lógica simple.
+  - `git.html`: material/práctica de Git en contexto de clase.
+
+- `notas.md`
+  - Notas breves de clase y lineamientos de ejercicios.
+
+> Nota: el repositorio contiene múltiples ejercicios “sueltos” (no necesariamente un único proyecto integrado). La intención es pedagógica: abrir, modificar y practicar.
 
 ---
 
-## Contenido principal
+## Cómo usar este repositorio (para clases)
 
-### 1) Demos base (archivos en raíz)
-- `clase_html.html`  
-  Base para explicar estructura HTML (head/body, secciones, listas, etc.).
-- `clase_css.html`  
-  Base para explicar estilos y clases CSS.
-- `clase_boostrap.html` / `pagina_web _boostrap.html` / `panel_boostrap.html`  
-  Ejemplos usando Bootstrap para construir UI rápidamente (componentes, layout).
-- `js_1.html`  
-  Ejercicio aplicado en JavaScript (por ejemplo calculadora de IMC).
-- `clasejs_2.html`  
-  Base para continuar JS (eventos, DOM, lógica).
-- `ejemplos.html`  
-  Demo aplicada tipo “Registro — Evento en línea de Programadores 2026” (ideal para formularios y UX).
-- `git.html`  
-  Apoyo visual/guía para temas Git (según contenido del archivo).
-- `pdp.html` / `otroarchiv.html`  
-  Archivos auxiliares para práctica/plantillas.
+### Opción A — Abrir directamente en el navegador
+- Haz doble clic sobre cualquiera de los `.html` y se abrirá en tu navegador.
+- Ideal para revisar conceptos rápidamente o mostrar en clase.
 
-### 2) Módulo jQuery (carpeta `jquery/`)
-Demos enfocadas en:
-- visibilidad (`show/hide`)
-- opacidad (`fadeIn/fadeOut`)
-- eventos (varias variantes)
-- una página índice con navegación y ejemplos
+### Opción B — Servidor local (recomendado)
+Levanta un servidor local para evitar problemas de rutas relativas y trabajar como “sitio”:
 
-Incluye documentación en:
-- `jquery/README.md` (explicación ejecutiva + bajada técnica de las animaciones)
+```bash
+cd ruta/al/repositorio
+python3 -m http.server 8000
 
-### 3) Sitio “public_site” (carpeta `public_site/`)
-Mini sitio multipágina (útil para explicar navegación, assets, estructura de páginas):
-- `public_site/home.html`
-- `public_site/services.html`
-- `public_site/contact.html`
 
-### 4) Assets compartidos (carpeta `assets/`)
-- `assets/css/main.css`  
-- `assets/css/media.css`  
-- `assets/css/public_site.css`  
-- `assets/js/main.js`  
-- `assets/js/public_site.js`  
-- `assets/img/perrito.jpeg`  
-
-### 5) Notas de arquitectura (archivo `notas.md`)
-Documento de nivel técnico (arquitectura + checklist) para implementar o cerrar un **carrito de compra** (enfoque SSR, recomendado para Django).
-
----
-
-## Estructura del repositorio (referencial)
