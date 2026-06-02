@@ -1,5 +1,7 @@
 # clasesam — Material de clases (HTML, CSS, Bootstrap, JavaScript, jQuery + Git)
 
+> _"Repositorio actualizado https://github.com/arielrosenmann94/curso-django"_
+
 ## Introducción ejecutiva
 Este repositorio reúne material práctico para clases orientadas a **desarrollo web front-end** y fundamentos de flujo de trabajo con **Git**. El enfoque es 100% “aprender haciendo”: cada archivo HTML es una **demo ejecutable** (sin build, sin instalaciones) para explicar conceptos clave y luego modificarlos en clase.
 
